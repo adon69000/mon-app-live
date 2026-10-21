@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Analytics } from '@vercel/analytics/react';
 const initialSubscribers = [
   {
     id: 1,
@@ -87,17 +88,19 @@ function AdminSubscriptionPage() {
   };
 
   return (
-    <div className="page-wrap">
-      <div className="container">
-        <div className="admin-header">
-          <div>
-            <div className="eyebrow">Admin control</div>
-            <h2>Subscriber payment management</h2>
+    <>
+      <Analytics />
+      <div className="page-wrap">
+        <div className="container">
+          <div className="admin-header">
+            <div>
+              <div className="eyebrow">Admin control</div>
+              <h2>Subscriber payment management</h2>
+            </div>
+            <button className="btn btn-primary" onClick={runStandardPolicy}>
+              Run payment policy
+            </button>
           </div>
-          <button className="btn btn-primary" onClick={runStandardPolicy}>
-            Run payment policy
-          </button>
-        </div>
 
         <div className="admin-grid">
           <div className="rule-panel">
@@ -242,6 +245,7 @@ function AdminSubscriptionPage() {
         </div>
       </div>
     </div>
+    </>
   );
 
 }
