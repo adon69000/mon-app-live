@@ -157,7 +157,6 @@ export default function App() {
       </div>
     );
   }
-
   if (room) {
     return (
       <div style={s.fullVid}>
@@ -170,3 +169,136 @@ export default function App() {
     );
   }
 
+  const addr = net === "USDT TRC20" ? TRC20 : EVM;
+  const thread = peer ? msgs.filter((m) => (m.sender === me.pseudo && m.receiver === peer.pseudo) || (m.sender === peer.pseudo && m.receiver === me.pseudo)) : Array.of();
+
+  return (
+    <div style={{ ...s.app, direction: isRtl ? "rtl" : "ltr" }}>
+      <header style={s.head}>
+        <strong style={{ color: "#fff", fontSize: 19, fontWeight: "900", display: "flex", alignItems: "center" }}><BluePaw />KANQKA</strong>
+        <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
+          <button onClick={() => setRoom({ id: `live_${me.pseudo}`, title: me.pseudo, host: true })} style={s.redSm}>{t.goLive}</button>
+          <button onClick={() => prompt("PIN :") === "6900" && setTab("admin")} style={s.iconBtn}>⚙️</button>
+          <button onClick={() => setTab("vip")} style={s.gold}>{me.is_vip ? "👑 VIP" : `🪙 ${me.coins}`}</button>
+        </div>
+      </header>
+
+      <main style={s.main}>
+        {tab === "live" && (
+          <div style={s.grid}>
+            {users.map((u, i) => (
+              <div key={u.id || i} style={s.card}>
+                <div style={{ ...s.between, width: "100%" }}>
+                  <span style={s.tag}>{t.liveTag}</span>
+                  <button onClick={() => { setPeer(u); setTab("chat"); }} style={s.iconBtn}>💬</button>
+                </div>
+                <Avatar u={u} sz={60} />
+                <div style={{ width: "100%", textAlign: "center" }}>
+                  <div style={{ fontWeight: "800", marginBottom: 8 }}>{u.pseudo} {u.is_vip ? "👑" : ""}</div>
+                  <button onClick={() => setRoom({ id: `live_${u.pseudo}`, title: u.pseudo, host: false })} style={s.actionBtn}>{t.join}</button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {tab === "chat" && (
+          <div style={s.col}>
+            {peer ? (
+              <div style={s.box}>
+                <div style={s.between}>
+                  <button onClick={() => setPeer(null)} style={s.dark}>←</button>
+                  <strong>{peer.pseudo}</strong>
+                  <button onClick={() => setRoom({ id: `live_${peer.pseudo}`, title: peer.pseudo, host: false })} style={s.blueSm}>📹</button>
+                </div>
+                <div style={s.chatList}>
+                  {thread.map((m, i) => <div key={m.id || i} style={m.sender === me.pseudo ? s.mMe : s.mThem}>{m.content}</div>)}
+                </div>
+                <form onSubmit={async (e) => { e.preventDefault(); if (!msgTxt.trim()) return; const txt = msgTxt.trim(); setMsgTxt(""); await api("messages", "POST", { sender: me.pseudo, receiver: peer.pseudo, content: txt }); load(); }} style={{ display: "flex", gap: 8 }}>
+                  <input value={msgTxt} onChange={(e) => setMsgTxt(e.target.value)} placeholder={t.msgPh} style={s.input} />
+                  <button type="submit" style={s.blueSm}>➤</button>
+                </form>
+              </div>
+            ) : (
+              users.filter((u) => u.pseudo !== me.pseudo).map((u, i) => (
+                <div key={u.id || i} onClick={() => setPeer(u)} style={{ ...s.box, flexDirection: "row", alignItems: "center", cursor: "pointer" }}>
+                  <Avatar u={u} sz={44} />
+                  <strong>{u.pseudo} {u.is_vip ? "👑" : ""}</strong>
+                </div>
+              ))
+            )}
+          </div>
+        )}
+
+        {tab === "vip" && (
+          <div style={s.col}>
+            <div style={s.box}>
+              <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                <Avatar u={me} sz={52} />
+                <div><strong>{me.pseudo}</strong><div style={{ fontSize: 12, color: "#94a3b8" }}>{me.contact}</div></div>
+              </div>
+            </div>
+            <div style={s.box}>
+              <div style={s.between}><strong>🥈 VIP Silver (1 Mois)</strong><span style={s.badge}>9.99 $</span></div>
+              <button onClick={() => setPlan({ name: "VIP Silver", price: "9.99 $" })} style={s.actionBtn}>{t.payBtn}</button>
+            </div>
+            <div style={s.box}>
+              <div style={s.between}><strong>👑 VIP Gold (1 Mois)</strong><span style={s.badge}>24.99 $</span></div>
+              <button onClick={() => setPlan({ name: "VIP Gold", price: "24.99 $" })} style={s.actionBtn}>{t.payBtn}</button>
+            </div>
+          </div>
+        )}
+
+        {tab === "admin" && (
+          <div style={s.col}>
+            <h3 style={{ margin: 0, color: "#38bdf8" }}>⚙️ Admin ({pays.length})</h3>
+            {pays.map((p) => (
+              <div key={p.id} style={s.box}>
+                <strong>{p.user_pseudo} — {p.plan_name} ({p.amount})</strong>
+                <small style={{ color: "#facc15", wordBreak: "break-all" }}>{p.network} : {p.tx_hash}</small>
+                {p.status === "valide" ? "✅ Validé" : <button onClick={async () => { await api(`crypto_payments?id=eq.${p.id}`, "PATCH", { status: "valide" }); load(); }} style={s.actionBtn}>Valider VIP</button>}
+              </div>
+            ))}
+          </div>
+        )}
+      </main>
+
+      {plan && (
+        <div style={s.modal} onClick={() => setPlan(null)}>
+          <div style={s.modalBox} onClick={(e) => e.stopPropagation()}>
+            <div style={s.between}><strong>{plan.name} ({plan.price})</strong><button onClick={() => setPlan(null)} style={s.iconBtn}>✕</button></div>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+              {Array.of("USDT TRC20", "BTC BEP20", "ETH ERC20", "USDT Arbitrum").map((k) => <button key={k} onClick={() => setNet(k)} style={net === k ? s.blueSm : s.dark}>{k}</button>)}
+            </div>
+            <div style={s.addrBox}>
+              <small style={{ color: "#facc15", wordBreak: "break-all" }}>{addr}</small>
+              <button onClick={() => navigator.clipboard?.writeText(addr)} style={s.gold}>{t.copy}</button>
+            </div>
+            <input value={tx} onChange={(e) => setTx(e.target.value)} placeholder={t.txPh} style={s.input} />
+            <button onClick={async () => { if (tx.length < 5) return; await api("crypto_payments", "POST", { user_pseudo: me.pseudo, plan_name: plan.name, amount: plan.price, network: net, tx_hash: tx }); alert(t.sent); setPlan(null); setTx(""); load(); }} style={s.actionBtn}>{t.confirm}</button>
+          </div>
+        </div>
+      )}
+
+      <nav style={s.nav}>
+        <button onClick={() => setTab("live")} style={tab === "live" ? s.navActive : s.navBtn}>{t.tabLive}</button>
+        <button onClick={() => { setTab("chat"); setPeer(null); }} style={tab === "chat" ? s.navActive : s.navBtn}>{t.tabChat}</button>
+        <button onClick={() => setTab("vip")} style={tab === "vip" ? s.navActive : s.navBtn}>{t.tabVip}</button>
+      </nav>
+    </div>
+  );
+}
+
+const s = {
+  center: { position: "fixed", inset: 0, backgroundImage: "linear-gradient(rgba(9,13,22,0.45), rgba(9,13,22,0.85)), url('/bg.jpg')", backgroundSize: "cover", backgroundPosition: "center", color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", padding: 12, fontFamily: "system-ui, sans-serif" },
+  circle: { width: 390, height: 390, borderRadius: "50%", background: "rgba(11,16,33,0.85)", backdropFilter: "blur(14px)", border: "2px solid rgba(56,189,248,0.5)", boxShadow: "0 0 45px rgba(14,165,233,0.4)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "22px 30px", boxSizing: "border-box", gap: 8 },
+  picker: { width: 44, height: 44, borderRadius: "50%", background: "rgba(14,165,233,0.25)", border: "2px dashed #38bdf8", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", overflow: "hidden", fontSize: 18 },
+  flag: { width: 28, height: 28, borderRadius: "50%", background: "rgba(30,41,59,0.85)", border: "1px solid rgba(255,255,255,0.15)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, cursor: "pointer", padding: 0 },
+  flagActive: { width: 28, height: 28, borderRadius: "50%", background: "rgba(14,165,233,0.3)", border: "2px solid #38bdf8", boxShadow: "0 0 10px rgba(56,189,248,0.7)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, cursor: "pointer", padding: 0 },
+  title: { fontSize: 22, fontWeight: "900", color: "#fff", display: "flex", alignItems: "center" },
+  cInput: { width: "80%", background: "rgba(9,13,22,0.88)", border: "1px solid rgba(56,189,248,0.4)", color: "#fff", padding: "8px 14px", borderRadius: 99, fontSize: 12, textAlign: "center", outline: "none" },
+  blueBtn: { width: "80%", background: "linear-gradient(90deg, #0284c7, #38bdf8)", color: "#fff", border: "none", padding: "9px 16px", borderRadius: 99, fontWeight: "800", fontSize: 13, cursor: "pointer" },
+  app: { minHeight: "100vh", width: "100%", backgroundImage: "linear-gradient(rgba(9,13,22,0.82), rgba(9,13,22,0.94)), url('/bg.jpg')", backgroundSize: "cover", backgroundPosition: "center", backgroundAttachment: "fixed", color: "#fff", fontFamily: "system-ui, sans-serif", display: "flex", flexDirection: "column" },
+  head: { display: "flex", justifyContent: "space-between", alignItems: "center", padding: "14px 18px", background: "rgba(11,16,33,0.85)", borderBottom: "1px solid rgba(56,189,248,0.25)" },
+  main: { flex: 1, padding: "18px 16px", maxWidth: 480, width: "100%", margin: "0 auto", boxSizing: "border-box" },
+  grid: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 },
