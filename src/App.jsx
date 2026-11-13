@@ -155,6 +155,85 @@ export default function App() {
     load();
   };
 
+  
+    const Flags = () => (
+    <div style={{ display: "flex", gap: 6, justifyContent: "center", flexWrap: "wrap", maxWidth: 310 }}>
+      {Object.keys(LANGS).map((c) => (
+        <button key={c} onClick={() => setLang(c)} style={lang === c ? s.flagActive : s.flag}>{LANGS[c].flag}</button>
+      ))}
+    </div>
+  );
+
+  const Avatar = ({ u, sz = 58 }) => (
+    <div style={{ ...s.avatar, width: sz, height: sz, fontSize: sz * 0.4 }}>
+      {u?.avatar_url ? <img src={u.avatar_url} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : (u?.pseudo || "?").slice(0, 1).toUpperCase()}
+    </div>
+  );
+
+  if (!me) {
+    return (
+      <div style={{ ...s.center, direction: isRtl ? "rtl" : "ltr" }}>
+        <div style={s.circle}>
+          <Flags />
+          <div style={s.title}><BluePaw /><strong>KANQKA</strong></div>
+          {!otpStep ? (
+            <>
+              <label style={s.picker}>
+                {avatar ? <img src={avatar} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : <span>📷</span>}
+                <input type="file" accept="image/*" style={{ display: "none" }} onChange={(e) => e.target.files?.at(0) && compressImage(e.target.files.at(0), setAvatar)} />
+              </label>
+              <div style={{ display: "flex", gap: 8 }}>
+                <button onClick={() => setAuthType("email")} style={authType === "email" ? s.blueSm : s.dark}>✉️</button>
+                <button onClick={() => setAuthType("phone")} style={authType === "phone" ? s.blueSm : s.dark}>📱</button>
+              </div>
+              <input value={contact} onChange={(e) => setContact(e.target.value)} placeholder={authType === "email" ? t.phEmail : t.phPhone} style={s.cInput} />
+              <input value={pseudo} onChange={(e) => setPseudo(e.target.value)} placeholder={t.ph} style={s.cInput} />
+              <button disabled={busy} onClick={sendOtp} style={s.blueBtn}>{busy ? "..." : t.sendCode}</button>
+            </>
+          ) : (
+            <>
+              <small style={{ color: "#38bdf8", fontSize: 11 }}>{contact}</small>
+              <input value={otpCode} onChange={(e) => setOtpCode(e.target.value)} placeholder={t.codePh} style={{ ...s.cInput, letterSpacing: 4, fontWeight: "bold" }} />
+              <button disabled={busy} onClick={verifyOtpAndEnter} style={s.blueBtn}>{busy ? "..." : t.verify}</button>
+              <button onClick={() => { setOtpStep(false); setOtpCode(""); }} style={s.dark}>{t.back}</button>
+            </>
+          )}
+        </div>
+      </div>
+    );
+  }
+
+  if (room) {
+    return (
+      <div style={s.fullVid}>
+        <div style={s.vidTop}>
+          <span>🔴 {room.title}</span>
+          <button onClick={() => setRoom(null)} style={s.red}>{t.quit}</button>
+        </div>
+        <div ref={zegoRef} style={{ width: "100%", height: "calc(100vh - 56px)" }} />
+      </div>
+    );
+  }
+
+  const addr = net === "USDT TRC20" ? TRC20 : EVM;
+  const thread = peer ? msgs.filter((m) => (m.sender === me.pseudo && m.receiver === peer.pseudo) || (m.sender === peer.pseudo && m.receiver === me.pseudo)) : Array.of();
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
   const Flags = () => (
     <div style={{ display: "flex", gap: 6, justifyContent: "center", flexWrap: "wrap", maxWidth: 310 }}>
       {Object.keys(LANGS).map((c) => (
