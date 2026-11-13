@@ -314,3 +314,18 @@ const s = {
   badge: { background: "rgba(56,189,248,0.2)", color: "#38bdf8", padding: "4px 12px", borderRadius: 99, fontWeight: "800", fontSize: 13 },
   input: { width: "100%", boxSizing: "border-box", background: "rgba(9,13,22,0.85)", border: "1px solid rgba(56,189,248,0.4)", color: "#fff", padding: "11px 16px", borderRadius: 99, fontSize: 13, outline: "none" },
   blueSm: { background: "linear-gradient(90deg, #0284c7, #38bdf8)", color: "#fff", border: "none", padding: "6px 12px", borderRadius: 99, fontWeight: "bold", fontSize: 12, cursor: "pointer" },
+    dark: { background: "rgba(30,41,59,0.85)", color: "#cbd5e1", border: "1px solid rgba(255,255,255,0.12)", padding: "6px 12px", borderRadius: 99, fontSize: 12, cursor: "pointer" },
+  gold: { background: "#facc15", color: "#090d16", border: "none", padding: "7px 14px", borderRadius: 99, fontWeight: "800", fontSize: 12, cursor: "pointer" },
+  iconBtn: { width: 32, height: 32, borderRadius: "50%", background: "rgba(30,41,59,0.85)", border: "1px solid rgba(56,189,248,0.3)", color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, cursor: "pointer", padding: 0 },
+  redSm: { background: "#ef4444", color: "#fff", border: "none", padding: "7px 12px", borderRadius: 99, fontWeight: "800", fontSize: 12, cursor: "pointer" },
+  red: { background: "#ef4444", color: "#fff", border: "none", padding: "8px 18px", borderRadius: 99, fontWeight: "bold", cursor: "pointer" },
+  fullVid: { position: "fixed", inset: 0, background: "#000", color: "#fff", zIndex: 99, fontFamily: "sans-serif" },
+  vidTop: { height: 56, padding: "0 18px", background: "rgba(11,16,33,0.95)", borderBottom: "1px solid rgba(56,189,248,0.3)", display: "flex", justifyContent: "space-between", alignItems: "center" },
+  modal: { position: "fixed", inset: 0, background: "rgba(0,0,0,0.82)", display: "flex", alignItems: "center", justifyContent: "center", padding: 18, zIndex: 80 },
+  modalBox: { background: "rgba(15,23,42,0.92)", border: "1.5px solid rgba(56,189,248,0.45)", padding: 22, borderRadius: 26, display: "flex", flexDirection: "column", gap: 14, width: "100%", maxWidth: 380, boxSizing: "border-box" },
+  addrBox: { background: "rgba(9,13,22,0.85)", border: "1px solid rgba(56,189,248,0.3)", padding: "10px 14px", borderRadius: 16, display: "flex", justifyContent: "space-between", alignItems: "center", gap: 8 },
+  nav: { display: "flex", justifyContent: "space-around", padding: "12px 14px", background: "rgba(11,16,33,0.88)", borderTop: "1px solid rgba(56,189,248,0.25)" },
+  navBtn: { background: "none", border: "none", color: "#94a3b8", fontWeight: "700", fontSize: 13, cursor: "pointer" },
+  navActive: { background: "rgba(56,189,248,0.15)", border: "1px solid rgba(56,189,248,0.4)", color: "#38bdf8", padding: "7px 16px", borderRadius: 99, fontWeight: "800", fontSize: 13, cursor: "pointer" },
+};
+
