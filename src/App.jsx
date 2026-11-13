@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
+import { ZegoUIKitPrebuilt } from "@zegocloud/zego-uikit-prebuilt";
 
-const SB_HOST = "dejlwkmjitajrgrykmpb.supabase.co";
-const SB_URL = "https://" + SB_HOST;
+const SB_URL = "https://supabase.co";
 const KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRlamx3a21qaXRhanJncnlrbXBiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTQ1MjE2ODUsImV4cCI6MjExMDA5NzY4NX0.WFXcigx7dFm7gqfBpP-xOYcCXWdGxOMJZGUkCg3NxDM";
 
 const ZEGO_APP_ID = 1407959367;
@@ -49,35 +49,34 @@ export default function App() {
 
   useEffect(() => {
     load();
-    const script = document.createElement("script");
-    script.src = "https://unpkg.com";
-    script.async = true;
-    document.body.appendChild(script);
   }, []);
 
   useEffect(() => {
-    if (!roomInfo || !zegoRef.current || !window.ZegoUIKitPrebuilt) return;
-    const kitToken = window.ZegoUIKitPrebuilt.generateKitTokenForTest(
+    if (!roomInfo || !zegoRef.current) return;
+    const kitToken = ZegoUIKitPrebuilt.generateKitTokenForTest(
       ZEGO_APP_ID,
       ZEGO_SECRET,
       String(roomInfo.roomId),
       String(me.id || Date.now()),
       me.pseudo
     );
-    const zp = window.ZegoUIKitPrebuilt.create(kitToken);
+    const zp = ZegoUIKitPrebuilt.create(kitToken);
     zp.joinRoom({
       container: zegoRef.current,
+      turnOnCameraWhenJoining: true,
+      turnOnMicrophoneWhenJoining: true,
+      showPreJoinView: false,
       scenario: {
-        mode: window.ZegoUIKitPrebuilt.LiveStreaming,
+        mode: ZegoUIKitPrebuilt.LiveStreaming,
         config: {
-          role: roomInfo.isHost
-            ? window.ZegoUIKitPrebuilt.Host
-            : window.ZegoUIKitPrebuilt.Audience,
+          role: roomInfo.isHost ? ZegoUIKitPrebuilt.Host : ZegoUIKitPrebuilt.Audience,
         },
       },
       onLeaveRoom: () => setRoomInfo(null),
     });
+    return () => zp.destroy();
   }, [roomInfo]);
+
 
   if (!me) {
     return (
