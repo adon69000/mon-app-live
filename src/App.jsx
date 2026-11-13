@@ -318,7 +318,93 @@ export default function App() {
                     <button onClick={() => { setPeer(u); setTab("chat"); }} style={s.dk}>💬</button>
                   </div>
                 </div>
-                <div style={s.av}>{u.avatar_url ? <img src={u.avatar_url} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : u.pseudo?.slice(0, 1)}</div>
+                <div style={{ ...s.av, width: 42, height: 42 }}>{u.avatar_url ? <img src={u.avatar_url} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : u.pseudo?.slice(0, 1)}</div>
+                <div><strong>{u.pseudo}</strong><div style={{ fontSize: 12, color: "#38bdf8" }}>{u.gender || "👩"} {u.age || 20} ans</div></div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {tab === "vip" && (
+          <div style={s.col}>
+            <div style={s.box}>
+              <strong>{me.gender} {me.pseudo} ({me.age} ans) — 🪙 {me.coins || 0}</strong>
+              <small style={{ color: "#94a3b8" }}>{me.contact}</small>
+            </div>
+            <div style={s.box}><strong>🥈 VIP Silver + 300 🪙 — 9.99 $</strong><button onClick={() => setPlan({ name: "VIP Silver + 300 Coins", price: "9.99 $" })} style={s.bBtn}>Crypto</button></div>
+            <div style={s.box}><strong>👑 VIP Gold + 1000 🪙 — 24.99 $</strong><button onClick={() => setPlan({ name: "VIP Gold + 1000 Coins", price: "24.99 $" })} style={s.bBtn}>Crypto</button></div>
+            <div style={s.box}><strong>🎁 Pack 500 Pièces Cadeaux — 14.99 $</strong><button onClick={() => setPlan({ name: "Pack 500 Coins", price: "14.99 $" })} style={s.bBtn}>Crypto</button></div>
+          </div>
+        )}
+
+        {tab === "admin" && (
+          <div style={s.col}>
+            <h3>⚙️ Admin ({pays.length})</h3>
+            {pays.map((p) => (
+              <div key={p.id} style={s.box}>
+                <strong>{p.user_pseudo} — {p.plan_name} ({p.amount})</strong>
+                <small style={{ color: "#facc15", wordBreak: "break-all" }}>{p.network}: {p.tx_hash}</small>
+                {p.status === "valide" ? "✅ Validé" : <button onClick={async () => { await api(`crypto_payments?id=eq.${p.id}`, "PATCH", { status: "valide" }); load(); }} style={s.bBtn}>Valider VIP & Pièces</button>}
+              </div>
+            ))}
+          </div>
+        )}
+      </main>
+
+      {plan && (
+        <div style={s.modal} onClick={() => setPlan(null)}>
+          <div style={s.box} onClick={(e) => e.stopPropagation()}>
+            <strong>{plan.name} ({plan.price})</strong>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 4 }}>
+              {Array.of("USDT TRC20", "BTC BEP20", "ETH ERC20", "USDT Arbitrum").map((k) => <button key={k} onClick={() => setNet(k)} style={net === k ? s.bSm : s.dk}>{k}</button>)}
+            </div>
+            <small style={{ color: "#facc15", wordBreak: "break-all" }}>{addr}</small>
+            <button onClick={() => navigator.clipboard?.writeText(addr)} style={s.gd}>Copier</button>
+            <input value={tx} onChange={(e) => setTx(e.target.value)} placeholder="TXID..." style={s.inp} />
+            <button onClick={async () => { if (tx.length < 5) return; await api("crypto_payments", "POST", { user_pseudo: me.pseudo, plan_name: plan.name, amount: plan.price, network: net, tx_hash: tx }); alert("OK!"); setPlan(null); setTx(""); load(); }} style={s.bBtn}>Confirmer</button>
+          </div>
+        </div>
+      )}
+
+      <nav style={s.nav}>
+        <button onClick={() => setTab("live")} style={s.nBtn}>🔥 Live</button>
+        <button onClick={() => { setTab("chat"); setPeer(null); }} style={s.nBtn}>💬 Chat</button>
+        <button onClick={() => setTab("vip")} style={s.nBtn}>👑 VIP</button>
+      </nav>
+    </div>
+  );
+}
+
+const s = {
+  center: { position: "fixed", inset: 0, backgroundImage: "linear-gradient(rgba(9,13,22,0.5), rgba(9,13,22,0.85)), url('/bg.jpg')", backgroundSize: "cover", backgroundPosition: "center", color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "sans-serif" },
+  circle: { width: 390, height: 390, borderRadius: "50%", background: "rgba(11,16,33,0.88)", border: "2px solid #38bdf8", boxShadow: "0 0 40px rgba(14,165,233,0.45)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: 24, boxSizing: "border-box", gap: 8 },
+  sign18: { width: 68, height: 68, borderRadius: "50%", background: "#ef4444", border: "3px solid #fff", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 34, boxShadow: "0 0 20px rgba(239,68,68,0.7)" },
+  pick: { width: 38, height: 38, borderRadius: "50%", border: "2px dashed #38bdf8", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", overflow: "hidden" },
+  fBtn: { width: 25, height: 25, borderRadius: "50%", background: "#1e293b", border: "none", fontSize: 11, cursor: "pointer", padding: 0 },
+  fAct: { width: 25, height: 25, borderRadius: "50%", background: "#0284c7", border: "2px solid #38bdf8", fontSize: 11, cursor: "pointer", padding: 0 },
+  inp: { width: "82%", background: "#090d16", border: "1px solid #38bdf8", color: "#fff", padding: "7px 12px", borderRadius: 99, fontSize: 12, textAlign: "center", outline: "none" },
+  bBtn: { width: "82%", background: "linear-gradient(90deg, #0284c7, #38bdf8)", color: "#fff", border: "none", padding: "8px 14px", borderRadius: 99, fontWeight: "bold", fontSize: 13, cursor: "pointer" },
+  bSm: { background: "#0284c7", color: "#fff", border: "none", padding: "6px 10px", borderRadius: 99, fontWeight: "bold", fontSize: 12, cursor: "pointer" },
+  dk: { background: "#1e293b", color: "#fff", border: "none", padding: "6px 10px", borderRadius: 99, fontSize: 12, cursor: "pointer" },
+  rd: { background: "#ef4444", color: "#fff", border: "none", padding: "6px 12px", borderRadius: 99, fontWeight: "bold", fontSize: 12, cursor: "pointer" },
+  gd: { background: "#facc15", color: "#000", border: "none", padding: "6px 10px", borderRadius: 99, fontWeight: "bold", fontSize: 12, cursor: "pointer" },
+  app: { minHeight: "100vh", backgroundImage: "linear-gradient(rgba(9,13,22,0.85), rgba(9,13,22,0.95)), url('/bg.jpg')", backgroundSize: "cover", color: "#fff", fontFamily: "sans-serif", display: "flex", flexDirection: "column" },
+  head: { display: "flex", justifyContent: "space-between", alignItems: "center", padding: 14, background: "rgba(11,16,33,0.9)", borderBottom: "1px solid #1e293b" },
+  main: { flex: 1, padding: 16, maxWidth: 460, width: "100%", margin: "0 auto", boxSizing: "border-box" },
+  grid: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 },
+  card: { height: 205, borderRadius: 22, padding: 12, background: "rgba(15,23,42,0.75)", border: "1px solid #38bdf8", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "space-between" },
+  av: { width: 56, height: 56, borderRadius: "50%", background: "#0284c7", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: "bold", fontSize: 22, overflow: "hidden" },
+  col: { display: "flex", flexDirection: "column", gap: 12 },
+  box: { background: "rgba(15,23,42,0.9)", padding: 16, borderRadius: 20, border: "1px solid #38bdf8", display: "flex", flexDirection: "column", gap: 10, maxWidth: 380, width: "100%", boxSizing: "border-box" },
+  giftItem: { background: "#0f172a", border: "1px solid #38bdf8", borderRadius: 14, padding: 10, color: "#fff", display: "flex", flexDirection: "column", alignItems: "center", gap: 4, cursor: "pointer" },
+  flyBox: { position: "fixed", top: "38%", left: "50%", transform: "translate(-50%, -50%)", background: "rgba(11,16,33,0.92)", border: "2px solid #facc15", borderRadius: 24, padding: "18px 28px", textAlign: "center", zIndex: 120, boxShadow: "0 0 35px rgba(250,204,21,0.6)" },
+  row: { display: "flex", justifyContent: "space-between", alignItems: "center", gap: 8 },
+  m1: { alignSelf: "flex-end", background: "#0284c7", padding: "8px 12px", borderRadius: 14, fontSize: 13 },
+  m2: { alignSelf: "flex-start", background: "#1e293b", padding: "8px 12px", borderRadius: 14, fontSize: 13 },
+  modal: { position: "fixed", inset: 0, background: "rgba(0,0,0,0.8)", display: "flex", alignItems: "center", justifyContent: "center", padding: 16, zIndex: 110 },
+  nav: { display: "flex", justifyContent: "space-around", padding: 12, background: "rgba(11,16,33,0.9)", borderTop: "1px solid #1e293b" },
+  nBtn: { background: "none", border: "none", color: "#38bdf8", fontWeight: "bold", fontSize: 14, cursor: "pointer" },
+};
 
 
 
