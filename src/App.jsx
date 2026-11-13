@@ -278,7 +278,31 @@ export default function App() {
 
 const s = {
   center: { position: "fixed", inset: 0, backgroundImage: "linear-gradient(rgba(9,13,22,0.5), rgba(9,13,22,0.85)), url('/bg.jpg')", backgroundSize: "cover", backgroundPosition: "center", color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "sans-serif" },
-
+  circle: { width: 380, height: 380, borderRadius: "50%", background: "rgba(11,16,33,0.86)", border: "2px solid #38bdf8", boxShadow: "0 0 40px rgba(14,165,233,0.4)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: 24, boxSizing: "border-box", gap: 8 },
+  pick: { width: 42, height: 42, borderRadius: "50%", border: "2px dashed #38bdf8", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", overflow: "hidden" },
+  fBtn: { width: 26, height: 26, borderRadius: "50%", background: "#1e293b", border: "none", fontSize: 12, cursor: "pointer", padding: 0 },
+  fAct: { width: 26, height: 26, borderRadius: "50%", background: "#0284c7", border: "2px solid #38bdf8", fontSize: 12, cursor: "pointer", padding: 0 },
+  inp: { width: "82%", background: "#090d16", border: "1px solid #38bdf8", color: "#fff", padding: "8px 14px", borderRadius: 99, fontSize: 12, textAlign: "center", outline: "none" },
+  bBtn: { width: "82%", background: "linear-gradient(90deg, #0284c7, #38bdf8)", color: "#fff", border: "none", padding: "9px 14px", borderRadius: 99, fontWeight: "bold", fontSize: 13, cursor: "pointer" },
+  bSm: { background: "#0284c7", color: "#fff", border: "none", padding: "6px 12px", borderRadius: 99, fontWeight: "bold", fontSize: 12, cursor: "pointer" },
+  dk: { background: "#1e293b", color: "#fff", border: "none", padding: "6px 10px", borderRadius: 99, fontSize: 12, cursor: "pointer" },
+  rd: { background: "#ef4444", color: "#fff", border: "none", padding: "6px 12px", borderRadius: 99, fontWeight: "bold", fontSize: 12, cursor: "pointer" },
+  gd: { background: "#facc15", color: "#000", border: "none", padding: "6px 12px", borderRadius: 99, fontWeight: "bold", fontSize: 12, cursor: "pointer" },
+  app: { minHeight: "100vh", backgroundImage: "linear-gradient(rgba(9,13,22,0.85), rgba(9,13,22,0.95)), url('/bg.jpg')", backgroundSize: "cover", color: "#fff", fontFamily: "sans-serif", display: "flex", flexDirection: "column" },
+  head: { display: "flex", justifyContent: "space-between", alignItems: "center", padding: 14, background: "rgba(11,16,33,0.9)", borderBottom: "1px solid #1e293b" },
+  main: { flex: 1, padding: 16, maxWidth: 460, width: "100%", margin: "0 auto", boxSizing: "border-box" },
+  grid: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 },
+  card: { height: 195, borderRadius: 22, padding: 12, background: "rgba(15,23,42,0.75)", border: "1px solid #38bdf8", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "space-between" },
+  av: { width: 56, height: 56, borderRadius: "50%", background: "#0284c7", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: "bold", fontSize: 22, overflow: "hidden" },
+  col: { display: "flex", flexDirection: "column", gap: 12 },
+  box: { background: "rgba(15,23,42,0.85)", padding: 16, borderRadius: 20, border: "1px solid #38bdf8", display: "flex", flexDirection: "column", gap: 10, maxWidth: 380, width: "100%", boxSizing: "border-box" },
+  row: { display: "flex", justifyContent: "space-between", alignItems: "center", gap: 8 },
+  m1: { alignSelf: "flex-end", background: "#0284c7", padding: "8px 12px", borderRadius: 14, fontSize: 13 },
+  m2: { alignSelf: "flex-start", background: "#1e293b", padding: "8px 12px", borderRadius: 14, fontSize: 13 },
+  modal: { position: "fixed", inset: 0, background: "rgba(0,0,0,0.8)", display: "flex", alignItems: "center", justifyContent: "center", padding: 16, zIndex: 80 },
+  nav: { display: "flex", justifyContent: "space-around", padding: 12, background: "rgba(11,16,33,0.9)", borderTop: "1px solid #1e293b" },
+  nBtn: { background: "none", border: "none", color: "#38bdf8", fontWeight: "bold", fontSize: 14, cursor: "pointer" },
+};
 
 
 
