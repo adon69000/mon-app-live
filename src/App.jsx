@@ -18,7 +18,19 @@ const LANGS = {
   tr: { flag: "🇹🇷 TR", sub: "HD Canlı Video & Dünya Çapında Tanışma", ph: "Takma adınız...", enter: "Canlı Yayına Gir 🚀", goLive: "🔴 Canlı Yayın Aç", liveTag: "🔴 CANLI", join: "📹 Katıl / Ara", quit: "Çıkış ✕", tabLive: "🔥 Canlı / Coco", tabVip: "👑 VIP Kripto", payBtn: "Kripto ile Öde", copy: "Kopyala", confirm: "Onayla", txPh: "TXID Kodu...", sent: "Ödeme gönderildi!" },
   pt: { flag: "🇧🇷 PT", sub: "Vídeo ao Vivo HD e Encontros Globais", ph: "Seu apelido...", enter: "Entrar ao Vivo 🚀", goLive: "🔴 Iniciar Live", liveTag: "🔴 AO VIVO", join: "📹 Entrar / Ligar", quit: "Sair ✕", tabLive: "🔥 Ao Vivo", tabVip: "👑 VIP Cripto", payBtn: "Pagar com Cripto", copy: "Copiar", confirm: "Confirmar", txPh: "Hash TXID...", sent: "Pagamento enviado!" },
   ru: { flag: "🇷🇺 RU", sub: "HD Видео Эфиры и Знакомства по Миру", ph: "Ваш никнейм...", enter: "Войти в Эфир 🚀", goLive: "🔴 Начать Эфир", liveTag: "🔴 В ЭФИРЕ", join: "📹 Войти / Звонок", quit: "Выйти ✕", tabLive: "🔥 Эфир / Coco", tabVip: "👑 VIP Крипто", payBtn: "Оплатить Крипто", copy: "Копировать", confirm: "Подтвердить", txPh: "Хэш TXID...", sent: "Оплата отправлена!" },
+  he: { flag: "🇮🇱 HE", sub: "שידור חי בוידאו והיכרויות בעולם", ph: "הכינוי שלך...", enter: "כניסה לשידור 🚀", goLive: "🔴 התחל שידור", liveTag: "🔴 שידור חי", join: "📹 הצטרף / שיחה", quit: "יציאה ✕", tabLive: "🔥 שידור חי", tabVip: "👑 מנוי VIP", payBtn: "תשלום בקריפטו", copy: "העתק", confirm: "אישור", txPh: "קוד TXID...", sent: "התשלום נשלח!" },
+  de: { flag: "🇩🇪 DE", sub: "HD Live-Video & Weltweites Dating", ph: "Dein Spitzname...", enter: "Live beitreten 🚀", goLive: "🔴 Live gehen", liveTag: "🔴 LIVE", join: "📹 Beitreten / Anrufen", quit: "Beenden ✕", tabLive: "🔥 Live / Coco", tabVip: "👑 VIP Krypto", payBtn: "Mit Krypto zahlen", copy: "Kopieren", confirm: "Bestätigen", txPh: "TXID-Hash...", sent: "Zahlung gesendet!" },
 };
+
+const BluePaw = () => (
+  <svg width="26" height="26" viewBox="0 0 24 24" fill="#38bdf8" style={{ verticalAlign: "middle", marginRight: 8 }}>
+    <circle cx="4.5" cy="9.5" r="2.5" />
+    <circle cx="9" cy="5.5" r="2.5" />
+    <circle cx="15" cy="5.5" r="2.5" />
+    <circle cx="19.5" cy="9.5" r="2.5" />
+    <path d="M12 10c-3.5 0-6.5 2.5-6.5 5.5 0 2 1.5 3.5 3.5 3.5 1.2 0 2-.5 3-.5s1.8.5 3 .5c2 0 3.5-1.5 3.5-3.5 0-3-3-5.5-6.5-5.5z" />
+  </svg>
+);
 
 const api = async (path, method = "GET", body = null) => {
   try {
@@ -41,6 +53,7 @@ const api = async (path, method = "GET", body = null) => {
 export default function App() {
   const [lang, setLang] = useState("fr");
   const t = LANGS[lang] ? LANGS[lang] : LANGS.fr;
+  const isRtl = lang === "ar" || lang === "he";
 
   const [me, setMe] = useState(null);
   const [pseudo, setPseudo] = useState("");
@@ -61,6 +74,8 @@ export default function App() {
   };
 
   useEffect(() => {
+    document.body.style.margin = "0";
+    document.body.style.background = "#090d16";
     load();
   }, []);
 
@@ -102,11 +117,14 @@ export default function App() {
 
   if (!me) {
     return (
-      <div style={{ ...s.center, direction: lang === "ar" ? "rtl" : "ltr" }}>
+      <div style={{ ...s.center, direction: isRtl ? "rtl" : "ltr" }}>
         <div style={s.box}>
           <LangBar />
-          <h2>🌍 COCO KANQKA</h2>
-          <p style={{ fontSize: 13, color: "#94a3b8", margin: 0 }}>{t.sub}</p>
+          <div style={{ fontSize: 26, fontWeight: "900", color: "#fff", textAlign: "center", display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <BluePaw />
+            <strong>KANQKA</strong>
+          </div>
+          <p style={{ fontSize: 13, color: "#94a3b8", margin: 0, textAlign: "center" }}>{t.sub}</p>
           <input value={pseudo} onChange={(e) => setPseudo(e.target.value)} placeholder={t.ph} style={s.input} />
           <button
             onClick={async () => {
@@ -139,9 +157,12 @@ export default function App() {
   const activeAddr = net === "USDT TRC20" ? TRC20 : EVM;
 
   return (
-    <div style={{ ...s.app, direction: lang === "ar" ? "rtl" : "ltr" }}>
+    <div style={{ ...s.app, direction: isRtl ? "rtl" : "ltr" }}>
       <header style={s.head}>
-        <strong>COCO KANQKA</strong>
+        <strong style={{ color: "#fff", fontSize: 19, fontWeight: "900", display: "flex", alignItems: "center" }}>
+          <BluePaw />
+          KANQKA
+        </strong>
         <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
           <button onClick={() => setRoomInfo({ roomId: `live_${me.pseudo}`, title: me.pseudo, isHost: true })} style={s.redSmall}>
             {t.goLive}
@@ -250,8 +271,8 @@ export default function App() {
 }
 
 const s = {
-  center: { minHeight: "100vh", background: "#090d16", color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", padding: 16, fontFamily: "sans-serif" },
-  app: { minHeight: "100vh", background: "#090d16", color: "#fff", fontFamily: "sans-serif", display: "flex", flexDirection: "column" },
+  center: { position: "fixed", inset: 0, background: "#090d16", color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", padding: 16, fontFamily: "sans-serif" },
+  app: { minHeight: "100vh", width: "100%", background: "#090d16", color: "#fff", fontFamily: "sans-serif", display: "flex", flexDirection: "column" },
   head: { display: "flex", justifyContent: "space-between", alignItems: "center", padding: 14, background: "#131024" },
   main: { flex: 1, padding: 14, maxWidth: 460, width: "100%", margin: "0 auto", boxSizing: "border-box" },
   box: { background: "#131024", padding: 16, borderRadius: 14, border: "1px solid #2a234d", display: "flex", flexDirection: "column", gap: 10, width: "100%", maxWidth: 360, boxSizing: "border-box" },
@@ -273,5 +294,6 @@ const s = {
   nav: { display: "flex", justifyContent: "space-around", padding: 14, background: "#131024" },
   navBtn: { background: "none", border: "none", color: "#fff", fontWeight: "bold", cursor: "pointer" },
 };
+
 
 
