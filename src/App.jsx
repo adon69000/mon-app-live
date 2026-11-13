@@ -18,7 +18,7 @@ const GIFTS = Array.of(
 );
 
 const LANGS = {
-  fr: { f: "🇫🇷", w: "Site réservé aux adultes (+18 ans)", ok18: "J'ai 18 ans ou plus ✓", ph: "Pseudo...", age: "Âge (18+)", c: "E-mail ou Tél...", s: "Suivant →", code: "Code 8 chiffres...", go: "Entrer 🚀" },
+  fr: { f: "🇫🇷", w: "Site réservé aux adultes (+18 ans)", ok18: "J'ai 18 ans ou plus ✓", ph: "Pseudo...", age: "Âge (18+)", c: "E-mail ou +212...", s: "Suivant →", code: "Code 6 ou 8 chiffres...", go: "Entrer 🚀" },
   en: { f: "🇬🇧", w: "Adults only (+18 years)", ok18: "I am 18 or older ✓", ph: "Nickname...", age: "Age (18+)", c: "Email or Phone...", s: "Next →", code: "8-digit code...", go: "Enter 🚀" },
   zh: { f: "🇨🇳", w: "仅限18岁以上成年人访问", ok18: "我已满18岁 ✓", ph: "昵称...", age: "年龄 (18+)", c: "邮箱或手机号...", s: "下一步 →", code: "8位验证码...", go: "进入 🚀" },
   es: { f: "🇪🇸", w: "Solo para mayores de 18 años", ok18: "Tengo 18 años o más ✓", ph: "Apodo...", age: "Edad (18+)", c: "Correo o Tel...", s: "Siguiente →", code: "Código 8 dígitos...", go: "Entrar 🚀" },
