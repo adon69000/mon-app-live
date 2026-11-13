@@ -189,12 +189,32 @@ export default function App() {
             ))}
           </div>
         )}
-
         {tab === "chat" && (
           <div style={s.col}>
             {peer ? (
               <div style={s.box}>
                 <div style={s.row}><button onClick={() => setPeer(null)} style={s.dk}>←</button><strong>{peer.pseudo}</strong></div>
+                <div style={{ height: 220, overflowY: "auto", display: "flex", flexDirection: "column", gap: 6 }}>
+                  {thread.map((m, i) => <div key={i} style={m.sender === me.pseudo ? s.m1 : s.m2}>{m.content}</div>)}
+                </div>
+                <form onSubmit={async (e) => { e.preventDefault(); if (!txt.trim()) return; await api("messages", "POST", { sender: me.pseudo, receiver: peer.pseudo, content: txt }); setTxt(""); load(); }} style={s.row}>
+                  <input value={txt} onChange={(e) => setTxt(e.target.value)} placeholder="Message..." style={s.inp} />
+                  <button type="submit" style={s.bSm}>➤</button>
+                </form>
+              </div>
+            ) : (
+              users.filter((u) => u.pseudo !== me.pseudo).map((u, i) => (
+                <div key={i} onClick={() => setPeer(u)} style={{ ...s.box, flexDirection: "row", alignItems: "center", cursor: "pointer" }}>
+                  <div style={{ ...s.av, width: 40, height: 40 }}>{u.pseudo?.slice(0, 1)}</div>
+                  <strong>{u.pseudo}</strong>
+                </div>
+              ))
+            )}
+          </div>
+        )}
+
+      
+         => setPeer(null)} style={s.dk}>←</button><strong>{peer.pseudo}</strong></div>
                 <div style={{ height: 220, overflowY: "auto", display: "flex", flexDirection: "column", gap: 6 }}>
                   {thread.map((m, i) => <div key={i} style={m.sender === me.pseudo ? s.m1 : s.m2}>{m.content}</div>)}
                 </div>
