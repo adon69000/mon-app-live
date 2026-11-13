@@ -271,8 +271,9 @@ export default function App() {
 }
 
 const s = {
-  center: { position: "fixed", inset: 0, background: "#090d16", color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", padding: 16, fontFamily: "sans-serif" },
-  app: { minHeight: "100vh", width: "100%", background: "#090d16", color: "#fff", fontFamily: "sans-serif", display: "flex", flexDirection: "column" },
+  center: { position: "fixed", inset: 0, backgroundImage: "linear-gradient(rgba(9, 13, 22, 0.5), rgba(9, 13, 22, 0.85)), url('/bg.jpg')", backgroundSize: "cover", backgroundPosition: "center", color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", padding: 16, fontFamily: "sans-serif" },
+
+ app: { minHeight: "100vh", width: "100%", background: "#090d16", color: "#fff", fontFamily: "sans-serif", display: "flex", flexDirection: "column" },
   head: { display: "flex", justifyContent: "space-between", alignItems: "center", padding: 14, background: "#131024" },
   main: { flex: 1, padding: 14, maxWidth: 460, width: "100%", margin: "0 auto", boxSizing: "border-box" },
   box: { background: "#131024", padding: 16, borderRadius: 14, border: "1px solid #2a234d", display: "flex", flexDirection: "column", gap: 10, width: "100%", maxWidth: 360, boxSizing: "border-box" },
