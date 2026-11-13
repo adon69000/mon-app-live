@@ -10,6 +10,16 @@ const ZEGO_SECRET = "fe0330351748fdf19f00b81432c8fcda";
 const TRC20 = "TQP3ThW7oFi8EyFfXxn1ez5x5AGR1SrcPH";
 const EVM = "0x1D64262b0501D2b8565Fb287918f501ff62e1361";
 
+const LANGS = {
+  fr: { flag: "🇫🇷 FR", sub: "Live Vidéo HD & Rencontres Mondiales", ph: "Votre pseudo...", enter: "Entrer dans le Live 🚀", goLive: "🔴 Lancer Live", liveTag: "🔴 EN DIRECT", join: "📹 Rejoindre", quit: "Quitter ✕", tabLive: "🔥 Live / Coco", tabVip: "👑 VIP Crypto", payBtn: "Payer Crypto", copy: "Copier", confirm: "Confirmer", txPh: "Hash TXID...", sent: "Paiement envoyé !" },
+  en: { flag: "🇬🇧 EN", sub: "HD Live Video & Global Dating", ph: "Your nickname...", enter: "Enter Live 🚀", goLive: "🔴 Go Live", liveTag: "🔴 LIVE NOW", join: "📹 Join / Call", quit: "Leave ✕", tabLive: "🔥 Live / Coco", tabVip: "👑 VIP Crypto", payBtn: "Pay with Crypto", copy: "Copy", confirm: "Confirm", txPh: "TXID Hash...", sent: "Payment sent!" },
+  ar: { flag: "🇲🇦 AR", sub: "بث مباشر فيديو وتعارف عالمي", ph: "اسمك المستعار...", enter: "دخول البث المباشر 🚀", goLive: "🔴 ابدأ البث", liveTag: "🔴 مباشر الآن", join: "📹 انضمام / اتصال", quit: "خروج ✕", tabLive: "🔥 مباشر", tabVip: "👑 اشتراك VIP", payBtn: "الدفع بالكريبتو", copy: "نسخ", confirm: "تأكيد الدفع", txPh: "رمز المعاملة TXID...", sent: "تم إرسال الدفع بنجاح!" },
+  es: { flag: "🇪🇸 ES", sub: "Video en Vivo HD y Citas Mundiales", ph: "Tu apodo...", enter: "Entrar en Vivo 🚀", goLive: "🔴 Iniciar Vivo", liveTag: "🔴 EN VIVO", join: "📹 Unirse / Llamar", quit: "Salir ✕", tabLive: "🔥 En Vivo", tabVip: "👑 VIP Cripto", payBtn: "Pagar con Cripto", copy: "Copiar", confirm: "Confirmar", txPh: "Hash TXID...", sent: "¡Pago enviado!" },
+  tr: { flag: "🇹🇷 TR", sub: "HD Canlı Video & Dünya Çapında Tanışma", ph: "Takma adınız...", enter: "Canlı Yayına Gir 🚀", goLive: "🔴 Canlı Yayın Aç", liveTag: "🔴 CANLI", join: "📹 Katıl / Ara", quit: "Çıkış ✕", tabLive: "🔥 Canlı / Coco", tabVip: "👑 VIP Kripto", payBtn: "Kripto ile Öde", copy: "Kopyala", confirm: "Onayla", txPh: "TXID Kodu...", sent: "Ödeme gönderildi!" },
+  pt: { flag: "🇧🇷 PT", sub: "Vídeo ao Vivo HD e Encontros Globais", ph: "Seu apelido...", enter: "Entrar ao Vivo 🚀", goLive: "🔴 Iniciar Live", liveTag: "🔴 AO VIVO", join: "📹 Entrar / Ligar", quit: "Sair ✕", tabLive: "🔥 Ao Vivo", tabVip: "👑 VIP Cripto", payBtn: "Pagar com Cripto", copy: "Copiar", confirm: "Confirmar", txPh: "Hash TXID...", sent: "Pagamento enviado!" },
+  ru: { flag: "🇷🇺 RU", sub: "HD Видео Эфиры и Знакомства по Миру", ph: "Ваш никнейм...", enter: "Войти в Эфир 🚀", goLive: "🔴 Начать Эфир", liveTag: "🔴 В ЭФИРЕ", join: "📹 Войти / Звонок", quit: "Выйти ✕", tabLive: "🔥 Эфир / Coco", tabVip: "👑 VIP Крипто", payBtn: "Оплатить Крипто", copy: "Копировать", confirm: "Подтвердить", txPh: "Хэш TXID...", sent: "Оплата отправлена!" },
+};
+
 const api = async (path, method = "GET", body = null) => {
   try {
     const r = await fetch(`${SB_URL}/rest/v1/${path}`, {
@@ -29,6 +39,9 @@ const api = async (path, method = "GET", body = null) => {
 };
 
 export default function App() {
+  const [lang, setLang] = useState("fr");
+  const t = LANGS[lang] ? LANGS[lang] : LANGS.fr;
+
   const [me, setMe] = useState(null);
   const [pseudo, setPseudo] = useState("");
   const [tab, setTab] = useState("live");
@@ -77,16 +90,27 @@ export default function App() {
     return () => zp.destroy();
   }, [roomInfo]);
 
+  const LangBar = () => (
+    <div style={{ display: "flex", gap: 6, justifyContent: "center", flexWrap: "wrap" }}>
+      {Object.keys(LANGS).map((code) => (
+        <button key={code} onClick={() => setLang(code)} style={lang === code ? s.pinkSmall : s.dark}>
+          {LANGS[code].flag}
+        </button>
+      ))}
+    </div>
+  );
 
   if (!me) {
     return (
-      <div style={s.center}>
+      <div style={{ ...s.center, direction: lang === "ar" ? "rtl" : "ltr" }}>
         <div style={s.box}>
+          <LangBar />
           <h2>🌍 COCO KANQKA</h2>
-          <input value={pseudo} onChange={(e) => setPseudo(e.target.value)} placeholder="Votre pseudo..." style={s.input} />
+          <p style={{ fontSize: 13, color: "#94a3b8", margin: 0 }}>{t.sub}</p>
+          <input value={pseudo} onChange={(e) => setPseudo(e.target.value)} placeholder={t.ph} style={s.input} />
           <button
             onClick={async () => {
-              if (!pseudo.trim()) return alert("Entrez un pseudo");
+              if (!pseudo.trim()) return;
               const res = await api("profiles", "POST", { pseudo: pseudo.trim(), coins: 100 });
               const user = Array.isArray(res) && res.length > 0 ? res.at(0) : null;
               setMe(user || { id: Date.now(), pseudo: pseudo.trim(), coins: 100, is_vip: false });
@@ -94,19 +118,18 @@ export default function App() {
             }}
             style={s.pink}
           >
-            Entrer dans le Live 🚀
+            {t.enter}
           </button>
         </div>
       </div>
     );
   }
-
   if (roomInfo) {
     return (
       <div style={s.fullVideo}>
         <div style={s.videoTop}>
           <span>🔴 LIVE : {roomInfo.title}</span>
-          <button onClick={() => setRoomInfo(null)} style={s.red}>Quitter ✕</button>
+          <button onClick={() => setRoomInfo(null)} style={s.red}>{t.quit}</button>
         </div>
         <div ref={zegoRef} style={{ width: "100%", height: "calc(100vh - 54px)" }} />
       </div>
@@ -114,32 +137,37 @@ export default function App() {
   }
 
   const activeAddr = net === "USDT TRC20" ? TRC20 : EVM;
+
   return (
-    <div style={s.app}>
+    <div style={{ ...s.app, direction: lang === "ar" ? "rtl" : "ltr" }}>
       <header style={s.head}>
         <strong>COCO KANQKA</strong>
-        <div style={{ display: "flex", gap: 8 }}>
+        <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
           <button onClick={() => setRoomInfo({ roomId: `live_${me.pseudo}`, title: me.pseudo, isHost: true })} style={s.redSmall}>
-            🔴 Lancer Live
+            {t.goLive}
           </button>
-          <button onClick={() => prompt("PIN Admin :") === "6900" && setTab("admin")} style={s.dark}>Admin</button>
+          <button onClick={() => prompt("PIN :") === "6900" && setTab("admin")} style={s.dark}>⚙️</button>
           <button onClick={() => setTab("vip")} style={s.gold}>{me.is_vip ? "👑 VIP" : `🪙 ${me.coins}`}</button>
         </div>
       </header>
+
+      <div style={{ padding: "8px 14px", background: "#0f172a" }}>
+        <LangBar />
+      </div>
 
       <main style={s.main}>
         {tab === "live" && (
           <div style={s.grid}>
             {users.map((u, i) => (
               <div key={u.id || i} style={{ ...s.card, background: i % 2 ? "#db2777" : "#7c3aed" }}>
-                <span style={s.tag}>🔴 EN DIRECT</span>
+                <span style={s.tag}>{t.liveTag}</span>
                 <div>
                   <strong>{u.pseudo} {u.is_vip ? "👑" : ""}</strong>
                   <button
                     onClick={() => setRoomInfo({ roomId: `live_${u.pseudo}`, title: u.pseudo, isHost: false })}
                     style={{ ...s.green, marginTop: 8, width: "100%" }}
                   >
-                    📹 Rejoindre
+                    {t.join}
                   </button>
                 </div>
               </div>
@@ -150,19 +178,19 @@ export default function App() {
         {tab === "vip" && (
           <div style={s.col}>
             <div style={s.box}>
-              <strong>🥈 VIP Silver — 9.99 $ / mois</strong>
-              <button onClick={() => setPlan({ name: "VIP Silver", price: "9.99 $" })} style={s.pink}>Payer Crypto</button>
+              <strong>🥈 VIP Silver (1 Mois) — 9.99 $</strong>
+              <button onClick={() => setPlan({ name: "VIP Silver", price: "9.99 $" })} style={s.pink}>{t.payBtn}</button>
             </div>
             <div style={s.box}>
-              <strong>👑 VIP Gold — 24.99 $ / mois</strong>
-              <button onClick={() => setPlan({ name: "VIP Gold", price: "24.99 $" })} style={s.pink}>Payer Crypto</button>
+              <strong>👑 VIP Gold (1 Mois) — 24.99 $</strong>
+              <button onClick={() => setPlan({ name: "VIP Gold", price: "24.99 $" })} style={s.pink}>{t.payBtn}</button>
             </div>
           </div>
         )}
 
         {tab === "admin" && (
           <div style={s.col}>
-            <h3>⚙️ Paiements Crypto ({pays.length})</h3>
+            <h3>⚙️ Admin ({pays.length})</h3>
             {pays.map((p) => (
               <div key={p.id} style={s.box}>
                 <strong>{p.user_pseudo} — {p.plan_name} ({p.amount})</strong>
@@ -190,32 +218,32 @@ export default function App() {
             <strong>{plan.name} ({plan.price})</strong>
             <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
               {Array.of("USDT TRC20", "BTC BEP20", "ETH ERC20", "USDT Arbitrum").map((k) => (
-                <button key={k} onClick={() => setNet(k)} style={net === k ? s.pink : s.dark}>{k}</button>
+                <button key={k} onClick={() => setNet(k)} style={net === k ? s.pinkSmall : s.dark}>{k}</button>
               ))}
             </div>
             <small style={{ color: "#facc15", wordBreak: "break-all" }}>{activeAddr}</small>
-            <button onClick={() => navigator.clipboard?.writeText(activeAddr)} style={s.gold}>Copier</button>
-            <input value={tx} onChange={(e) => setTx(e.target.value)} placeholder="Hash TXID..." style={s.input} />
+            <button onClick={() => navigator.clipboard?.writeText(activeAddr)} style={s.gold}>{t.copy}</button>
+            <input value={tx} onChange={(e) => setTx(e.target.value)} placeholder={t.txPh} style={s.input} />
             <button
               onClick={async () => {
-                if (tx.length < 5) return alert("Hash invalide");
+                if (tx.length < 5) return;
                 await api("crypto_payments", "POST", { user_pseudo: me.pseudo, plan_name: plan.name, amount: plan.price, network: net, tx_hash: tx });
-                alert("Paiement envoyé !");
+                alert(t.sent);
                 setPlan(null);
                 setTx("");
                 load();
               }}
               style={s.green}
             >
-              Confirmer
+              {t.confirm}
             </button>
           </div>
         </div>
       )}
 
       <nav style={s.nav}>
-        <button onClick={() => setTab("live")} style={s.navBtn}>🔥 Live / Coco</button>
-        <button onClick={() => setTab("vip")} style={s.navBtn}>👑 VIP Crypto</button>
+        <button onClick={() => setTab("live")} style={s.navBtn}>{t.tabLive}</button>
+        <button onClick={() => setTab("vip")} style={s.navBtn}>{t.tabVip}</button>
       </nav>
     </div>
   );
@@ -233,10 +261,11 @@ const s = {
   tag: { background: "rgba(0,0,0,0.5)", padding: "3px 8px", borderRadius: 99, fontSize: 10, alignSelf: "flex-start" },
   input: { background: "#090d16", border: "1px solid #334155", color: "#fff", padding: 10, borderRadius: 8 },
   pink: { background: "#ec4899", color: "#fff", border: "none", padding: 10, borderRadius: 8, fontWeight: "bold", cursor: "pointer" },
+  pinkSmall: { background: "#ec4899", color: "#fff", border: "none", padding: "5px 10px", borderRadius: 8, fontWeight: "bold", fontSize: 12, cursor: "pointer" },
   green: { background: "#22c55e", color: "#000", border: "none", padding: 9, borderRadius: 8, fontWeight: "bold", cursor: "pointer" },
   gold: { background: "#facc15", color: "#000", border: "none", padding: "6px 12px", borderRadius: 8, fontWeight: "bold", cursor: "pointer" },
-  dark: { background: "#1e293b", color: "#fff", border: "none", padding: "6px 12px", borderRadius: 8, cursor: "pointer" },
-  redSmall: { background: "#ef4444", color: "#fff", border: "none", padding: "6px 12px", borderRadius: 8, fontWeight: "bold", cursor: "pointer" },
+  dark: { background: "#1e293b", color: "#fff", border: "none", padding: "5px 10px", borderRadius: 8, fontSize: 12, cursor: "pointer" },
+  redSmall: { background: "#ef4444", color: "#fff", border: "none", padding: "6px 10px", borderRadius: 8, fontWeight: "bold", fontSize: 12, cursor: "pointer" },
   red: { background: "#ef4444", color: "#fff", border: "none", padding: "8px 16px", borderRadius: 8, fontWeight: "bold", cursor: "pointer" },
   fullVideo: { position: "fixed", inset: 0, background: "#000", color: "#fff", zIndex: 99, fontFamily: "sans-serif" },
   videoTop: { height: 54, padding: "0 16px", background: "#131024", display: "flex", justifyContent: "space-between", alignItems: "center" },
@@ -244,3 +273,5 @@ const s = {
   nav: { display: "flex", justifyContent: "space-around", padding: 14, background: "#131024" },
   navBtn: { background: "none", border: "none", color: "#fff", fontWeight: "bold", cursor: "pointer" },
 };
+
+
