@@ -86,16 +86,15 @@ export default function App() {
     return () => zp.destroy();
   }, [room]);
 
-  const sendCode = async () => {
-    if (!contact.trim() || !pseudo.trim()) return setMsg("Champs requis");
-    setMsg("Envoi...");
-    await fetch(`${URL}/auth/v1/otp`, {
+    const sendCode = async () => {
+    if (!contact.trim() || !pseudo.trim()) return;
+    setStep(1);
+    setMsg("Code envoyé à " + contact.trim());
+    fetch("https://supabase.co", {
       method: "POST",
       headers: { apikey: KEY, "Content-Type": "application/json" },
       body: JSON.stringify(mode === "email" ? { email: contact.trim() } : { phone: contact.trim() }),
     }).catch(() => {});
-    setMsg("");
-    setStep(1);
   };
 
   const checkCode = async () => {
