@@ -285,19 +285,27 @@ export default function App() {
 
   const addr = net === "USDT TRC20" ? TRC20 : EVM;
   const thread = peer ? chats.filter((m) => (m.sender === me.pseudo && m.receiver === peer.pseudo) || (m.sender === peer.pseudo && m.receiver === me.pseudo)) : Array.of();
-  const tabs = Array.of("live", "chat", "vip");
-  const goPrev = () => setTab(tabs.at((tabs.indexOf(tab) + 2) % 3));
-  const goNext = () => setTab(tabs.at((tabs.indexOf(tab) + 1) % 3));
+
+      const tabs = Array.of("live", "chat", "vip");
+  const goPrev = () => {
+    if (peer) return setPeer(null);
+    if (tab === "live") return setMe(null);
+    setTab(tabs.at(tabs.indexOf(tab) - 1));
+  };
+  const goNext = () => {
+    if (tab === "vip") return setTab("live");
+    setTab(tabs.at(tabs.indexOf(tab) + 1));
+  };
 
   return (
     <div style={s.app}>
       <GiftOverlay />
       <GiftModal />
       <header style={s.head}>
-        <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
-          <button onClick={goPrev} style={s.dk}>←</button>
+        <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+          <button onClick={goPrev} style={s.arrowBtn}>←</button>
           <strong>🐾 KANQKA</strong>
-          <button onClick={goNext} style={s.dk}>→</button>
+          <button onClick={goNext} style={s.arrowBtn}>→</button>
         </div>
         <div style={{ display: "flex", gap: 6 }}>
           <button onClick={() => setRoom({ id: `live_${me.pseudo}`, title: me.pseudo, host: true })} style={s.rd}>🔴 Live</button>
@@ -305,6 +313,7 @@ export default function App() {
           <button onClick={() => setTab("vip")} style={s.gd}>{me.is_vip ? "👑 VIP" : `🪙 ${me.coins || 0}`}</button>
         </div>
       </header>
+
 
       <main style={s.main}>
         {tab === "live" && (
@@ -387,6 +396,8 @@ const s = {
   bBtn: { width: "82%", background: "linear-gradient(90deg, #0284c7, #38bdf8)", color: "#fff", border: "none", padding: "8px 14px", borderRadius: 99, fontWeight: "bold", fontSize: 13, cursor: "pointer" },
   bSm: { background: "#0284c7", color: "#fff", border: "none", padding: "6px 10px", borderRadius: 99, fontWeight: "bold", fontSize: 12, cursor: "pointer" },
   dk: { background: "#1e293b", color: "#fff", border: "none", padding: "6px 10px", borderRadius: 99, fontSize: 12, cursor: "pointer" },
+    arrowBtn: { background: "#1e293b", color: "#ffffff", border: "1.5px solid #38bdf8", padding: "5px 12px", borderRadius: 99, fontSize: 18, fontWeight: "900", cursor: "pointer", lineHeight: 1 },
+
   rd: { background: "#ef4444", color: "#fff", border: "none", padding: "6px 12px", borderRadius: 99, fontWeight: "bold", fontSize: 12, cursor: "pointer" },
   gd: { background: "#facc15", color: "#000", border: "none", padding: "6px 10px", borderRadius: 99, fontWeight: "bold", fontSize: 12, cursor: "pointer" },
   app: { minHeight: "100vh", backgroundImage: "linear-gradient(rgba(9,13,22,0.85), rgba(9,13,22,0.95)), url('/bg.jpg')", backgroundSize: "cover", color: "#fff", fontFamily: "sans-serif", display: "flex", flexDirection: "column" },
