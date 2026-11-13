@@ -23,7 +23,7 @@ const LANGS = {
 };
 
 const BluePaw = () => (
-  <svg width="28" height="28" viewBox="0 0 24 24" fill="#38bdf8" style={{ verticalAlign: "middle", marginRight: 8, filter: "drop-shadow(0 0 8px rgba(56, 189, 248, 0.7))" }}>
+  <svg width="26" height="26" viewBox="0 0 24 24" fill="#38bdf8" style={{ verticalAlign: "middle", marginRight: 8, filter: "drop-shadow(0 0 8px rgba(56, 189, 248, 0.8))" }}>
     <circle cx="4.5" cy="9.5" r="2.5" />
     <circle cx="9" cy="5.5" r="2.5" />
     <circle cx="15" cy="5.5" r="2.5" />
@@ -106,7 +106,7 @@ export default function App() {
   }, [roomInfo]);
 
   const FlagCircles = () => (
-    <div style={{ display: "flex", gap: 6, justifyContent: "center", flexWrap: "wrap", maxWidth: 270 }}>
+    <div style={{ display: "flex", gap: 8, justifyContent: "center", flexWrap: "wrap", maxWidth: 320 }}>
       {Object.keys(LANGS).map((code) => (
         <button
           key={code}
@@ -159,10 +159,10 @@ export default function App() {
     return (
       <div style={s.fullVideo}>
         <div style={s.videoTop}>
-          <span>🔴 LIVE : {roomInfo.title}</span>
+          <span style={{ fontWeight: "700" }}>🔴 LIVE : {roomInfo.title}</span>
           <button onClick={() => setRoomInfo(null)} style={s.red}>{t.quit}</button>
         </div>
-        <div ref={zegoRef} style={{ width: "100%", height: "calc(100vh - 54px)" }} />
+        <div ref={zegoRef} style={{ width: "100%", height: "calc(100vh - 58px)" }} />
       </div>
     );
   }
@@ -172,20 +172,20 @@ export default function App() {
   return (
     <div style={{ ...s.app, direction: isRtl ? "rtl" : "ltr" }}>
       <header style={s.head}>
-        <strong style={{ color: "#fff", fontSize: 19, fontWeight: "900", display: "flex", alignItems: "center" }}>
+        <strong style={{ color: "#fff", fontSize: 20, fontWeight: "900", display: "flex", alignItems: "center" }}>
           <BluePaw />
           KANQKA
         </strong>
-        <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
+        <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
           <button onClick={() => setRoomInfo({ roomId: `live_${me.pseudo}`, title: me.pseudo, isHost: true })} style={s.redSmall}>
             {t.goLive}
           </button>
-          <button onClick={() => prompt("PIN :") === "6900" && setTab("admin")} style={s.dark}>⚙️</button>
-          <button onClick={() => setTab("vip")} style={s.gold}>{me.is_vip ? "👑 VIP" : `🪙 ${me.coins}`}</button>
+          <button onClick={() => prompt("PIN :") === "6900" && setTab("admin")} style={s.iconCircle}>⚙️</button>
+          <button onClick={() => setTab("vip")} style={s.goldPill}>{me.is_vip ? "👑 VIP" : `🪙 ${me.coins}`}</button>
         </div>
       </header>
 
-      <div style={{ padding: "10px 14px", background: "#0f172a", display: "flex", justifyContent: "center" }}>
+      <div style={s.flagBarWrap}>
         <FlagCircles />
       </div>
 
@@ -193,13 +193,16 @@ export default function App() {
         {tab === "live" && (
           <div style={s.grid}>
             {users.map((u, i) => (
-              <div key={u.id || i} style={{ ...s.card, background: i % 2 ? "#db2777" : "#7c3aed" }}>
-                <span style={s.tag}>{t.liveTag}</span>
-                <div>
-                  <strong>{u.pseudo} {u.is_vip ? "👑" : ""}</strong>
+              <div key={u.id || i} style={s.glassCard}>
+                <span style={s.liveTag}>{t.liveTag}</span>
+                <div style={s.avatarBubble}>{u.pseudo.slice(0, 1).toUpperCase()}</div>
+                <div style={{ width: "100%", textAlign: "center" }}>
+                  <div style={{ fontSize: 16, fontWeight: "800", marginBottom: 10 }}>
+                    {u.pseudo} {u.is_vip ? "👑" : ""}
+                  </div>
                   <button
                     onClick={() => setRoomInfo({ roomId: `live_${u.pseudo}`, title: u.pseudo, isHost: false })}
-                    style={{ ...s.green, marginTop: 8, width: "100%" }}
+                    style={s.blueActionBtn}
                   >
                     {t.join}
                   </button>
@@ -211,22 +214,39 @@ export default function App() {
 
         {tab === "vip" && (
           <div style={s.col}>
-            <div style={s.box}>
-              <strong>🥈 VIP Silver (1 Mois) — 9.99 $</strong>
-              <button onClick={() => setPlan({ name: "VIP Silver", price: "9.99 $" })} style={s.blueLaunchBtn}>{t.payBtn}</button>
+            <div style={s.glassBox}>
+              <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                <div style={{ ...s.avatarBubble, width: 48, height: 48, fontSize: 20 }}>{me.pseudo.slice(0, 1).toUpperCase()}</div>
+                <div>
+                  <strong style={{ fontSize: 17 }}>{me.pseudo}</strong>
+                  <div style={{ fontSize: 12, color: "#38bdf8" }}>{me.is_vip ? "👑 VIP Actif" : `🪙 ${me.coins} pièces`}</div>
+                </div>
+              </div>
             </div>
-            <div style={s.box}>
-              <strong>👑 VIP Gold (1 Mois) — 24.99 $</strong>
-              <button onClick={() => setPlan({ name: "VIP Gold", price: "24.99 $" })} style={s.blueLaunchBtn}>{t.payBtn}</button>
+
+            <div style={s.glassBox}>
+              <div style={s.rowBetween}>
+                <strong style={{ fontSize: 16 }}>🥈 VIP Silver (1 Mois)</strong>
+                <span style={s.priceBadge}>9.99 $</span>
+              </div>
+              <button onClick={() => setPlan({ name: "VIP Silver", price: "9.99 $" })} style={s.blueActionBtn}>{t.payBtn}</button>
+            </div>
+
+            <div style={s.glassBox}>
+              <div style={s.rowBetween}>
+                <strong style={{ fontSize: 16 }}>👑 VIP Gold (1 Mois)</strong>
+                <span style={s.priceBadge}>24.99 $</span>
+              </div>
+              <button onClick={() => setPlan({ name: "VIP Gold", price: "24.99 $" })} style={s.blueActionBtn}>{t.payBtn}</button>
             </div>
           </div>
         )}
 
         {tab === "admin" && (
           <div style={s.col}>
-            <h3>⚙️ Admin ({pays.length})</h3>
+            <h3 style={{ margin: "0 0 4px 0", color: "#38bdf8" }}>⚙️ Admin ({pays.length})</h3>
             {pays.map((p) => (
-              <div key={p.id} style={s.box}>
+              <div key={p.id} style={s.glassBox}>
                 <strong>{p.user_pseudo} — {p.plan_name} ({p.amount})</strong>
                 <small style={{ color: "#facc15", wordBreak: "break-all" }}>{p.network} : {p.tx_hash}</small>
                 {p.status === "valide" ? "✅ Validé" : (
@@ -235,7 +255,7 @@ export default function App() {
                       await api(`crypto_payments?id=eq.${p.id}`, "PATCH", { status: "valide" });
                       load();
                     }}
-                    style={s.green}
+                    style={s.blueActionBtn}
                   >
                     Valider VIP
                   </button>
@@ -248,16 +268,21 @@ export default function App() {
 
       {plan && (
         <div style={s.modal} onClick={() => setPlan(null)}>
-          <div style={s.box} onClick={(e) => e.stopPropagation()}>
-            <strong>{plan.name} ({plan.price})</strong>
+          <div style={s.modalGlass} onClick={(e) => e.stopPropagation()}>
+            <div style={s.rowBetween}>
+              <strong style={{ fontSize: 16 }}>{plan.name} ({plan.price})</strong>
+              <button onClick={() => setPlan(null)} style={s.iconCircle}>✕</button>
+            </div>
             <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
               {Array.of("USDT TRC20", "BTC BEP20", "ETH ERC20", "USDT Arbitrum").map((k) => (
-                <button key={k} onClick={() => setNet(k)} style={net === k ? s.blueSmall : s.dark}>{k}</button>
+                <button key={k} onClick={() => setNet(k)} style={net === k ? s.blueSmall : s.darkPill}>{k}</button>
               ))}
             </div>
-            <small style={{ color: "#facc15", wordBreak: "break-all" }}>{activeAddr}</small>
-            <button onClick={() => navigator.clipboard?.writeText(activeAddr)} style={s.gold}>{t.copy}</button>
-            <input value={tx} onChange={(e) => setTx(e.target.value)} placeholder={t.txPh} style={s.input} />
+            <div style={s.addrBox}>
+              <small style={{ color: "#facc15", wordBreak: "break-all", fontFamily: "monospace" }}>{activeAddr}</small>
+              <button onClick={() => navigator.clipboard?.writeText(activeAddr)} style={s.goldPill}>{t.copy}</button>
+            </div>
+            <input value={tx} onChange={(e) => setTx(e.target.value)} placeholder={t.txPh} style={s.modernInput} />
             <button
               onClick={async () => {
                 if (tx.length < 5) return;
@@ -267,7 +292,7 @@ export default function App() {
                 setTx("");
                 load();
               }}
-              style={s.green}
+              style={s.blueActionBtn}
             >
               {t.confirm}
             </button>
@@ -276,8 +301,8 @@ export default function App() {
       )}
 
       <nav style={s.nav}>
-        <button onClick={() => setTab("live")} style={s.navBtn}>{t.tabLive}</button>
-        <button onClick={() => setTab("vip")} style={s.navBtn}>{t.tabVip}</button>
+        <button onClick={() => setTab("live")} style={tab === "live" ? s.navBtnActive : s.navBtn}>{t.tabLive}</button>
+        <button onClick={() => setTab("vip")} style={tab === "vip" ? s.navBtnActive : s.navBtn}>{t.tabVip}</button>
       </nav>
     </div>
   );
@@ -293,28 +318,13 @@ const s = {
   circleInput: { width: "86%", background: "rgba(9, 13, 22, 0.85)", border: "1px solid rgba(56, 189, 248, 0.4)", color: "#fff", padding: "11px 16px", borderRadius: 99, fontSize: 13, textAlign: "center", outline: "none" },
   blueLaunchBtn: { width: "86%", background: "linear-gradient(90deg, #0284c7, #38bdf8)", color: "#fff", border: "none", padding: "11px 18px", borderRadius: 99, fontWeight: "800", fontSize: 14, cursor: "pointer", boxShadow: "0 6px 20px rgba(14, 165, 233, 0.45)" },
 
-  app: { minHeight: "100vh", width: "100%", background: "#090d16", color: "#fff", fontFamily: "system-ui, sans-serif", display: "flex", flexDirection: "column" },
-  head: { display: "flex", justifyContent: "space-between", alignItems: "center", padding: 14, background: "#131024" },
-  main: { flex: 1, padding: 14, maxWidth: 460, width: "100%", margin: "0 auto", boxSizing: "border-box" },
-  box: { background: "#131024", padding: 16, borderRadius: 14, border: "1px solid #2a234d", display: "flex", flexDirection: "column", gap: 10, width: "100%", maxWidth: 360, boxSizing: "border-box" },
-  col: { display: "flex", flexDirection: "column", gap: 12 },
-  grid: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 },
-  card: { height: 170, borderRadius: 14, padding: 12, display: "flex", flexDirection: "column", justifyContent: "space-between" },
-  tag: { background: "rgba(0,0,0,0.5)", padding: "3px 8px", borderRadius: 99, fontSize: 10, alignSelf: "flex-start" },
-  input: { background: "#090d16", border: "1px solid #334155", color: "#fff", padding: 10, borderRadius: 8 },
-  blueSmall: { background: "#0284c7", color: "#fff", border: "none", padding: "5px 10px", borderRadius: 8, fontWeight: "bold", fontSize: 12, cursor: "pointer" },
-  green: { background: "#22c55e", color: "#000", border: "none", padding: 9, borderRadius: 8, fontWeight: "bold", cursor: "pointer" },
-  gold: { background: "#facc15", color: "#000", border: "none", padding: "6px 12px", borderRadius: 8, fontWeight: "bold", cursor: "pointer" },
-  dark: { background: "#1e293b", color: "#fff", border: "none", padding: "5px 10px", borderRadius: 8, fontSize: 12, cursor: "pointer" },
-  redSmall: { background: "#ef4444", color: "#fff", border: "none", padding: "6px 10px", borderRadius: 8, fontWeight: "bold", fontSize: 12, cursor: "pointer" },
-  red: { background: "#ef4444", color: "#fff", border: "none", padding: "8px 16px", borderRadius: 8, fontWeight: "bold", cursor: "pointer" },
-  fullVideo: { position: "fixed", inset: 0, background: "#000", color: "#fff", zIndex: 99, fontFamily: "sans-serif" },
-  videoTop: { height: 54, padding: "0 16px", background: "#131024", display: "flex", justifyContent: "space-between", alignItems: "center" },
-  modal: { position: "fixed", inset: 0, background: "rgba(0,0,0,0.8)", display: "flex", alignItems: "center", justifyContent: "center", padding: 16 },
-  nav: { display: "flex", justifyContent: "space-around", padding: 14, background: "#131024" },
-  navBtn: { background: "none", border: "none", color: "#fff", fontWeight: "bold", cursor: "pointer" },
-};
+  app: { minHeight: "100vh", width: "100%", backgroundImage: "linear-gradient(rgba(9, 13, 22, 0.82), rgba(9, 13, 22, 0.94)), url('/bg.jpg')", backgroundSize: "cover", backgroundPosition: "center", backgroundAttachment: "fixed", color: "#fff", fontFamily: "system-ui, sans-serif", display: "flex", flexDirection: "column" },
+  head: { display: "flex", justifyContent: "space-between", alignItems: "center", padding: "14px 18px", background: "rgba(11, 16, 33, 0.85)", backdropFilter: "blur(12px)", borderBottom: "1px solid rgba(56, 189, 248, 0.25)" },
+  flagBarWrap: { padding: "10px 14px", background: "rgba(11, 16, 33, 0.65)", borderBottom: "1px solid rgba(56, 189, 248, 0.15)", display: "flex", justifyContent: "center" },
+  main: { flex: 1, padding: "20px 16px", maxWidth: 480, width: "100%", margin: "0 auto", boxSizing: "border-box" },
 
+  grid: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 },
+  glassCard: { height: 205, borderRadius: 24, padding: 16, background: "rgba(15, 23, 42, 0.72)", backdropFilter: "blur(14px)", border: "1.5px solid rgba(56, 189, 248, 0.35)", boxShadow: "0 8px 25px rgba(2, 132, 199, 0.2)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "space-between" },
 
 
 
