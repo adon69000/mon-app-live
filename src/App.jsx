@@ -18,15 +18,15 @@ const GIFTS = Array.of(
 );
 
 const LANGS = {
-  fr: { f: "🇫🇷", w: "Site réservé aux adultes (+18 ans)", ok18: "J'ai 18 ans ou plus ✓", ph: "Pseudo...", age: "Âge (18+)", c: "E-mail ou +212...", s: "Suivant →", code: "Code 6 ou 8 chiffres...", go: "Entrer 🚀" },
-  en: { f: "🇬🇧", w: "Adults only (+18 years)", ok18: "I am 18 or older ✓", ph: "Nickname...", age: "Age (18+)", c: "Email or Phone...", s: "Next →", code: "8-digit code...", go: "Enter 🚀" },
-  zh: { f: "🇨🇳", w: "仅限18岁以上成年人访问", ok18: "我已满18岁 ✓", ph: "昵称...", age: "年龄 (18+)", c: "邮箱或手机号...", s: "下一步 →", code: "8位验证码...", go: "进入 🚀" },
-  es: { f: "🇪🇸", w: "Solo para mayores de 18 años", ok18: "Tengo 18 años o más ✓", ph: "Apodo...", age: "Edad (18+)", c: "Correo o Tel...", s: "Siguiente →", code: "Código 8 dígitos...", go: "Entrar 🚀" },
-  tr: { f: "🇹🇷", w: "Sadece 18 yaş ve üzeri yetişkinler", ok18: "18 yaşından büyüğüm ✓", ph: "Takma ad...", age: "Yaş (18+)", c: "E-posta / Tel...", s: "İleri →", code: "8 haneli kod...", go: "Gir 🚀" },
-  pt: { f: "🇧🇷", w: "Apenas para maiores de 18 anos", ok18: "Tenho 18 anos ou mais ✓", ph: "Apelido...", age: "Idade (18+)", c: "E-mail ou Tel...", s: "Próximo →", code: "Código 8 dígitos...", go: "Entrar 🚀" },
-  ru: { f: "🇷🇺", w: "Только для лиц старше 18 лет", ok18: "Мне есть 18 лет ✓", ph: "Никнейм...", age: "Возраст (18+)", c: "Почта / Тел...", s: "Далее →", code: "Код из 8 цифр...", go: "Войти 🚀" },
-  he: { f: "🇮🇱", w: "הכניסה למבוגרים מעל גיל 18 בלבד", ok18: "אני מעל גיל 18 ✓", ph: "כינוי...", age: "גיל (18+)", c: "אימייל / טלפון...", s: "הבא →", code: "קוד 8 ספרות...", go: "כניסה 🚀" },
-  de: { f: "🇩🇪", w: "Nur für Erwachsene ab 18 Jahren", ok18: "Ich bin 18 oder älter ✓", ph: "Name...", age: "Alter (18+)", c: "E-Mail / Tel...", s: "Weiter →", code: "8-stelliger Code...", go: "Starten 🚀" },
+  fr: { f: "🇫🇷", w: "Site réservé aux adultes (+18 ans)", ok18: "J'ai 18 ans ou plus ✓", ph: "Pseudo...", c: "Adresse E-mail...", s: "Envoyer Code 📩", code: "Code 8 chiffres...", go: "Entrer 🚀" },
+  en: { f: "🇬🇧", w: "Adults only (+18 years)", ok18: "I am 18 or older ✓", ph: "Nickname...", c: "Email address...", s: "Send Code 📩", code: "8-digit code...", go: "Enter 🚀" },
+  zh: { f: "🇨🇳", w: "仅限18岁以上成年人访问", ok18: "我已满18岁 ✓", ph: "昵称...", c: "电子邮箱...", s: "发送验证码 📩", code: "8位验证码...", go: "进入 🚀" },
+  es: { f: "🇪🇸", w: "Solo para mayores de 18 años", ok18: "Tengo 18 años o más ✓", ph: "Apodo...", c: "Correo electrónico...", s: "Enviar Código 📩", code: "Código 8 dígitos...", go: "Entrar 🚀" },
+  tr: { f: "🇹🇷", w: "Sadece 18 yaş ve üzeri yetişkinler", ok18: "18 yaşından büyüğüm ✓", ph: "Takma ad...", c: "E-posta adresi...", s: "Kod Gönder 📩", code: "8 haneli kod...", go: "Gir 🚀" },
+  pt: { f: "🇧🇷", w: "Apenas para maiores de 18 anos", ok18: "Tenho 18 anos ou mais ✓", ph: "Apelido...", c: "Endereço de E-mail...", s: "Enviar Código 📩", code: "Código 8 dígitos...", go: "Entrar 🚀" },
+  ru: { f: "🇷🇺", w: "Только для лиц старше 18 лет", ok18: "Мне есть 18 лет ✓", ph: "Никнейм...", c: "Электронная почта...", s: "Отправить код 📩", code: "Код из 8 цифр...", go: "Войти 🚀" },
+  he: { f: "🇮🇱", w: "הכניסה למבוגרים מעל גיל 18 בלבד", ok18: "אני מעל גיל 18 ✓", ph: "כינוי...", c: "כתובת אימייל...", s: "שלח קוד 📩", code: "קוד 8 ספרות...", go: "כניסה 🚀" },
+  de: { f: "🇩🇪", w: "Nur für Erwachsene ab 18 Jahren", ok18: "Ich bin 18 oder älter ✓", ph: "Name...", c: "E-Mail-Adresse...", s: "Code senden 📩", code: "8-stelliger Code...", go: "Starten 🚀" },
 };
 
 const api = async (p, m = "GET", b = null) => {
@@ -41,11 +41,14 @@ const api = async (p, m = "GET", b = null) => {
 };
 
 export default function App() {
+  const savedUser = (() => {
+    try { return JSON.parse(localStorage.getItem("kanqka_user") || "null"); } catch { return null; }
+  })();
+
   const [lang, setLang] = useState("fr");
   const t = LANGS[lang] || LANGS.fr;
-  const [is18, setIs18] = useState(false);
-  const [me, setMe] = useState(null);
-  const [mode, setMode] = useState("email");
+  const [is18, setIs18] = useState(Boolean(savedUser));
+  const [me, setMe] = useState(savedUser);
   const [contact, setContact] = useState("");
   const [pseudo, setPseudo] = useState("");
   const [age, setAge] = useState("22");
@@ -71,6 +74,14 @@ export default function App() {
   const [net, setNet] = useState("USDT TRC20");
   const [tx, setTx] = useState("");
   const zegoRef = useRef(null);
+
+  const saveSession = (u) => {
+    setMe(u);
+    try {
+      if (u) localStorage.setItem("kanqka_user", JSON.stringify(u));
+      else localStorage.removeItem("kanqka_user");
+    } catch {}
+  };
 
   const load = async () => {
     const u = await api("profiles?select=*&order=created_at.desc");
@@ -104,29 +115,32 @@ export default function App() {
     return () => zp.destroy();
   }, [room]);
   const sendCode = async () => {
-    if (!contact.trim() || !pseudo.trim()) return setMsg("Champs requis");
+    if (!contact.trim() || !pseudo.trim()) return setMsg("Entrez votre e-mail et pseudo");
+    if (!contact.includes("@")) return setMsg("Adresse e-mail invalide");
     if (Number(age) < 18) return setMsg("🔞 -18 Interdit !");
-    setMsg("Envoi...");
+    setMsg("Envoi du code sur " + contact.trim() + "...");
     await fetch(`${URL}/auth/v1/otp`, {
       method: "POST",
       headers: { apikey: KEY, "Content-Type": "application/json" },
-      body: JSON.stringify(mode === "email" ? { email: contact.trim() } : { phone: contact.trim() }),
+      body: JSON.stringify({ email: contact.trim() }),
     }).catch(() => {});
-    setMsg("");
+    setMsg("Code envoyé par e-mail !");
     setStep(1);
   };
 
   const checkCode = async () => {
     if (otp.trim().length < 4) return setMsg("Code invalide");
+    setMsg("Vérification...");
     const r = await fetch(`${URL}/auth/v1/verify`, {
       method: "POST",
       headers: { apikey: KEY, "Content-Type": "application/json" },
-      body: JSON.stringify(mode === "email" ? { email: contact.trim(), token: otp.trim(), type: "email" } : { phone: contact.trim(), token: otp.trim(), type: "sms" }),
+      body: JSON.stringify({ email: contact.trim(), token: otp.trim(), type: "email" }),
     });
-    if (!r.ok) return setMsg("Code incorrect");
+    if (!r.ok) return setMsg("Code incorrect ou expiré");
     const data = { pseudo: pseudo.trim(), contact: contact.trim(), age: Number(age) || 18, gender, avatar_url: avatar || null, coins: 100 };
     const res = await api("profiles", "POST", data);
-    setMe((Array.isArray(res) && res.at(0)) || { id: Date.now(), ...data });
+    const profile = (Array.isArray(res) && res.at(0)) || { id: Date.now(), ...data };
+    saveSession(profile);
     load();
   };
 
@@ -137,7 +151,7 @@ export default function App() {
       return alert("👑 Devenez VIP ou rechargez vos pièces pour envoyer ce cadeau !");
     }
     const newCoins = Math.max(0, (me.coins || 0) - g.cost);
-    setMe({ ...me, coins: newCoins });
+    saveSession({ ...me, coins: newCoins });
     if (typeof me.id === "string") {
       await api(`profiles?id=eq.${me.id}`, "PATCH", { coins: newCoins });
     }
@@ -214,14 +228,10 @@ export default function App() {
                 <button onClick={() => setGender("👨")} style={gender === "👨" ? s.bSm : s.dk}>👨</button>
                 <input type="number" min="18" max="99" value={age} onChange={(e) => setAge(e.target.value)} style={{ ...s.inp, width: 54, padding: "6px" }} />
               </div>
-              <div style={{ display: "flex", gap: 6 }}>
-                <button onClick={() => setMode("email")} style={mode === "email" ? s.bSm : s.dk}>✉️</button>
-                <button onClick={() => setMode("phone")} style={mode === "phone" ? s.bSm : s.dk}>📱</button>
-              </div>
-              <input value={contact} onChange={(e) => setContact(e.target.value)} placeholder={t.c} style={s.inp} />
+              <input type="email" value={contact} onChange={(e) => setContact(e.target.value)} placeholder={t.c} style={s.inp} />
               <input value={pseudo} onChange={(e) => setPseudo(e.target.value)} placeholder={t.ph} style={s.inp} />
               <div style={{ display: "flex", gap: 8, width: "82%" }}>
-                <button onClick={() => setIs18(false)} style={s.dk}>←</button>
+                <button onClick={() => setIs18(false)} style={s.arrowBtn}>←</button>
                 <button onClick={sendCode} style={{ ...s.bBtn, width: "100%" }}>{t.s}</button>
               </div>
             </>
@@ -229,7 +239,7 @@ export default function App() {
             <>
               <input value={otp} onChange={(e) => setOtp(e.target.value)} placeholder={t.code} style={{ ...s.inp, letterSpacing: 3 }} />
               <div style={{ display: "flex", gap: 8, width: "82%" }}>
-                <button onClick={() => setStep(0)} style={s.dk}>←</button>
+                <button onClick={() => { setStep(0); setMsg(""); }} style={s.arrowBtn}>←</button>
                 <button onClick={checkCode} style={{ ...s.bBtn, width: "100%" }}>{t.go}</button>
               </div>
             </>
@@ -285,11 +295,10 @@ export default function App() {
 
   const addr = net === "USDT TRC20" ? TRC20 : EVM;
   const thread = peer ? chats.filter((m) => (m.sender === me.pseudo && m.receiver === peer.pseudo) || (m.sender === peer.pseudo && m.receiver === me.pseudo)) : Array.of();
-
-      const tabs = Array.of("live", "chat", "vip");
+  const tabs = Array.of("live", "chat", "vip");
   const goPrev = () => {
     if (peer) return setPeer(null);
-    if (tab === "live") return setMe(null);
+    if (tab === "live") return saveSession(null);
     setTab(tabs.at(tabs.indexOf(tab) - 1));
   };
   const goNext = () => {
@@ -314,7 +323,6 @@ export default function App() {
         </div>
       </header>
 
-
       <main style={s.main}>
         {tab === "live" && (
           <div style={s.grid}>
@@ -327,98 +335,3 @@ export default function App() {
                     <button onClick={() => { setPeer(u); setTab("chat"); }} style={s.dk}>💬</button>
                   </div>
                 </div>
-                <div style={{ ...s.av, width: 42, height: 42 }}>{u.avatar_url ? <img src={u.avatar_url} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : u.pseudo?.slice(0, 1)}</div>
-                <div><strong>{u.pseudo}</strong><div style={{ fontSize: 12, color: "#38bdf8" }}>{u.gender || "👩"} {u.age || 20} ans</div></div>
-              </div>
-            ))}
-          </div>
-        )}
-
-        {tab === "vip" && (
-          <div style={s.col}>
-            <div style={s.box}>
-              <strong>{me.gender} {me.pseudo} ({me.age} ans) — 🪙 {me.coins || 0}</strong>
-              <small style={{ color: "#94a3b8" }}>{me.contact}</small>
-            </div>
-            <div style={s.box}><strong>🥈 VIP Silver + 300 🪙 — 9.99 $</strong><button onClick={() => setPlan({ name: "VIP Silver + 300 Coins", price: "9.99 $" })} style={s.bBtn}>Crypto</button></div>
-            <div style={s.box}><strong>👑 VIP Gold + 1000 🪙 — 24.99 $</strong><button onClick={() => setPlan({ name: "VIP Gold + 1000 Coins", price: "24.99 $" })} style={s.bBtn}>Crypto</button></div>
-            <div style={s.box}><strong>🎁 Pack 500 Pièces Cadeaux — 14.99 $</strong><button onClick={() => setPlan({ name: "Pack 500 Coins", price: "14.99 $" })} style={s.bBtn}>Crypto</button></div>
-          </div>
-        )}
-
-        {tab === "admin" && (
-          <div style={s.col}>
-            <h3>⚙️ Admin ({pays.length})</h3>
-            {pays.map((p) => (
-              <div key={p.id} style={s.box}>
-                <strong>{p.user_pseudo} — {p.plan_name} ({p.amount})</strong>
-                <small style={{ color: "#facc15", wordBreak: "break-all" }}>{p.network}: {p.tx_hash}</small>
-                {p.status === "valide" ? "✅ Validé" : <button onClick={async () => { await api(`crypto_payments?id=eq.${p.id}`, "PATCH", { status: "valide" }); load(); }} style={s.bBtn}>Valider VIP & Pièces</button>}
-              </div>
-            ))}
-          </div>
-        )}
-      </main>
-
-      {plan && (
-        <div style={s.modal} onClick={() => setPlan(null)}>
-          <div style={s.box} onClick={(e) => e.stopPropagation()}>
-            <strong>{plan.name} ({plan.price})</strong>
-            <div style={{ display: "flex", flexWrap: "wrap", gap: 4 }}>
-              {Array.of("USDT TRC20", "BTC BEP20", "ETH ERC20", "USDT Arbitrum").map((k) => <button key={k} onClick={() => setNet(k)} style={net === k ? s.bSm : s.dk}>{k}</button>)}
-            </div>
-            <small style={{ color: "#facc15", wordBreak: "break-all" }}>{addr}</small>
-            <button onClick={() => navigator.clipboard?.writeText(addr)} style={s.gd}>Copier</button>
-            <input value={tx} onChange={(e) => setTx(e.target.value)} placeholder="TXID..." style={s.inp} />
-            <button onClick={async () => { if (tx.length < 5) return; await api("crypto_payments", "POST", { user_pseudo: me.pseudo, plan_name: plan.name, amount: plan.price, network: net, tx_hash: tx }); alert("OK!"); setPlan(null); setTx(""); load(); }} style={s.bBtn}>Confirmer</button>
-          </div>
-        </div>
-      )}
-
-      <nav style={s.nav}>
-        <button onClick={() => setTab("live")} style={s.nBtn}>🔥 Live</button>
-        <button onClick={() => { setTab("chat"); setPeer(null); }} style={s.nBtn}>💬 Chat</button>
-        <button onClick={() => setTab("vip")} style={s.nBtn}>👑 VIP</button>
-      </nav>
-    </div>
-  );
-}
-
-const s = {
-  center: { position: "fixed", inset: 0, backgroundImage: "linear-gradient(rgba(9,13,22,0.5), rgba(9,13,22,0.85)), url('/bg.jpg')", backgroundSize: "cover", backgroundPosition: "center", color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "sans-serif" },
-   circle: { width: "min(440px, 94vw)", height: "min(440px, 94vw)", borderRadius: "50%", background: "rgba(11,16,33,0.88)", border: "2px solid #38bdf8", boxShadow: "0 0 45px rgba(14,165,233,0.45)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: 30, boxSizing: "border-box", gap: 10 },
-
-  sign18: { width: 68, height: 68, borderRadius: "50%", background: "#ef4444", border: "3px solid #fff", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 34, boxShadow: "0 0 20px rgba(239,68,68,0.7)" },
-  pick: { width: 38, height: 38, borderRadius: "50%", border: "2px dashed #38bdf8", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", overflow: "hidden" },
-  fBtn: { width: 25, height: 25, borderRadius: "50%", background: "#1e293b", border: "none", fontSize: 11, cursor: "pointer", padding: 0 },
-  fAct: { width: 25, height: 25, borderRadius: "50%", background: "#0284c7", border: "2px solid #38bdf8", fontSize: 11, cursor: "pointer", padding: 0 },
-  inp: { width: "82%", background: "#090d16", border: "1px solid #38bdf8", color: "#fff", padding: "7px 12px", borderRadius: 99, fontSize: 12, textAlign: "center", outline: "none" },
-  bBtn: { width: "82%", background: "linear-gradient(90deg, #0284c7, #38bdf8)", color: "#fff", border: "none", padding: "8px 14px", borderRadius: 99, fontWeight: "bold", fontSize: 13, cursor: "pointer" },
-  bSm: { background: "#0284c7", color: "#fff", border: "none", padding: "6px 10px", borderRadius: 99, fontWeight: "bold", fontSize: 12, cursor: "pointer" },
-  dk: { background: "#1e293b", color: "#fff", border: "none", padding: "6px 10px", borderRadius: 99, fontSize: 12, cursor: "pointer" },
-    arrowBtn: { background: "#1e293b", color: "#ffffff", border: "1.5px solid #38bdf8", padding: "5px 12px", borderRadius: 99, fontSize: 18, fontWeight: "900", cursor: "pointer", lineHeight: 1 },
-
-  rd: { background: "#ef4444", color: "#fff", border: "none", padding: "6px 12px", borderRadius: 99, fontWeight: "bold", fontSize: 12, cursor: "pointer" },
-  gd: { background: "#facc15", color: "#000", border: "none", padding: "6px 10px", borderRadius: 99, fontWeight: "bold", fontSize: 12, cursor: "pointer" },
-  app: { minHeight: "100vh", backgroundImage: "linear-gradient(rgba(9,13,22,0.85), rgba(9,13,22,0.95)), url('/bg.jpg')", backgroundSize: "cover", color: "#fff", fontFamily: "sans-serif", display: "flex", flexDirection: "column" },
-  head: { display: "flex", justifyContent: "space-between", alignItems: "center", padding: 14, background: "rgba(11,16,33,0.9)", borderBottom: "1px solid #1e293b" },
-  main: { flex: 1, padding: 16, maxWidth: 460, width: "100%", margin: "0 auto", boxSizing: "border-box" },
-  grid: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 },
-  card: { height: 205, borderRadius: 22, padding: 12, background: "rgba(15,23,42,0.75)", border: "1px solid #38bdf8", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "space-between" },
-  av: { width: 56, height: 56, borderRadius: "50%", background: "#0284c7", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: "bold", fontSize: 22, overflow: "hidden" },
-  col: { display: "flex", flexDirection: "column", gap: 12 },
-  box: { background: "rgba(15,23,42,0.9)", padding: 16, borderRadius: 20, border: "1px solid #38bdf8", display: "flex", flexDirection: "column", gap: 10, maxWidth: 380, width: "100%", boxSizing: "border-box" },
-  giftItem: { background: "#0f172a", border: "1px solid #38bdf8", borderRadius: 14, padding: 10, color: "#fff", display: "flex", flexDirection: "column", alignItems: "center", gap: 4, cursor: "pointer" },
-  flyBox: { position: "fixed", top: "38%", left: "50%", transform: "translate(-50%, -50%)", background: "rgba(11,16,33,0.92)", border: "2px solid #facc15", borderRadius: 24, padding: "18px 28px", textAlign: "center", zIndex: 120, boxShadow: "0 0 35px rgba(250,204,21,0.6)" },
-  row: { display: "flex", justifyContent: "space-between", alignItems: "center", gap: 8 },
-  m1: { alignSelf: "flex-end", background: "#0284c7", padding: "8px 12px", borderRadius: 14, fontSize: 13 },
-  m2: { alignSelf: "flex-start", background: "#1e293b", padding: "8px 12px", borderRadius: 14, fontSize: 13 },
-  modal: { position: "fixed", inset: 0, background: "rgba(0,0,0,0.8)", display: "flex", alignItems: "center", justifyContent: "center", padding: 16, zIndex: 110 },
-  nav: { display: "flex", justifyContent: "space-around", padding: 12, background: "rgba(11,16,33,0.9)", borderTop: "1px solid #1e293b" },
-  nBtn: { background: "none", border: "none", color: "#38bdf8", fontWeight: "bold", fontSize: 14, cursor: "pointer" },
-};
-
-
-
-
-
