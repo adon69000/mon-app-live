@@ -1,8 +1,5 @@
-Voici le code complet et mis à jour de COCO KANQKA intégrant vos 4 adresses cryptomonnaies exactes (USDT TRON TRC20, BTC BNB Smart Chain BEP20, ETH ERC20, et USDT Arbitrum).
 
-Étape 1 : Copier tout ce code
 
-Cliquez sur l'icône Copier en haut à droite du bloc ci-dessous pour le récupérer intégralement :
 jsx
 import React, { useState, useEffect, useRef } from "react";
 
