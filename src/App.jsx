@@ -11,15 +11,15 @@ const TRC20 = "TQP3ThW7oFi8EyFfXxn1ez5x5AGR1SrcPH";
 const EVM = "0x1D64262b0501D2b8565Fb287918f501ff62e1361";
 
 const LANGS = {
-  fr: { flag: "🇫🇷", phPhone: "Téléphone...", phEmail: "E-mail...", ph: "Pseudo...", enter: "Lancer KANQKA 🚀", goLive: "🔴 Live", liveTag: "🔴 LIVE", join: "📹 Rejoindre", quit: "Quitter ✕", tabLive: "🔥 Live", tabChat: "💬 Chat", tabVip: "👑 VIP", payBtn: "Payer Crypto", copy: "Copier", confirm: "Confirmer", txPh: "Hash TXID...", sent: "Envoyé !", msgPh: "Message..." },
-  en: { flag: "🇬🇧", phPhone: "Phone...", phEmail: "Email...", ph: "Nickname...", enter: "Launch KANQKA 🚀", goLive: "🔴 Go Live", liveTag: "🔴 LIVE", join: "📹 Join", quit: "Leave ✕", tabLive: "🔥 Live", tabChat: "💬 Chat", tabVip: "👑 VIP", payBtn: "Pay Crypto", copy: "Copy", confirm: "Confirm", txPh: "TXID Hash...", sent: "Sent!", msgPh: "Message..." },
-  ar: { flag: "🇲🇦", phPhone: "الهاتف...", phEmail: "الإيميل...", ph: "الاسم...", enter: "دخول 🚀", goLive: "🔴 بث", liveTag: "🔴 مباشر", join: "📹 انضمام", quit: "خروج ✕", tabLive: "🔥 مباشر", tabChat: "💬 دردشة", tabVip: "👑 VIP", payBtn: "دفع كريبتو", copy: "نسخ", confirm: "تأكيد", txPh: "TXID...", sent: "تم!", msgPh: "رسالة..." },
-  es: { flag: "🇪🇸", phPhone: "Teléfono...", phEmail: "Correo...", ph: "Apodo...", enter: "Entrar 🚀", goLive: "🔴 Vivo", liveTag: "🔴 VIVO", join: "📹 Unirse", quit: "Salir ✕", tabLive: "🔥 Vivo", tabChat: "💬 Chat", tabVip: "👑 VIP", payBtn: "Pagar Cripto", copy: "Copiar", confirm: "Confirmar", txPh: "TXID...", sent: "¡Enviado!", msgPh: "Mensaje..." },
-  tr: { flag: "🇹🇷", phPhone: "Telefon...", phEmail: "E-posta...", ph: "Takma ad...", enter: "Başlat 🚀", goLive: "🔴 Yayın", liveTag: "🔴 CANLI", join: "📹 Katıl", quit: "Çıkış ✕", tabLive: "🔥 Canlı", tabChat: "💬 Sohbet", tabVip: "👑 VIP", payBtn: "Kripto Öde", copy: "Kopyala", confirm: "Onayla", txPh: "TXID...", sent: "Gönderildi!", msgPh: "Mesaj..." },
-  pt: { flag: "🇧🇷", phPhone: "Telefone...", phEmail: "E-mail...", ph: "Apelido...", enter: "Entrar 🚀", goLive: "🔴 Live", liveTag: "🔴 VIVO", join: "📹 Entrar", quit: "Sair ✕", tabLive: "🔥 Vivo", tabChat: "💬 Chat", tabVip: "👑 VIP", payBtn: "Pagar Cripto", copy: "Copiar", confirm: "Confirmar", txPh: "TXID...", sent: "Enviado!", msgPh: "Mensagem..." },
-  ru: { flag: "🇷🇺", phPhone: "Телефон...", phEmail: "Почта...", ph: "Никнейм...", enter: "Войти 🚀", goLive: "🔴 Эфир", liveTag: "🔴 ЭФИР", join: "📹 Войти", quit: "Выйти ✕", tabLive: "🔥 Эфир", tabChat: "💬 Чат", tabVip: "👑 VIP", payBtn: "Крипто", copy: "Копия", confirm: "ОК", txPh: "TXID...", sent: "Отправлено!", msgPh: "Сообщение..." },
-  he: { flag: "🇮🇱", phPhone: "טלפון...", phEmail: "אימייל...", ph: "כינוי...", enter: "כניסה 🚀", goLive: "🔴 שידור", liveTag: "🔴 חי", join: "📹 הצטרף", quit: "יציאה ✕", tabLive: "🔥 שידור", tabChat: "💬 צ׳אט", tabVip: "👑 VIP", payBtn: "קריפטו", copy: "העתק", confirm: "אישור", txPh: "TXID...", sent: "נשלח!", msgPh: "הודעה..." },
-  de: { flag: "🇩🇪", phPhone: "Telefon...", phEmail: "E-Mail...", ph: "Name...", enter: "Starten 🚀", goLive: "🔴 Live", liveTag: "🔴 LIVE", join: "📹 Beitreten", quit: "Ende ✕", tabLive: "🔥 Live", tabChat: "💬 Chat", tabVip: "👑 VIP", payBtn: "Krypto", copy: "Kopieren", confirm: "OK", txPh: "TXID...", sent: "Gesendet!", msgPh: "Nachricht..." },
+  fr: { flag: "🇫🇷", phPhone: "Téléphone (+212...)", phEmail: "Adresse E-mail...", ph: "Pseudo...", sendCode: "Envoyer le code 📩", codePh: "Code à 6 chiffres...", verify: "Vérifier & Entrer 🚀", back: "← Modifier", goLive: "🔴 Live", liveTag: "🔴 LIVE", join: "📹 Rejoindre", quit: "Quitter ✕", tabLive: "🔥 Live", tabChat: "💬 Chat", tabVip: "👑 VIP", payBtn: "Payer Crypto", copy: "Copier", confirm: "Confirmer", txPh: "Hash TXID...", sent: "Envoyé !", msgPh: "Message..." },
+  en: { flag: "🇬🇧", phPhone: "Phone (+1...)", phEmail: "Email address...", ph: "Nickname...", sendCode: "Send Code 📩", codePh: "6-digit code...", verify: "Verify & Enter 🚀", back: "← Edit", goLive: "🔴 Go Live", liveTag: "🔴 LIVE", join: "📹 Join", quit: "Leave ✕", tabLive: "🔥 Live", tabChat: "💬 Chat", tabVip: "👑 VIP", payBtn: "Pay Crypto", copy: "Copy", confirm: "Confirm", txPh: "TXID Hash...", sent: "Sent!", msgPh: "Message..." },
+  ar: { flag: "🇲🇦", phPhone: "الهاتف (+212...)", phEmail: "البريد الإلكتروني...", ph: "الاسم...", sendCode: "إرسال الرمز 📩", codePh: "رمز التحقق...", verify: "تأكيد ودخول 🚀", back: "→ تعديل", goLive: "🔴 بث", liveTag: "🔴 مباشر", join: "📹 انضمام", quit: "خروج ✕", tabLive: "🔥 مباشر", tabChat: "💬 دردشة", tabVip: "👑 VIP", payBtn: "دفع كريبتو", copy: "نسخ", confirm: "تأكيد", txPh: "TXID...", sent: "تم!", msgPh: "رسالة..." },
+  es: { flag: "🇪🇸", phPhone: "Teléfono...", phEmail: "Correo...", ph: "Apodo...", sendCode: "Enviar código 📩", codePh: "Código 6 dígitos...", verify: "Verificar y Entrar 🚀", back: "← Editar", goLive: "🔴 Vivo", liveTag: "🔴 VIVO", join: "📹 Unirse", quit: "Salir ✕", tabLive: "🔥 Vivo", tabChat: "💬 Chat", tabVip: "👑 VIP", payBtn: "Pagar Cripto", copy: "Copiar", confirm: "Confirmar", txPh: "TXID...", sent: "¡Enviado!", msgPh: "Mensaje..." },
+  tr: { flag: "🇹🇷", phPhone: "Telefon...", phEmail: "E-posta...", ph: "Takma ad...", sendCode: "Kod Gönder 📩", codePh: "6 haneli kod...", verify: "Doğrula ve Gir 🚀", back: "← Düzenle", goLive: "🔴 Yayın", liveTag: "🔴 CANLI", join: "📹 Katıl", quit: "Çıkış ✕", tabLive: "🔥 Canlı", tabChat: "💬 Sohbet", tabVip: "👑 VIP", payBtn: "Kripto Öde", copy: "Kopyala", confirm: "Onayla", txPh: "TXID...", sent: "Gönderildi!", msgPh: "Mesaj..." },
+  pt: { flag: "🇧🇷", phPhone: "Telefone...", phEmail: "E-mail...", ph: "Apelido...", sendCode: "Enviar código 📩", codePh: "Código 6 dígitos...", verify: "Verificar e Entrar 🚀", back: "← Editar", goLive: "🔴 Live", liveTag: "🔴 VIVO", join: "📹 Entrar", quit: "Sair ✕", tabLive: "🔥 Vivo", tabChat: "💬 Chat", tabVip: "👑 VIP", payBtn: "Pagar Cripto", copy: "Copiar", confirm: "Confirmar", txPh: "TXID...", sent: "Enviado!", msgPh: "Mensagem..." },
+  ru: { flag: "🇷🇺", phPhone: "Телефон...", phEmail: "Почта...", ph: "Никнейм...", sendCode: "Отправить код 📩", codePh: "Код из 6 цифр...", verify: "Подтвердить 🚀", back: "← Назад", goLive: "🔴 Эфир", liveTag: "🔴 ЭФИР", join: "📹 Войти", quit: "Выйти ✕", tabLive: "🔥 Эфир", tabChat: "💬 Чат", tabVip: "👑 VIP", payBtn: "Крипто", copy: "Копия", confirm: "ОК", txPh: "TXID...", sent: "Отправлено!", msgPh: "Сообщение..." },
+  he: { flag: "🇮🇱", phPhone: "טלפון...", phEmail: "אימייל...", ph: "כינוי...", sendCode: "שלח קוד 📩", codePh: "קוד אימות...", verify: "אמת וכנס 🚀", back: "→ חזור", goLive: "🔴 שידור", liveTag: "🔴 חי", join: "📹 הצטרף", quit: "יציאה ✕", tabLive: "🔥 שידור", tabChat: "💬 צ׳אט", tabVip: "👑 VIP", payBtn: "קריפטו", copy: "העתק", confirm: "אישור", txPh: "TXID...", sent: "נשלח!", msgPh: "הודעה..." },
+  de: { flag: "🇩🇪", phPhone: "Telefon...", phEmail: "E-Mail...", ph: "Name...", sendCode: "Code senden 📩", codePh: "6-stelliger Code...", verify: "Bestätigen 🚀", back: "← Zurück", goLive: "🔴 Live", liveTag: "🔴 LIVE", join: "📹 Beitreten", quit: "Ende ✕", tabLive: "🔥 Live", tabChat: "💬 Chat", tabVip: "👑 VIP", payBtn: "Krypto", copy: "Kopieren", confirm: "OK", txPh: "TXID...", sent: "Gesendet!", msgPh: "Nachricht..." },
 };
 
 const BluePaw = () => (
@@ -55,16 +55,27 @@ const api = async (path, method = "GET", body = null) => {
   } catch { return null; }
 };
 
+const authApi = async (endpoint, body) => {
+  return fetch(`${SB_URL}/auth/v1/${endpoint}`, {
+    method: "POST",
+    headers: { apikey: KEY, "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+};
+
 export default function App() {
   const [lang, setLang] = useState("fr");
   const t = LANGS[lang] || LANGS.fr;
   const isRtl = lang === "ar" || lang === "he";
 
   const [me, setMe] = useState(null);
-  const [authType, setAuthType] = useState("phone");
+  const [authType, setAuthType] = useState("email");
   const [contact, setContact] = useState("");
   const [pseudo, setPseudo] = useState("");
   const [avatar, setAvatar] = useState("");
+  const [otpStep, setOtpStep] = useState(false);
+  const [otpCode, setOtpCode] = useState("");
+  const [busy, setBusy] = useState(false);
 
   const [tab, setTab] = useState("live");
   const [users, setUsers] = useState(Array.of({ id: "sofia", pseudo: "Sofia", is_vip: true }));
@@ -109,54 +120,45 @@ export default function App() {
     });
     return () => zp.destroy();
   }, [room]);
+
+  const sendOtp = async () => {
+    if (!pseudo.trim() || !contact.trim()) return alert("Remplissez tous les champs");
+    setBusy(true);
+    const payload = authType === "email" ? { email: contact.trim() } : { phone: contact.trim() };
+    const res = await authApi("otp", payload);
+    setBusy(false);
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      alert(err.msg || err.error_description || "Erreur d'envoi du code.");
+      return;
+    }
+    setOtpStep(true);
+  };
+
+  const verifyOtpAndEnter = async () => {
+    if (otpCode.trim().length < 4) return;
+    setBusy(true);
+    const verifyPayload = authType === "email"
+      ? { email: contact.trim(), token: otpCode.trim(), type: "email" }
+      : { phone: contact.trim(), token: otpCode.trim(), type: "sms" };
+    const res = await authApi("verify", verifyPayload);
+    if (!res.ok) {
+      setBusy(false);
+      alert("Code invalide ou expiré !");
+      return;
+    }
+    const data = { pseudo: pseudo.trim(), contact: contact.trim(), avatar_url: avatar || null, coins: 100 };
+    const created = await api("profiles", "POST", data);
+    const u = Array.isArray(created) && created.length > 0 ? created.at(0) : null;
+    setMe(u || { id: Date.now(), ...data, is_vip: false });
+    setBusy(false);
+    load();
+  };
+
   const Flags = () => (
     <div style={{ display: "flex", gap: 6, justifyContent: "center", flexWrap: "wrap", maxWidth: 310 }}>
       {Object.keys(LANGS).map((c) => (
-        <button key={c} onClick={() => setLang(c)} style={lang === c ? s.flagActive : s.flag}>{LANGS[c].flag}</button>
-      ))}
-    </div>
-  );
-
-  const Avatar = ({ u, sz = 58 }) => (
-    <div style={{ ...s.avatar, width: sz, height: sz, fontSize: sz * 0.4 }}>
-      {u?.avatar_url ? <img src={u.avatar_url} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : (u?.pseudo || "?").slice(0, 1).toUpperCase()}
-    </div>
-  );
-
-  if (!me) {
-    return (
-      <div style={{ ...s.center, direction: isRtl ? "rtl" : "ltr" }}>
-        <div style={s.circle}>
-          <Flags />
-          <div style={s.title}><BluePaw /><strong>KANQKA</strong></div>
-          <label style={s.picker}>
-            {avatar ? <img src={avatar} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : <span>📷</span>}
-            <input type="file" accept="image/*" style={{ display: "none" }} onChange={(e) => e.target.files?.at(0) && compressImage(e.target.files.at(0), setAvatar)} />
-          </label>
-          <div style={{ display: "flex", gap: 8 }}>
-            <button onClick={() => setAuthType("phone")} style={authType === "phone" ? s.blueSm : s.dark}>📱</button>
-            <button onClick={() => setAuthType("email")} style={authType === "email" ? s.blueSm : s.dark}>✉️</button>
-          </div>
-          <input value={contact} onChange={(e) => setContact(e.target.value)} placeholder={authType === "email" ? t.phEmail : t.phPhone} style={s.cInput} />
-          <input value={pseudo} onChange={(e) => setPseudo(e.target.value)} placeholder={t.ph} style={s.cInput} />
-          <button
-            onClick={async () => {
-              if (!pseudo.trim() || !contact.trim()) return;
-              const data = { pseudo: pseudo.trim(), contact: contact.trim(), avatar_url: avatar || null, coins: 100 };
-              const res = await api("profiles", "POST", data);
-              const u = Array.isArray(res) && res.length > 0 ? res.at(0) : null;
-              setMe(u || { id: Date.now(), ...data, is_vip: false });
-              load();
-            }}
-            style={s.blueBtn}
-          >
-            {t.enter}
-          </button>
-        </div>
-      </div>
-    );
-  }
-
+```jsx
   if (room) {
     return (
       <div style={s.fullVid}>
@@ -201,6 +203,7 @@ export default function App() {
             ))}
           </div>
         )}
+
         {tab === "chat" && (
           <div style={s.col}>
             {peer ? (
@@ -301,31 +304,3 @@ const s = {
   head: { display: "flex", justifyContent: "space-between", alignItems: "center", padding: "14px 18px", background: "rgba(11,16,33,0.85)", borderBottom: "1px solid rgba(56,189,248,0.25)" },
   main: { flex: 1, padding: "18px 16px", maxWidth: 480, width: "100%", margin: "0 auto", boxSizing: "border-box" },
   grid: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 },
-  card: { height: 205, borderRadius: 24, padding: 14, background: "rgba(15,23,42,0.72)", backdropFilter: "blur(14px)", border: "1.5px solid rgba(56,189,248,0.35)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "space-between" },
-  avatar: { borderRadius: "50%", background: "linear-gradient(135deg, #0284c7, #38bdf8)", border: "2px solid rgba(255,255,255,0.5)", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: "900", color: "#fff", overflow: "hidden" },
-  tag: { background: "rgba(239,68,68,0.85)", padding: "4px 9px", borderRadius: 99, fontSize: 10, fontWeight: "800" },
-  actionBtn: { width: "100%", background: "linear-gradient(90deg, #0284c7, #38bdf8)", color: "#fff", border: "none", padding: "10px 14px", borderRadius: 99, fontWeight: "800", fontSize: 13, cursor: "pointer" },
-  chatList: { height: 240, overflowY: "auto", display: "flex", flexDirection: "column", gap: 8, padding: 4 },
-  mMe: { alignSelf: "flex-end", background: "linear-gradient(90deg, #0284c7, #38bdf8)", color: "#fff", padding: "8px 14px", borderRadius: 16, fontSize: 13, maxWidth: "78%" },
-  mThem: { alignSelf: "flex-start", background: "rgba(30,41,59,0.9)", color: "#fff", padding: "8px 14px", borderRadius: 16, fontSize: 13, maxWidth: "78%" },
-  col: { display: "flex", flexDirection: "column", gap: 14 },
-  box: { background: "rgba(15,23,42,0.75)", backdropFilter: "blur(14px)", padding: 16, borderRadius: 22, border: "1.5px solid rgba(56,189,248,0.35)", display: "flex", flexDirection: "column", gap: 12, width: "100%", boxSizing: "border-box" },
-  between: { display: "flex", justifyContent: "space-between", alignItems: "center", gap: 8 },
-  badge: { background: "rgba(56,189,248,0.2)", color: "#38bdf8", padding: "4px 12px", borderRadius: 99, fontWeight: "800", fontSize: 13 },
-  input: { width: "100%", boxSizing: "border-box", background: "rgba(9,13,22,0.85)", border: "1px solid rgba(56,189,248,0.4)", color: "#fff", padding: "11px 16px", borderRadius: 99, fontSize: 13, outline: "none" },
-  blueSm: { background: "linear-gradient(90deg, #0284c7, #38bdf8)", color: "#fff", border: "none", padding: "6px 12px", borderRadius: 99, fontWeight: "bold", fontSize: 12, cursor: "pointer" },
-    dark: { background: "rgba(30,41,59,0.85)", color: "#cbd5e1", border: "1px solid rgba(255,255,255,0.12)", padding: "6px 12px", borderRadius: 99, fontSize: 12, cursor: "pointer" },
-  gold: { background: "#facc15", color: "#090d16", border: "none", padding: "7px 14px", borderRadius: 99, fontWeight: "800", fontSize: 12, cursor: "pointer" },
-  iconBtn: { width: 32, height: 32, borderRadius: "50%", background: "rgba(30,41,59,0.85)", border: "1px solid rgba(56,189,248,0.3)", color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, cursor: "pointer", padding: 0 },
-  redSm: { background: "#ef4444", color: "#fff", border: "none", padding: "7px 12px", borderRadius: 99, fontWeight: "800", fontSize: 12, cursor: "pointer" },
-  red: { background: "#ef4444", color: "#fff", border: "none", padding: "8px 18px", borderRadius: 99, fontWeight: "bold", cursor: "pointer" },
-  fullVid: { position: "fixed", inset: 0, background: "#000", color: "#fff", zIndex: 99, fontFamily: "sans-serif" },
-  vidTop: { height: 56, padding: "0 18px", background: "rgba(11,16,33,0.95)", borderBottom: "1px solid rgba(56,189,248,0.3)", display: "flex", justifyContent: "space-between", alignItems: "center" },
-  modal: { position: "fixed", inset: 0, background: "rgba(0,0,0,0.82)", display: "flex", alignItems: "center", justifyContent: "center", padding: 18, zIndex: 80 },
-  modalBox: { background: "rgba(15,23,42,0.92)", border: "1.5px solid rgba(56,189,248,0.45)", padding: 22, borderRadius: 26, display: "flex", flexDirection: "column", gap: 14, width: "100%", maxWidth: 380, boxSizing: "border-box" },
-  addrBox: { background: "rgba(9,13,22,0.85)", border: "1px solid rgba(56,189,248,0.3)", padding: "10px 14px", borderRadius: 16, display: "flex", justifyContent: "space-between", alignItems: "center", gap: 8 },
-  nav: { display: "flex", justifyContent: "space-around", padding: "12px 14px", background: "rgba(11,16,33,0.88)", borderTop: "1px solid rgba(56,189,248,0.25)" },
-  navBtn: { background: "none", border: "none", color: "#94a3b8", fontWeight: "700", fontSize: 13, cursor: "pointer" },
-  navActive: { background: "rgba(56,189,248,0.15)", border: "1px solid rgba(56,189,248,0.4)", color: "#38bdf8", padding: "7px 16px", borderRadius: 99, fontWeight: "800", fontSize: 13, cursor: "pointer" },
-};
-
