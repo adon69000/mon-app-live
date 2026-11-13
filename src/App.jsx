@@ -23,7 +23,7 @@ const LANGS = {
 };
 
 const BluePaw = () => (
-  <svg width="24" height="24" viewBox="0 0 24 24" fill="#38bdf8" style={{ verticalAlign: "middle", marginRight: 6, filter: "drop-shadow(0 0 8px rgba(56,189,248,0.8))" }}>
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="#38bdf8" style={{ verticalAlign: "middle", marginRight: 6 }}>
     <circle cx="4.5" cy="9.5" r="2.5" /><circle cx="9" cy="5.5" r="2.5" /><circle cx="15" cy="5.5" r="2.5" /><circle cx="19.5" cy="9.5" r="2.5" />
     <path d="M12 10c-3.5 0-6.5 2.5-6.5 5.5 0 2 1.5 3.5 3.5 3.5 1.2 0 2-.5 3-.5s1.8.5 3 .5c2 0 3.5-1.5 3.5-3.5 0-3-3-5.5-6.5-5.5z" />
   </svg>
@@ -109,7 +109,6 @@ export default function App() {
     });
     return () => zp.destroy();
   }, [room]);
-
   const Flags = () => (
     <div style={{ display: "flex", gap: 6, justifyContent: "center", flexWrap: "wrap", maxWidth: 310 }}>
       {Object.keys(LANGS).map((c) => (
@@ -157,6 +156,7 @@ export default function App() {
       </div>
     );
   }
+
   if (room) {
     return (
       <div style={s.fullVid}>
@@ -201,7 +201,6 @@ export default function App() {
             ))}
           </div>
         )}
-
         {tab === "chat" && (
           <div style={s.col}>
             {peer ? (
@@ -302,3 +301,16 @@ const s = {
   head: { display: "flex", justifyContent: "space-between", alignItems: "center", padding: "14px 18px", background: "rgba(11,16,33,0.85)", borderBottom: "1px solid rgba(56,189,248,0.25)" },
   main: { flex: 1, padding: "18px 16px", maxWidth: 480, width: "100%", margin: "0 auto", boxSizing: "border-box" },
   grid: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 },
+  card: { height: 205, borderRadius: 24, padding: 14, background: "rgba(15,23,42,0.72)", backdropFilter: "blur(14px)", border: "1.5px solid rgba(56,189,248,0.35)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "space-between" },
+  avatar: { borderRadius: "50%", background: "linear-gradient(135deg, #0284c7, #38bdf8)", border: "2px solid rgba(255,255,255,0.5)", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: "900", color: "#fff", overflow: "hidden" },
+  tag: { background: "rgba(239,68,68,0.85)", padding: "4px 9px", borderRadius: 99, fontSize: 10, fontWeight: "800" },
+  actionBtn: { width: "100%", background: "linear-gradient(90deg, #0284c7, #38bdf8)", color: "#fff", border: "none", padding: "10px 14px", borderRadius: 99, fontWeight: "800", fontSize: 13, cursor: "pointer" },
+  chatList: { height: 240, overflowY: "auto", display: "flex", flexDirection: "column", gap: 8, padding: 4 },
+  mMe: { alignSelf: "flex-end", background: "linear-gradient(90deg, #0284c7, #38bdf8)", color: "#fff", padding: "8px 14px", borderRadius: 16, fontSize: 13, maxWidth: "78%" },
+  mThem: { alignSelf: "flex-start", background: "rgba(30,41,59,0.9)", color: "#fff", padding: "8px 14px", borderRadius: 16, fontSize: 13, maxWidth: "78%" },
+  col: { display: "flex", flexDirection: "column", gap: 14 },
+  box: { background: "rgba(15,23,42,0.75)", backdropFilter: "blur(14px)", padding: 16, borderRadius: 22, border: "1.5px solid rgba(56,189,248,0.35)", display: "flex", flexDirection: "column", gap: 12, width: "100%", boxSizing: "border-box" },
+  between: { display: "flex", justifyContent: "space-between", alignItems: "center", gap: 8 },
+  badge: { background: "rgba(56,189,248,0.2)", color: "#38bdf8", padding: "4px 12px", borderRadius: 99, fontWeight: "800", fontSize: 13 },
+  input: { width: "100%", boxSizing: "border-box", background: "rgba(9,13,22,0.85)", border: "1px solid rgba(56,189,248,0.4)", color: "#fff", padding: "11px 16px", borderRadius: 99, fontSize: 13, outline: "none" },
+  blueSm: { background: "linear-gradient(90deg, #0284c7, #38bdf8)", color: "#fff", border: "none", padding: "6px 12px", borderRadius: 99, fontWeight: "bold", fontSize: 12, cursor: "pointer" },
