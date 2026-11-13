@@ -1,15 +1,10 @@
-jsx
 import React, { useState, useEffect } from "react";
 
 const URL = "https://supabase.co";
 const KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRlamx3a21qaXRhanJncnlrbXBiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTQ1MjE2ODUsImV4cCI6MjExMDA5NzY4NX0.WFXcigx7dFm7gqfBpP-xOYcCXWdGxOMJZGUkCg3NxDM";
 
-const WALLETS = {
-  "USDT TRC20": "TQP3ThW7oFi8EyFfXxn1ez5x5AGR1SrcPH",
-  "BTC BEP20": "0x1D64262b0501D2b8565Fb287918f501ff62e1361",
-  "ETH ERC20": "0x1D64262b0501D2b8565Fb287918f501ff62e1361",
-  "USDT Arbitrum": "0x1D64262b0501D2b8565Fb287918f501ff62e1361",
-};
+const TRC20 = "TQP3ThW7oFi8EyFfXxn1ez5x5AGR1SrcPH";
+const EVM = "0x1D64262b0501D2b8565Fb287918f501ff62e1361";
 
 const api = async (path, method = "GET", body = null) => {
   try {
@@ -23,19 +18,18 @@ const api = async (path, method = "GET", body = null) => {
       },
       body: body ? JSON.stringify(body) : null,
     });
-    return r.ok ? await r.json() : [];
+    return r.ok ? await r.json() : null;
   } catch {
-    return [];
+    return null;
   }
 };
 
 export default function App() {
   const [me, setMe] = useState(null);
   const [pseudo, setPseudo] = useState("");
-  const [loading, setLoading] = useState(false);
   const [tab, setTab] = useState("live");
-  const [users, setUsers] = useState([{ id: 1, pseudo: "Sofia", country: "Maroc", is_vip: true }]);
-  const [pays, setPays] = useState([]);
+  const [users, setUsers] = useState(Array.of({ id: 1, pseudo: "Sofia", is_vip: true }));
+  const [pays, setPays] = useState(Array.of());
   const [call, setCall] = useState(null);
   const [plan, setPlan] = useState(null);
   const [net, setNet] = useState("USDT TRC20");
@@ -57,30 +51,18 @@ export default function App() {
       <div style={s.center}>
         <div style={s.box}>
           <h2>🌍 COCO KANQKA</h2>
-          <input
-            value={pseudo}
-            onChange={(e) => setPseudo(e.target.value)}
-            placeholder="Votre pseudo..."
-            style={s.input}
-          />
+          <input value={pseudo} onChange={(e) => setPseudo(e.target.value)} placeholder="Votre pseudo..." style={s.input} />
           <button
-            disabled={loading}
             onClick={async () => {
               if (!pseudo.trim()) return alert("Entrez un pseudo");
-              setLoading(true);
-              const res = await api("profiles", "POST", {
-                pseudo: pseudo.trim(),
-                country: "Maroc",
-                coins: 100,
-              });
-              const createdUser = Array.isArray(res) && res.length > 0 ? res[0] : null;
-              setMe(createdUser || { pseudo: pseudo.trim(), coins: 100, is_vip: false });
-              setLoading(false);
+              const res = await api("profiles", "POST", { pseudo: pseudo.trim(), coins: 100 });
+              const user = Array.isArray(res) && res.length > 0 ? res.at(0) : null;
+              setMe(user || { pseudo: pseudo.trim(), coins: 100, is_vip: false });
               load();
             }}
             style={s.pink}
           >
-            {loading ? "Connexion..." : "Entrer 🚀"}
+            Entrer 🚀
           </button>
         </div>
       </div>
@@ -92,24 +74,20 @@ export default function App() {
       <div style={s.full}>
         <h3>🔴 EN DIRECT : {call.pseudo}</h3>
         <h1>📹</h1>
-        <button onClick={() => setCall(null)} style={s.red}>
-          Raccrocher
-        </button>
+        <button onClick={() => setCall(null)} style={s.red}>Raccrocher</button>
       </div>
     );
   }
+
+  const activeAddr = net === "USDT TRC20" ? TRC20 : EVM;
 
   return (
     <div style={s.app}>
       <header style={s.head}>
         <strong>COCO KANQKA</strong>
         <div style={{ display: "flex", gap: 8 }}>
-          <button onClick={() => prompt("Code PIN :") === "6900" && setTab("admin")} style={s.dark}>
-            Admin
-          </button>
-          <button onClick={() => setTab("vip")} style={s.gold}>
-            {me.is_vip ? "👑 VIP" : `🪙 ${me.coins}`}
-          </button>
+          <button onClick={() => prompt("PIN Admin :") === "6900" && setTab("admin")} style={s.dark}>Admin</button>
+          <button onClick={() => setTab("vip")} style={s.gold}>{me.is_vip ? "👑 VIP" : `🪙 ${me.coins}`}</button>
         </div>
       </header>
 
@@ -118,12 +96,8 @@ export default function App() {
           <div style={s.grid}>
             {users.map((u, i) => (
               <div key={u.id || i} style={{ ...s.card, background: i % 2 ? "#db2777" : "#7c3aed" }}>
-                <strong>
-                  {u.pseudo} {u.is_vip ? "👑" : ""}
-                </strong>
-                <button onClick={() => setCall(u)} style={s.green}>
-                  📹 Appeler
-                </button>
+                <strong>{u.pseudo} {u.is_vip ? "👑" : ""}</strong>
+                <button onClick={() => setCall(u)} style={s.green}>📹 Appeler</button>
               </div>
             ))}
           </div>
@@ -132,16 +106,12 @@ export default function App() {
         {tab === "vip" && (
           <div style={s.col}>
             <div style={s.box}>
-              <strong>🥈 VIP Silver (1 Mois) — 9.99 $</strong>
-              <button onClick={() => setPlan({ name: "VIP Silver", price: "9.99 $" })} style={s.pink}>
-                Payer Crypto
-              </button>
+              <strong>🥈 VIP Silver — 9.99 $ / mois</strong>
+              <button onClick={() => setPlan({ name: "VIP Silver", price: "9.99 $" })} style={s.pink}>Payer Crypto</button>
             </div>
             <div style={s.box}>
-              <strong>👑 VIP Gold (1 Mois) — 24.99 $</strong>
-              <button onClick={() => setPlan({ name: "VIP Gold", price: "24.99 $" })} style={s.pink}>
-                Payer Crypto
-              </button>
+              <strong>👑 VIP Gold — 24.99 $ / mois</strong>
+              <button onClick={() => setPlan({ name: "VIP Gold", price: "24.99 $" })} style={s.pink}>Payer Crypto</button>
             </div>
           </div>
         )}
@@ -149,18 +119,11 @@ export default function App() {
         {tab === "admin" && (
           <div style={s.col}>
             <h3>⚙️ Paiements Crypto ({pays.length})</h3>
-            {pays.length === 0 && <small style={{ color: "#94a3b8" }}>Aucun paiement reçu pour le moment.</small>}
             {pays.map((p) => (
               <div key={p.id} style={s.box}>
-                <strong>
-                  {p.user_pseudo} — {p.plan_name} ({p.amount})
-                </strong>
-                <small style={{ color: "#facc15", wordBreak: "break-all" }}>
-                  {p.network} : {p.tx_hash}
-                </small>
-                {p.status === "valide" ? (
-                  "✅ Validé"
-                ) : (
+                <strong>{p.user_pseudo} — {p.plan_name} ({p.amount})</strong>
+                <small style={{ color: "#facc15", wordBreak: "break-all" }}>{p.network} : {p.tx_hash}</small>
+                {p.status === "valide" ? "✅ Validé" : (
                   <button
                     onClick={async () => {
                       await api(`crypto_payments?id=eq.${p.id}`, "PATCH", { status: "valide" });
@@ -180,36 +143,19 @@ export default function App() {
       {plan && (
         <div style={s.modal} onClick={() => setPlan(null)}>
           <div style={s.box} onClick={(e) => e.stopPropagation()}>
-            <strong>
-              {plan.name} ({plan.price})
-            </strong>
+            <strong>{plan.name} ({plan.price})</strong>
             <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
-              {Object.keys(WALLETS).map((k) => (
-                <button key={k} onClick={() => setNet(k)} style={net === k ? s.pink : s.dark}>
-                  {k}
-                </button>
+              {Array.of("USDT TRC20", "BTC BEP20", "ETH ERC20", "USDT Arbitrum").map((k) => (
+                <button key={k} onClick={() => setNet(k)} style={net === k ? s.pink : s.dark}>{k}</button>
               ))}
             </div>
-            <small style={{ color: "#facc15", wordBreak: "break-all" }}>{WALLETS[net]}</small>
-            <button onClick={() => navigator.clipboard?.writeText(WALLETS[net])} style={s.gold}>
-              Copier l&apos;adresse
-            </button>
-            <input
-              value={tx}
-              onChange={(e) => setTx(e.target.value)}
-              placeholder="Collez le Hash TXID..."
-              style={s.input}
-            />
+            <small style={{ color: "#facc15", wordBreak: "break-all" }}>{activeAddr}</small>
+            <button onClick={() => navigator.clipboard?.writeText(activeAddr)} style={s.gold}>Copier</button>
+            <input value={tx} onChange={(e) => setTx(e.target.value)} placeholder="Hash TXID..." style={s.input} />
             <button
               onClick={async () => {
                 if (tx.length < 5) return alert("Hash invalide");
-                await api("crypto_payments", "POST", {
-                  user_pseudo: me.pseudo,
-                  plan_name: plan.name,
-                  amount: plan.price,
-                  network: net,
-                  tx_hash: tx,
-                });
+                await api("crypto_payments", "POST", { user_pseudo: me.pseudo, plan_name: plan.name, amount: plan.price, network: net, tx_hash: tx });
                 alert("Paiement envoyé !");
                 setPlan(null);
                 setTx("");
@@ -224,12 +170,8 @@ export default function App() {
       )}
 
       <nav style={s.nav}>
-        <button onClick={() => setTab("live")} style={s.navBtn}>
-          🔥 Live
-        </button>
-        <button onClick={() => setTab("vip")} style={s.navBtn}>
-          👑 VIP Crypto
-        </button>
+        <button onClick={() => setTab("live")} style={s.navBtn}>🔥 Live</button>
+        <button onClick={() => setTab("vip")} style={s.navBtn}>👑 VIP Crypto</button>
       </nav>
     </div>
   );
@@ -253,13 +195,5 @@ const s = {
   full: { position: "fixed", inset: 0, background: "#4c1d95", color: "#fff", display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "center", padding: 24, fontFamily: "sans-serif" },
   modal: { position: "fixed", inset: 0, background: "rgba(0,0,0,0.8)", display: "flex", alignItems: "center", justifyContent: "center", padding: 16 },
   nav: { display: "flex", justifyContent: "space-around", padding: 14, background: "#131024" },
-Utilisez le code avec précaution.
-navBtn: { background: "none", border: "none", color: "#fff", fontWeight: "bold", cursor: "pointer" },
+  navBtn: { background: "none", border: "none", color: "#fff", fontWeight: "bold", cursor: "pointer" },
 };
-
-### 2. Vérifier le SQL sur Supabase (important)
-* **Exécuter la requête.** Assurez-vous d'avoir bien cliqué sur le bouton vert **`Run`** dans votre onglet **Supabase > SQL Editor** pour créer les tables `profiles` et `crypto_payments`. (Grâce à `res[0]` dans ce nouveau code, le bouton **« Entrer 🚀 »** fonctionnera désormais même si le SQL n'est pas encore exécuté).
-
-<FollowUp>
-Dites-moi si le bouton **« Entrer 🚀 »** vous fait bien entrer dans l'application une fois cette correction enregistrée sur GitHub !
-</FollowUp>
