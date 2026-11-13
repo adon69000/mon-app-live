@@ -11,19 +11,19 @@ const TRC20 = "TQP3ThW7oFi8EyFfXxn1ez5x5AGR1SrcPH";
 const EVM = "0x1D64262b0501D2b8565Fb287918f501ff62e1361";
 
 const LANGS = {
-  fr: { flag: "🇫🇷 FR", sub: "Live Vidéo HD & Rencontres Mondiales", ph: "Votre pseudo...", enter: "Entrer dans le Live 🚀", goLive: "🔴 Lancer Live", liveTag: "🔴 EN DIRECT", join: "📹 Rejoindre", quit: "Quitter ✕", tabLive: "🔥 Live / Coco", tabVip: "👑 VIP Crypto", payBtn: "Payer Crypto", copy: "Copier", confirm: "Confirmer", txPh: "Hash TXID...", sent: "Paiement envoyé !" },
-  en: { flag: "🇬🇧 EN", sub: "HD Live Video & Global Dating", ph: "Your nickname...", enter: "Enter Live 🚀", goLive: "🔴 Go Live", liveTag: "🔴 LIVE NOW", join: "📹 Join / Call", quit: "Leave ✕", tabLive: "🔥 Live / Coco", tabVip: "👑 VIP Crypto", payBtn: "Pay with Crypto", copy: "Copy", confirm: "Confirm", txPh: "TXID Hash...", sent: "Payment sent!" },
-  ar: { flag: "🇲🇦 AR", sub: "بث مباشر فيديو وتعارف عالمي", ph: "اسمك المستعار...", enter: "دخول البث المباشر 🚀", goLive: "🔴 ابدأ البث", liveTag: "🔴 مباشر الآن", join: "📹 انضمام / اتصال", quit: "خروج ✕", tabLive: "🔥 مباشر", tabVip: "👑 اشتراك VIP", payBtn: "الدفع بالكريبتو", copy: "نسخ", confirm: "تأكيد الدفع", txPh: "رمز المعاملة TXID...", sent: "تم إرسال الدفع بنجاح!" },
-  es: { flag: "🇪🇸 ES", sub: "Video en Vivo HD y Citas Mundiales", ph: "Tu apodo...", enter: "Entrar en Vivo 🚀", goLive: "🔴 Iniciar Vivo", liveTag: "🔴 EN VIVO", join: "📹 Unirse / Llamar", quit: "Salir ✕", tabLive: "🔥 En Vivo", tabVip: "👑 VIP Cripto", payBtn: "Pagar con Cripto", copy: "Copiar", confirm: "Confirmar", txPh: "Hash TXID...", sent: "¡Pago enviado!" },
-  tr: { flag: "🇹🇷 TR", sub: "HD Canlı Video & Dünya Çapında Tanışma", ph: "Takma adınız...", enter: "Canlı Yayına Gir 🚀", goLive: "🔴 Canlı Yayın Aç", liveTag: "🔴 CANLI", join: "📹 Katıl / Ara", quit: "Çıkış ✕", tabLive: "🔥 Canlı / Coco", tabVip: "👑 VIP Kripto", payBtn: "Kripto ile Öde", copy: "Kopyala", confirm: "Onayla", txPh: "TXID Kodu...", sent: "Ödeme gönderildi!" },
-  pt: { flag: "🇧🇷 PT", sub: "Vídeo ao Vivo HD e Encontros Globais", ph: "Seu apelido...", enter: "Entrar ao Vivo 🚀", goLive: "🔴 Iniciar Live", liveTag: "🔴 AO VIVO", join: "📹 Entrar / Ligar", quit: "Sair ✕", tabLive: "🔥 Ao Vivo", tabVip: "👑 VIP Cripto", payBtn: "Pagar com Cripto", copy: "Copiar", confirm: "Confirmar", txPh: "Hash TXID...", sent: "Pagamento enviado!" },
-  ru: { flag: "🇷🇺 RU", sub: "HD Видео Эфиры и Знакомства по Миру", ph: "Ваш никнейм...", enter: "Войти в Эфир 🚀", goLive: "🔴 Начать Эфир", liveTag: "🔴 В ЭФИРЕ", join: "📹 Войти / Звонок", quit: "Выйти ✕", tabLive: "🔥 Эфир / Coco", tabVip: "👑 VIP Крипто", payBtn: "Оплатить Крипто", copy: "Копировать", confirm: "Подтвердить", txPh: "Хэш TXID...", sent: "Оплата отправлена!" },
-  he: { flag: "🇮🇱 HE", sub: "שידור חי בוידאו והיכרויות בעולם", ph: "הכינוי שלך...", enter: "כניסה לשידור 🚀", goLive: "🔴 התחל שידור", liveTag: "🔴 שידור חי", join: "📹 הצטרף / שיחה", quit: "יציאה ✕", tabLive: "🔥 שידור חי", tabVip: "👑 מנוי VIP", payBtn: "תשלום בקריפטו", copy: "העתק", confirm: "אישור", txPh: "קוד TXID...", sent: "התשלום נשלח!" },
-  de: { flag: "🇩🇪 DE", sub: "HD Live-Video & Weltweites Dating", ph: "Dein Spitzname...", enter: "Live beitreten 🚀", goLive: "🔴 Live gehen", liveTag: "🔴 LIVE", join: "📹 Beitreten / Anrufen", quit: "Beenden ✕", tabLive: "🔥 Live / Coco", tabVip: "👑 VIP Krypto", payBtn: "Mit Krypto zahlen", copy: "Kopieren", confirm: "Bestätigen", txPh: "TXID-Hash...", sent: "Zahlung gesendet!" },
+  fr: { flag: "🇫🇷", sub: "Live Vidéo HD & Rencontres", ph: "Votre pseudo...", enter: "Lancer KANQKA 🚀", goLive: "🔴 Lancer Live", liveTag: "🔴 EN DIRECT", join: "📹 Rejoindre", quit: "Quitter ✕", tabLive: "🔥 Live / Coco", tabVip: "👑 VIP Crypto", payBtn: "Payer Crypto", copy: "Copier", confirm: "Confirmer", txPh: "Hash TXID...", sent: "Paiement envoyé !" },
+  en: { flag: "🇬🇧", sub: "HD Live Video & Dating", ph: "Your nickname...", enter: "Launch KANQKA 🚀", goLive: "🔴 Go Live", liveTag: "🔴 LIVE NOW", join: "📹 Join / Call", quit: "Leave ✕", tabLive: "🔥 Live / Coco", tabVip: "👑 VIP Crypto", payBtn: "Pay with Crypto", copy: "Copy", confirm: "Confirm", txPh: "TXID Hash...", sent: "Payment sent!" },
+  ar: { flag: "🇲🇦", sub: "بث مباشر فيديو وتعارف", ph: "اسمك المستعار...", enter: "دخول البث 🚀", goLive: "🔴 ابدأ البث", liveTag: "🔴 مباشر الآن", join: "📹 انضمام", quit: "خروج ✕", tabLive: "🔥 مباشر", tabVip: "👑 اشتراك VIP", payBtn: "الدفع بالكريبتو", copy: "نسخ", confirm: "تأكيد", txPh: "رمز TXID...", sent: "تم الإرسال!" },
+  es: { flag: "🇪🇸", sub: "Video en Vivo HD y Citas", ph: "Tu apodo...", enter: "Entrar en Vivo 🚀", goLive: "🔴 Iniciar Vivo", liveTag: "🔴 EN VIVO", join: "📹 Unirse", quit: "Salir ✕", tabLive: "🔥 En Vivo", tabVip: "👑 VIP Cripto", payBtn: "Pagar con Cripto", copy: "Copiar", confirm: "Confirmar", txPh: "Hash TXID...", sent: "¡Pago enviado!" },
+  tr: { flag: "🇹🇷", sub: "HD Canlı Video & Tanışma", ph: "Takma adınız...", enter: "Canlı Yayına Gir 🚀", goLive: "🔴 Canlı Yayın", liveTag: "🔴 CANLI", join: "📹 Katıl", quit: "Çıkış ✕", tabLive: "🔥 Canlı", tabVip: "👑 VIP Kripto", payBtn: "Kripto ile Öde", copy: "Kopyala", confirm: "Onayla", txPh: "TXID Kodu...", sent: "Ödeme gönderildi!" },
+  pt: { flag: "🇧🇷", sub: "Vídeo ao Vivo HD e Encontros", ph: "Seu apelido...", enter: "Entrar ao Vivo 🚀", goLive: "🔴 Iniciar Live", liveTag: "🔴 AO VIVO", join: "📹 Entrar", quit: "Sair ✕", tabLive: "🔥 Ao Vivo", tabVip: "👑 VIP Cripto", payBtn: "Pagar com Cripto", copy: "Copiar", confirm: "Confirmar", txPh: "Hash TXID...", sent: "Pagamento enviado!" },
+  ru: { flag: "🇷🇺", sub: "HD Видео Эфиры и Знакомства", ph: "Ваш никнейм...", enter: "Войти в Эфир 🚀", goLive: "🔴 В Эфир", liveTag: "🔴 В ЭФИРЕ", join: "📹 Войти", quit: "Выйти ✕", tabLive: "🔥 Эфир", tabVip: "👑 VIP Крипто", payBtn: "Оплатить Крипто", copy: "Копировать", confirm: "Подтвердить", txPh: "Хэш TXID...", sent: "Оплата отправлена!" },
+  he: { flag: "🇮🇱", sub: "שידור חי בוידאו והיכרויות", ph: "הכינוי שלך...", enter: "כניסה לשידור 🚀", goLive: "🔴 התחל שידור", liveTag: "🔴 שידור חי", join: "📹 הצטרף", quit: "יציאה ✕", tabLive: "🔥 שידור חי", tabVip: "👑 מנוי VIP", payBtn: "תשלום בקריפטו", copy: "העתק", confirm: "אישור", txPh: "קוד TXID...", sent: "התשלום נשלח!" },
+  de: { flag: "🇩🇪", sub: "HD Live-Video & Dating", ph: "Dein Spitzname...", enter: "Live starten 🚀", goLive: "🔴 Live gehen", liveTag: "🔴 LIVE", join: "📹 Beitreten", quit: "Beenden ✕", tabLive: "🔥 Live", tabVip: "👑 VIP Krypto", payBtn: "Mit Krypto zahlen", copy: "Kopieren", confirm: "Bestätigen", txPh: "TXID-Hash...", sent: "Zahlung gesendet!" },
 };
 
 const BluePaw = () => (
-  <svg width="26" height="26" viewBox="0 0 24 24" fill="#38bdf8" style={{ verticalAlign: "middle", marginRight: 8 }}>
+  <svg width="28" height="28" viewBox="0 0 24 24" fill="#38bdf8" style={{ verticalAlign: "middle", marginRight: 8, filter: "drop-shadow(0 0 8px rgba(56, 189, 248, 0.7))" }}>
     <circle cx="4.5" cy="9.5" r="2.5" />
     <circle cx="9" cy="5.5" r="2.5" />
     <circle cx="15" cy="5.5" r="2.5" />
@@ -105,10 +105,14 @@ export default function App() {
     return () => zp.destroy();
   }, [roomInfo]);
 
-  const LangBar = () => (
-    <div style={{ display: "flex", gap: 6, justifyContent: "center", flexWrap: "wrap" }}>
+  const FlagCircles = () => (
+    <div style={{ display: "flex", gap: 6, justifyContent: "center", flexWrap: "wrap", maxWidth: 270 }}>
       {Object.keys(LANGS).map((code) => (
-        <button key={code} onClick={() => setLang(code)} style={lang === code ? s.pinkSmall : s.dark}>
+        <button
+          key={code}
+          onClick={() => setLang(code)}
+          style={lang === code ? s.flagCircleActive : s.flagCircle}
+        >
           {LANGS[code].flag}
         </button>
       ))}
@@ -118,14 +122,23 @@ export default function App() {
   if (!me) {
     return (
       <div style={{ ...s.center, direction: isRtl ? "rtl" : "ltr" }}>
-        <div style={s.box}>
-          <LangBar />
-          <div style={{ fontSize: 26, fontWeight: "900", color: "#fff", textAlign: "center", display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <div style={s.circleCard}>
+          <FlagCircles />
+
+          <div style={s.brandTitle}>
             <BluePaw />
             <strong>KANQKA</strong>
           </div>
-          <p style={{ fontSize: 13, color: "#94a3b8", margin: 0, textAlign: "center" }}>{t.sub}</p>
-          <input value={pseudo} onChange={(e) => setPseudo(e.target.value)} placeholder={t.ph} style={s.input} />
+
+          <p style={s.circleSub}>{t.sub}</p>
+
+          <input
+            value={pseudo}
+            onChange={(e) => setPseudo(e.target.value)}
+            placeholder={t.ph}
+            style={s.circleInput}
+          />
+
           <button
             onClick={async () => {
               if (!pseudo.trim()) return;
@@ -134,7 +147,7 @@ export default function App() {
               setMe(user || { id: Date.now(), pseudo: pseudo.trim(), coins: 100, is_vip: false });
               load();
             }}
-            style={s.pink}
+            style={s.blueLaunchBtn}
           >
             {t.enter}
           </button>
@@ -172,8 +185,8 @@ export default function App() {
         </div>
       </header>
 
-      <div style={{ padding: "8px 14px", background: "#0f172a" }}>
-        <LangBar />
+      <div style={{ padding: "10px 14px", background: "#0f172a", display: "flex", justifyContent: "center" }}>
+        <FlagCircles />
       </div>
 
       <main style={s.main}>
@@ -200,11 +213,11 @@ export default function App() {
           <div style={s.col}>
             <div style={s.box}>
               <strong>🥈 VIP Silver (1 Mois) — 9.99 $</strong>
-              <button onClick={() => setPlan({ name: "VIP Silver", price: "9.99 $" })} style={s.pink}>{t.payBtn}</button>
+              <button onClick={() => setPlan({ name: "VIP Silver", price: "9.99 $" })} style={s.blueLaunchBtn}>{t.payBtn}</button>
             </div>
             <div style={s.box}>
               <strong>👑 VIP Gold (1 Mois) — 24.99 $</strong>
-              <button onClick={() => setPlan({ name: "VIP Gold", price: "24.99 $" })} style={s.pink}>{t.payBtn}</button>
+              <button onClick={() => setPlan({ name: "VIP Gold", price: "24.99 $" })} style={s.blueLaunchBtn}>{t.payBtn}</button>
             </div>
           </div>
         )}
@@ -239,7 +252,7 @@ export default function App() {
             <strong>{plan.name} ({plan.price})</strong>
             <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
               {Array.of("USDT TRC20", "BTC BEP20", "ETH ERC20", "USDT Arbitrum").map((k) => (
-                <button key={k} onClick={() => setNet(k)} style={net === k ? s.pinkSmall : s.dark}>{k}</button>
+                <button key={k} onClick={() => setNet(k)} style={net === k ? s.blueSmall : s.dark}>{k}</button>
               ))}
             </div>
             <small style={{ color: "#facc15", wordBreak: "break-all" }}>{activeAddr}</small>
@@ -271,9 +284,16 @@ export default function App() {
 }
 
 const s = {
-  center: { position: "fixed", inset: 0, backgroundImage: "linear-gradient(rgba(9, 13, 22, 0.5), rgba(9, 13, 22, 0.85)), url('/bg.jpg')", backgroundSize: "cover", backgroundPosition: "center", color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", padding: 16, fontFamily: "sans-serif" },
+  center: { position: "fixed", inset: 0, backgroundImage: "linear-gradient(rgba(9, 13, 22, 0.45), rgba(9, 13, 22, 0.85)), url('/bg.jpg')", backgroundSize: "cover", backgroundPosition: "center", color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", padding: 16, fontFamily: "system-ui, sans-serif" },
+  circleCard: { width: 350, height: 350, borderRadius: "50%", background: "rgba(11, 16, 33, 0.82)", backdropFilter: "blur(14px)", border: "2px solid rgba(56, 189, 248, 0.45)", boxShadow: "0 0 45px rgba(14, 165, 233, 0.35), inset 0 0 25px rgba(56, 189, 248, 0.15)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "32px 28px", boxSizing: "border-box", gap: 12 },
+  flagCircle: { width: 34, height: 34, borderRadius: "50%", background: "rgba(30, 41, 59, 0.85)", border: "1px solid rgba(255, 255, 255, 0.15)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16, cursor: "pointer", padding: 0 },
+  flagCircleActive: { width: 34, height: 34, borderRadius: "50%", background: "rgba(14, 165, 233, 0.3)", border: "2px solid #38bdf8", boxShadow: "0 0 12px rgba(56, 189, 248, 0.7)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16, cursor: "pointer", padding: 0, transform: "scale(1.1)" },
+  brandTitle: { fontSize: 25, fontWeight: "900", color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", letterSpacing: 1 },
+  circleSub: { fontSize: 12, color: "#cbd5e1", margin: 0, textAlign: "center" },
+  circleInput: { width: "86%", background: "rgba(9, 13, 22, 0.85)", border: "1px solid rgba(56, 189, 248, 0.4)", color: "#fff", padding: "11px 16px", borderRadius: 99, fontSize: 13, textAlign: "center", outline: "none" },
+  blueLaunchBtn: { width: "86%", background: "linear-gradient(90deg, #0284c7, #38bdf8)", color: "#fff", border: "none", padding: "11px 18px", borderRadius: 99, fontWeight: "800", fontSize: 14, cursor: "pointer", boxShadow: "0 6px 20px rgba(14, 165, 233, 0.45)" },
 
- app: { minHeight: "100vh", width: "100%", background: "#090d16", color: "#fff", fontFamily: "sans-serif", display: "flex", flexDirection: "column" },
+  app: { minHeight: "100vh", width: "100%", background: "#090d16", color: "#fff", fontFamily: "system-ui, sans-serif", display: "flex", flexDirection: "column" },
   head: { display: "flex", justifyContent: "space-between", alignItems: "center", padding: 14, background: "#131024" },
   main: { flex: 1, padding: 14, maxWidth: 460, width: "100%", margin: "0 auto", boxSizing: "border-box" },
   box: { background: "#131024", padding: 16, borderRadius: 14, border: "1px solid #2a234d", display: "flex", flexDirection: "column", gap: 10, width: "100%", maxWidth: 360, boxSizing: "border-box" },
@@ -282,8 +302,7 @@ const s = {
   card: { height: 170, borderRadius: 14, padding: 12, display: "flex", flexDirection: "column", justifyContent: "space-between" },
   tag: { background: "rgba(0,0,0,0.5)", padding: "3px 8px", borderRadius: 99, fontSize: 10, alignSelf: "flex-start" },
   input: { background: "#090d16", border: "1px solid #334155", color: "#fff", padding: 10, borderRadius: 8 },
-  pink: { background: "#ec4899", color: "#fff", border: "none", padding: 10, borderRadius: 8, fontWeight: "bold", cursor: "pointer" },
-  pinkSmall: { background: "#ec4899", color: "#fff", border: "none", padding: "5px 10px", borderRadius: 8, fontWeight: "bold", fontSize: 12, cursor: "pointer" },
+  blueSmall: { background: "#0284c7", color: "#fff", border: "none", padding: "5px 10px", borderRadius: 8, fontWeight: "bold", fontSize: 12, cursor: "pointer" },
   green: { background: "#22c55e", color: "#000", border: "none", padding: 9, borderRadius: 8, fontWeight: "bold", cursor: "pointer" },
   gold: { background: "#facc15", color: "#000", border: "none", padding: "6px 12px", borderRadius: 8, fontWeight: "bold", cursor: "pointer" },
   dark: { background: "#1e293b", color: "#fff", border: "none", padding: "5px 10px", borderRadius: 8, fontSize: 12, cursor: "pointer" },
@@ -295,6 +314,9 @@ const s = {
   nav: { display: "flex", justifyContent: "space-around", padding: 14, background: "#131024" },
   navBtn: { background: "none", border: "none", color: "#fff", fontWeight: "bold", cursor: "pointer" },
 };
+
+
+
 
 
 
