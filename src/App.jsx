@@ -10,15 +10,15 @@ const TRC20 = "TQP3ThW7oFi8EyFfXxn1ez5x5AGR1SrcPH";
 const EVM = "0x1D64262b0501D2b8565Fb287918f501ff62e1361";
 
 const LANGS = {
-  fr: { f: "🇫🇷", ph: "Pseudo...", c: "E-mail ou Tél...", s: "Envoyer Code 📩", code: "Code 6 chiffres...", go: "Entrer 🚀", live: "🔴 Live", join: "📹 Rejoindre", chat: "💬 Chat", vip: "👑 VIP", pay: "Payer Crypto", msg: "Message..." },
-  en: { f: "🇬🇧", ph: "Nickname...", c: "Email or Phone...", s: "Send Code 📩", code: "6-digit code...", go: "Enter 🚀", live: "🔴 Live", join: "📹 Join", chat: "💬 Chat", vip: "👑 VIP", pay: "Pay Crypto", msg: "Message..." },
-  ar: { f: "🇲🇦", ph: "الاسم...", c: "إيميل أو هاتف...", s: "إرسال الرمز 📩", code: "رمز التحقق...", go: "دخول 🚀", live: "🔴 بث", join: "📹 انضمام", chat: "💬 دردشة", vip: "👑 VIP", pay: "دفع كريبتو", msg: "رسالة..." },
-  es: { f: "🇪🇸", ph: "Apodo...", c: "Correo o Tel...", s: "Enviar Código 📩", code: "Código 6 dígitos...", go: "Entrar 🚀", live: "🔴 Vivo", join: "📹 Unirse", chat: "💬 Chat", vip: "👑 VIP", pay: "Pagar Cripto", msg: "Mensaje..." },
-  tr: { f: "🇹🇷", ph: "Takma ad...", c: "E-posta / Tel...", s: "Kod Gönder 📩", code: "6 haneli kod...", go: "Gir 🚀", live: "🔴 Yayın", join: "📹 Katıl", chat: "💬 Sohbet", vip: "👑 VIP", pay: "Kripto Öde", msg: "Mesaj..." },
-  pt: { f: "🇧🇷", ph: "Apelido...", c: "E-mail ou Tel...", s: "Enviar Código 📩", code: "Código 6 dígitos...", go: "Entrar 🚀", live: "🔴 Live", join: "📹 Entrar", chat: "💬 Chat", vip: "👑 VIP", pay: "Pagar Cripto", msg: "Mensagem..." },
-  ru: { f: "🇷🇺", ph: "Никнейм...", c: "Почта / Тел...", s: "Отправить код 📩", code: "Код из 6 цифр...", go: "Войти 🚀", live: "🔴 Эфир", join: "📹 Войти", chat: "💬 Чат", vip: "👑 VIP", pay: "Крипто", msg: "Сообщение..." },
-  he: { f: "🇮🇱", ph: "כינוי...", c: "אימייל / טלפון...", s: "שלח קוד 📩", code: "קוד אימות...", go: "כניסה 🚀", live: "🔴 שידור", join: "📹 הצטרף", chat: "💬 צ׳אט", vip: "👑 VIP", pay: "קריפטו", msg: "הודעה..." },
-  de: { f: "🇩🇪", ph: "Name...", c: "E-Mail / Tel...", s: "Code senden 📩", code: "6-stelliger Code...", go: "Starten 🚀", live: "🔴 Live", join: "📹 Beitreten", chat: "💬 Chat", vip: "👑 VIP", pay: "Krypto", msg: "Nachricht..." },
+  fr: { f: "🇫🇷", ph: "Pseudo...", c: "E-mail ou Tél...", s: "Envoyer Code 📩", code: "Code 8 chiffres...", go: "Entrer 🚀" },
+  en: { f: "🇬🇧", ph: "Nickname...", c: "Email or Phone...", s: "Send Code 📩", code: "8-digit code...", go: "Enter 🚀" },
+  zh: { f: "🇨🇳", ph: "昵称...", c: "邮箱或手机号...", s: "发送验证码 📩", code: "8位验证码...", go: "进入 🚀" },
+  es: { f: "🇪🇸", ph: "Apodo...", c: "Correo o Tel...", s: "Enviar Código 📩", code: "Código 8 dígitos...", go: "Entrar 🚀" },
+  tr: { f: "🇹🇷", ph: "Takma ad...", c: "E-posta / Tel...", s: "Kod Gönder 📩", code: "8 haneli kod...", go: "Gir 🚀" },
+  pt: { f: "🇧🇷", ph: "Apelido...", c: "E-mail ou Tel...", s: "Enviar Código 📩", code: "Código 8 dígitos...", go: "Entrar 🚀" },
+  ru: { f: "🇷🇺", ph: "Никнейм...", c: "Почта / Тел...", s: "Отправить код 📩", code: "Код из 8 цифр...", go: "Войти 🚀" },
+  he: { f: "🇮🇱", ph: "כינוי...", c: "אימייל / טלפון...", s: "שלח קוד 📩", code: "קוד 8 ספרות...", go: "כניסה 🚀" },
+  de: { f: "🇩🇪", ph: "Name...", c: "E-Mail / Tel...", s: "Code senden 📩", code: "8-stelliger Code...", go: "Starten 🚀" },
 };
 
 const api = async (p, m = "GET", b = null) => {
