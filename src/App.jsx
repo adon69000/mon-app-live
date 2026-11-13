@@ -95,17 +95,22 @@ export default function App() {
     setStep(1);
   };
 
-  const verifyOtp = async () => {
-    const r = await fetch(`${URL}/auth/v1/verify`, {
-      method: "POST",
-      headers: { apikey: KEY, "Content-Type": "application/json" },
-      body: JSON.stringify(mode === "email" ? { email: contact.trim(), token: otp.trim(), type: "email" } : { phone: contact.trim(), token: otp.trim(), type: "sms" }),
-    });
-    if (!r.ok) return alert("Code invalide");
-    const data = { pseudo: pseudo.trim(), contact: contact.trim(), avatar_url: avatar || null, coins: 100 };
-    const res = await api("profiles", "POST", data);
-    setMe((Array.isArray(res) && res.at(0)) || { id: Date.now(), ...data });
-    load();
+  const verifyOtp = async () => {{
+    if (!contact.trim() || !pseudo.trim()) return;
+    try {
+      const r = await fetch(`${URL}/auth/v1/otp`, {
+        method: "POST",
+        headers: { apikey: KEY, "Content-Type": "application/json" },
+        body: JSON.stringify(mode === "email" ? { email: contact.trim() } : { phone: contact.trim() }),
+      });
+      if (!r.ok) {
+        const err = await r.json().catch(() => ({}));
+        alert(err.msg || err.error_description || "Erreur Supabase Auth (" + r.status + ")");
+      }
+      setStep(1);
+    } catch (e) {
+      alert("Erreur réseau : " + e.message);
+    }
   };
 
   if (!me) {
