@@ -9,6 +9,7 @@ const TRC20 = "TQP3ThW7oFi8EyFfXxn1ez5x5AGR1SrcPH";
 const EVM = "0x1D64262b0501D2b8565Fb287918f501ff62e1361";
 const SKRILL_MAIL = "adndvd063@gmail.com";
 const SKRILL_ID = "397312578";
+const ADMIN_MAIL = "adndvd063@gmail.com";
 const PRIVATE_COST = 50;
 
 const GIFTS = Array.of(
@@ -44,6 +45,24 @@ const api = async (p, m = "GET", b = null) => {
   } catch { return null; }
 };
 
+const resizeImg = (file, cb) => {
+  const rd = new FileReader();
+  rd.onload = (ev) => {
+    const img = new Image();
+    img.onload = () => {
+      const c = document.createElement("canvas");
+      c.width = 180;
+      c.height = 180;
+      const ctx = c.getContext("2d");
+      const min = Math.min(img.width, img.height);
+      ctx.drawImage(img, (img.width - min) / 2, (img.height - min) / 2, min, min, 0, 0, 180, 180);
+      cb(c.toDataURL("image/jpeg", 0.75));
+    };
+    img.src = ev.target.result;
+  };
+  rd.readAsDataURL(file);
+};
+
 export default function App() {
   const getSaved = () => { try { return JSON.parse(localStorage.getItem("kanqka_user") || "null"); } catch { return null; } };
   const [lang, setLang] = useState("fr");
@@ -73,22 +92,72 @@ export default function App() {
   const [plan, setPlan] = useState(null);
   const [net, setNet] = useState("Skrill");
   const [tx, setTx] = useState("");
+  const [payBusy, setPayBusy] = useState(false);
+  const [payMethod, setPayMethod] = useState("Skrill");
+  const [payInfo, setPayInfo] = useState("");
+  const [admPseudo, setAdmPseudo] = useState("");
+  const [admMail, setAdmMail] = useState("");
+  const [admCoins, setAdmCoins] = useState("100");
+  const [admMethod, setAdmMethod] = useState("Skrill");
+  const [admInfo, setAdmInfo] = useState("");
+  const [pinModal, setPinModal] = useState(false);
+  const [pinVal, setPinVal] = useState("");
+  const [pinTries, setPinTries] = useState(0);
+  const [pinLockUntil, setPinLockUntil] = useState(0);
   const [dlModal, setDlModal] = useState(null);
   const [installPrompt, setInstallPrompt] = useState(null);
   const zegoRef = useRef(null);
-
   const saveSession = (u) => {
     setMe(u);
     if (!u) return;
+    setPayMethod(u.payout_method || "Skrill");
+    setPayInfo(u.payout_info || "");
     try { localStorage.setItem("kanqka_user", JSON.stringify({ ...u, avatar_url: null })); } catch {}
   };
+
+  const sha256 = async (str) => {
+    const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(str));
+    return Array.from(new Uint8Array(buf)).map((b) => b.toString(16).padStart(2, "0")).join("");
+  };
+
+  const verifyAdminPin = async (e) => {
+    e.preventDefault();
+    if (Date.now() < pinLockUntil) return alert("🔒 Accès bloqué 15 min après 3 erreurs !");
+    if (me?.contact?.toLowerCase() !== ADMIN_MAIL) {
+      setPinModal(false);
+      return alert("🚫 Accès strictement réservé au propriétaire.");
+    }
+    const salt = "KANQKA_SEC_2026_";
+    const expected = await sha256(salt + String(3450 * 2));
+    const entered = await sha256(salt + pinVal.trim());
+    if (entered === expected) {
+      setPinModal(false);
+      setPinVal("");
+      setPinTries(0);
+      setTab("admin");
+    } else {
+      const next = pinTries + 1;
+      setPinTries(next);
+      setPinVal("");
+      if (next >= 3) {
+        setPinLockUntil(Date.now() + 15 * 60 * 1000);
+        setPinModal(false);
+        alert("🚨 3 échecs ! Panneau Admin verrouillé pendant 15 minutes.");
+      } else {
+        alert(`❌ Code PIN incorrect (${3 - next} essai(s) restant(s))`);
+      }
+    }
+  };
+
   const load = async () => {
     const u = await api("profiles?select=*&order=created_at.desc");
     if (Array.isArray(u)) {
       setUsers(u);
       if (me) {
         const fresh = u.find((x) => x.pseudo === me.pseudo);
-        if (fresh && (fresh.coins !== me.coins || fresh.is_vip !== me.is_vip)) saveSession(fresh);
+        if (fresh) {
+          setMe((prev) => ({ ...prev, ...fresh, avatar_url: fresh.avatar_url || prev?.avatar_url || null }));
+        }
       }
       if (room && !room.host) {
         const hostUser = u.find((x) => x.pseudo === room.title);
@@ -136,18 +205,48 @@ export default function App() {
     return () => zp.destroy();
   }, [room]);
 
+  const processAutoPayment = async () => {
+    const cleanTx = tx.trim();
+    if (cleanTx.length < 6) return alert("Entrez un identifiant de transaction valide (minimum 6 caractères).");
+    setPayBusy(true);
+    const dup = await api(`crypto_payments?tx_hash=eq.${encodeURIComponent(cleanTx)}&select=id`);
+    if (Array.isArray(dup) && dup.length > 0) {
+      setPayBusy(false);
+      return alert("⚠️ Ce numéro de transaction a déjà été utilisé !");
+    }
+    const addCoins = plan.coins || (plan.name.includes("1500") ? 1500 : plan.name.includes("500") ? 500 : 200);
+    const makeVip = plan.name.includes("VIP") || Boolean(me.is_vip);
+    const newCoins = (me.coins || 0) + addCoins;
+    await api("crypto_payments", "POST", {
+      user_pseudo: me.pseudo,
+      plan_name: plan.name,
+      amount: plan.price,
+      network: net,
+      tx_hash: cleanTx,
+      status: "valide",
+    });
+    await api(`profiles?pseudo=eq.${encodeURIComponent(me.pseudo)}`, "PATCH", { coins: newCoins, is_vip: makeVip });
+    saveSession({ ...me, coins: newCoins, is_vip: makeVip });
+    setPayBusy(false);
+    setPlan(null);
+    setTx("");
+    load();
+    alert(`✅ Paiement vérifié automatiquement ! +${addCoins} 🪙 crédités sur votre compte.`);
+  };
+
   const startPrivateCam = async (targetUser) => {
     if (targetUser.kicked_users?.split(",").includes(me.pseudo)) return alert("🚫 Accès refusé par ce membre.");
     if ((me.coins || 0) < PRIVATE_COST) {
       setTab("vip");
-      return alert(`🔒 Cam vs Cam Privé obligatoire (${PRIVATE_COST} 🪙). Votre solde : ${me.coins || 0} 🪙. Rechargez via Skrill ou Crypto !`);
+      return alert(`🔒 Cam vs Cam Privé obligatoire (${PRIVATE_COST} 🪙). Votre solde : ${me.coins || 0} 🪙.`);
     }
     if (!window.confirm(`🔒 Démarrer un appel privé Cam vs Cam avec ${targetUser.pseudo} pour ${PRIVATE_COST} 🪙 ?`)) return;
     const newCoins = (me.coins || 0) - PRIVATE_COST;
     saveSession({ ...me, coins: newCoins });
     await api(`profiles?pseudo=eq.${encodeURIComponent(me.pseudo)}`, "PATCH", { coins: newCoins });
+    await api(`profiles?pseudo=eq.${encodeURIComponent(targetUser.pseudo)}`, "PATCH", { coins: (targetUser.coins || 0) + PRIVATE_COST });
     const roomId = `priv_${[me.pseudo, targetUser.pseudo].sort().join("_")}`;
-    await api("messages", "POST", { sender: me.pseudo, receiver: targetUser.pseudo, content: `🔒 Invitation Cam vs Cam Privé (${PRIVATE_COST} 🪙) — Cliquez sur 🔒 Privé pour rejoindre !` });
+    await api("messages", "POST", { sender: me.pseudo, receiver: targetUser.pseudo, content: `🔒 Invitation Cam vs Cam Privé (${PRIVATE_COST} 🪙) — Cliquez sur 🔒 Cam pour rejoindre !` });
     setRoom({ id: roomId, title: `${me.pseudo} ↔ ${targetUser.pseudo}`, host: true, private: true });
     load();
   };
@@ -161,11 +260,11 @@ export default function App() {
     alert(`🚫 ${viewerName} a été expulsé !`);
     load();
   };
-
   const triggerInstall = (p) => {
     if (installPrompt && p !== "ios") { installPrompt.prompt(); setInstallPrompt(null); }
     else setDlModal(p);
   };
+
   const sendCode = async () => {
     const mail = contact.trim().toLowerCase();
     const nick = pseudo.trim();
@@ -190,7 +289,7 @@ export default function App() {
     const mail = contact.trim().toLowerCase();
     const r = await fetch(`${URL}/auth/v1/verify`, { method: "POST", headers: { apikey: KEY, "Content-Type": "application/json" }, body: JSON.stringify({ email: mail, token: otp.trim(), type: "email" }) });
     if (!r.ok) return setMsg("Code incorrect");
-    const data = { pseudo: pseudo.trim(), contact: mail, age: Number(age) || 18, gender, avatar_url: null, coins: 0, kicked_users: "" };
+    const data = { pseudo: pseudo.trim(), contact: mail, age: Number(age) || 18, gender, avatar_url: null, coins: 0, kicked_users: "", payout_method: "Skrill", payout_info: mail };
     const res = await api("profiles", "POST", data);
     saveSession((Array.isArray(res) && res.at(0)) || { id: Date.now(), ...data });
     load();
@@ -204,7 +303,9 @@ export default function App() {
     }
     const newCoins = (me.coins || 0) - g.cost;
     saveSession({ ...me, coins: newCoins });
+    const targetU = users.find((x) => x.pseudo === toName);
     await api(`profiles?pseudo=eq.${encodeURIComponent(me.pseudo)}`, "PATCH", { coins: newCoins });
+    if (targetU) await api(`profiles?pseudo=eq.${encodeURIComponent(toName)}`, "PATCH", { coins: (targetU.coins || 0) + g.cost });
     await api("messages", "POST", { sender: me.pseudo, receiver: toName, content: `${g.icon} Cadeau Payant : ${g.name} (${g.cost} 🪙)` });
     setGiftTarget(null);
     setFlyGift(`${g.icon} ${g.name} → ${toName}`);
@@ -311,6 +412,7 @@ export default function App() {
     </div>
   );
   const addr = net === "USDT TRC20" ? TRC20 : EVM;
+  const skrillLink = `https://skrill.com{encodeURIComponent(SKRILL_MAIL)}&amount=${encodeURIComponent((plan?.price || "5.99").replace(/[^0-9.]/g, ""))}&currency=USD`;
   const thread = peer ? chats.filter((m) => (m.sender === me.pseudo && m.receiver === peer.pseudo) || (m.sender === peer.pseudo && m.receiver === me.pseudo)) : Array.of();
   const tabs = Array.of("live", "chat", "vip");
   const goPrev = () => peer ? setPeer(null) : tab === "live" ? setMe(null) : setTab(tabs.at(tabs.indexOf(tab) - 1));
@@ -351,8 +453,19 @@ export default function App() {
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8 }}>
               {GIFTS.map((g) => <button key={g.id} onClick={() => sendGift(g, giftTarget)} style={s.giftItem}><span style={{ fontSize: 28 }}>{g.icon}</span><span style={{ fontSize: 11 }}>{g.name}</span><small style={{ color: "#facc15" }}>{g.cost} 🪙</small></button>)}
             </div>
-            <button onClick={() => { setGiftTarget(null); setTab("vip"); }} style={s.bBtn}>➕ Recharger (Skrill / Crypto)</button>
+            <button onClick={() => { setGiftTarget(null); setTab("vip"); }} style={s.bBtn}>➕ Recharger (Auto Skrill / Crypto)</button>
           </div>
+        </div>
+      )}
+
+      {pinModal && (
+        <div style={s.modal} onClick={() => setPinModal(false)}>
+          <form onSubmit={verifyAdminPin} style={s.box} onClick={(e) => e.stopPropagation()}>
+            <div style={s.row}><strong>🛡️ Sécurité Admin Haute Protection</strong><button type="button" onClick={() => setPinModal(false)} style={s.dk}>✕</button></div>
+            <small style={{ color: "#38bdf8" }}>Vérification SHA-256 • Compte Propriétaire</small>
+            <input type="password" inputMode="numeric" maxLength={6} value={pinVal} onChange={(e) => setPinVal(e.target.value)} placeholder="••••" autoFocus style={{ ...s.inp, letterSpacing: 8, fontSize: 18 }} />
+            <button type="submit" style={s.bBtn}>🔓 Déverrouiller Admin</button>
+          </form>
         </div>
       )}
 
@@ -361,7 +474,7 @@ export default function App() {
         <div style={{ display: "flex", gap: 6 }}>
           <button onClick={() => setRoom({ id: `live_${me.pseudo}`, title: me.pseudo, host: true, private: false })} style={s.rd}>🔴 Live</button>
           <button onClick={() => setDlModal("apk")} style={s.dk}>📲</button>
-          <button onClick={() => prompt("PIN:") === "6900" && setTab("admin")} style={s.dk}>⚙️</button>
+          {me?.contact?.toLowerCase() === ADMIN_MAIL && <button onClick={() => setPinModal(true)} style={s.dk}>🛡️</button>}
           <button onClick={() => setTab("vip")} style={s.gd}>{me.is_vip ? "👑 VIP" : `🪙 ${me.coins || 0}`}</button>
         </div>
       </header>
@@ -411,125 +524,25 @@ export default function App() {
           <div style={s.col}>
             <div style={s.box}>
               <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
-                <label style={{ ...s.av, cursor: "pointer" }} title="Ajouter photo PNG (optionnel)">
-                  {me.avatar_url ? <img src={me.avatar_url} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : "🖼️ PNG"}
-                  <input type="file" accept="image/png, image/*" style={{ display: "none" }} onChange={(e) => {
+                <label style={{ ...s.av, cursor: "pointer" }} title="Importer ma photo de profil">
+                  {me.avatar_url ? <img src={me.avatar_url} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : "📷+"}
+                  <input type="file" accept="image/*" style={{ display: "none" }} onChange={(e) => {
                     const f = e.target.files?.at(0);
                     if (!f) return;
-                    const rd = new FileReader();
-                    rd.onload = async () => {
-                      const img = rd.result;
-                      saveSession({ ...me, avatar_url: img });
-                      await api(`profiles?pseudo=eq.${encodeURIComponent(me.pseudo)}`, "PATCH", { avatar_url: img });
+                    resizeImg(f, async (img) => {
+                      const updated = { ...me, avatar_url: img };
+                      setMe(updated);
+                      setUsers((prev) => prev.map((u) => (u.pseudo === me.pseudo ? updated : u)));
+                      const res = await api(`profiles?pseudo=eq.${encodeURIComponent(me.pseudo)}`, "PATCH", { avatar_url: img });
+                      if (res) alert("✅ Photo de profil enregistrée et affichée !");
                       load();
-                    };
-                    rd.readAsDataURL(f);
+                    });
                   }} />
                 </label>
                 <div>
                   <strong>{me.gender} {me.pseudo} ({me.age} ans)</strong>
                   <div style={{ fontSize: 12, color: "#facc15" }}>Solde : 🪙 {me.coins || 0}</div>
-                  <small style={{ color: "#38bdf8" }}>Optionnel : cliquez sur 🖼️ PNG pour votre photo</small>
+                  <small style={{ color: "#38bdf8" }}>Cliquez sur 📷+ (tout format photo auto-ajusté)</small>
                 </div>
               </div>
-            </div>
-            <div style={s.box}><strong>🪙 Pack 200 Pièces (Cam Privé & Cadeaux) — 5.99 $</strong><button onClick={() => setPlan({ name: "Pack 200 Coins", price: "5.99 $" })} style={s.bBtn}>Payer (Skrill / Crypto)</button></div>
-            <div style={s.box}><strong>🥈 VIP Silver + 500 🪙 — 14.99 $</strong><button onClick={() => setPlan({ name: "VIP Silver + 500 Coins", price: "14.99 $" })} style={s.bBtn}>Payer (Skrill / Crypto)</button></div>
-            <div style={s.box}><strong>👑 VIP Gold + 1500 🪙 — 29.99 $</strong><button onClick={() => setPlan({ name: "VIP Gold + 1500 Coins", price: "29.99 $" })} style={s.bBtn}>Payer (Skrill / Crypto)</button></div>
-          </div>
-        )}
-
-        {tab === "admin" && (
-          <div style={s.col}>
-            <h3>⚙️ Admin ({pays.length})</h3>
-            {pays.map((p) => (
-              <div key={p.id} style={s.box}>
-                <strong>{p.user_pseudo} — {p.plan_name} ({p.amount})</strong>
-                <small style={{ color: "#facc15", wordBreak: "break-all" }}>{p.network}: {p.tx_hash}</small>
-                {p.status === "valide" ? "✅ Validé" : (
-                  <button onClick={async () => {
-                                       await api(`crypto_payments?id=eq.${p.id}`, "PATCH", { status: "valide" });
-                    const targetU = users.find((x) => x.pseudo === p.user_pseudo);
-                    const addCoins = p.plan_name.includes("1500") ? 1500 : p.plan_name.includes("500") ? 500 : 200;
-                    await api(`profiles?pseudo=eq.${encodeURIComponent(p.user_pseudo)}`, "PATCH", { coins: (targetU?.coins || 0) + addCoins, is_vip: p.plan_name.includes("VIP") });
-                    load();
-                  }} style={s.bBtn}>Valider & Créditer Pièces</button>
-                )}
-              </div>
-            ))}
-          </div>
-        )}
-      </main>
-
-      {plan && (
-        <div style={s.modal} onClick={() => setPlan(null)}>
-          <div style={s.box} onClick={(e) => e.stopPropagation()}>
-            <strong>{plan.name} ({plan.price})</strong>
-            <div style={{ display: "flex", flexWrap: "wrap", gap: 4 }}>
-              {Array.of("Skrill", "USDT TRC20", "BTC BEP20", "ETH ERC20", "USDT Arbitrum").map((k) => <button key={k} onClick={() => setNet(k)} style={net === k ? s.bSm : s.dk}>{k}</button>)}
-            </div>
-            {net === "Skrill" ? (
-              <div style={{ background: "#090d16", padding: 10, borderRadius: 12, border: "1px solid #ec4899", display: "flex", flexDirection: "column", gap: 6 }}>
-                <small style={{ color: "#facc15" }}>💳 E-mail Skrill : <b>{SKRILL_MAIL}</b></small>
-                <small style={{ color: "#38bdf8" }}>🆔 ID Client Skrill : <b>{SKRILL_ID}</b></small>
-                <div style={{ display: "flex", gap: 6 }}>
-                  <button onClick={() => navigator.clipboard?.writeText(SKRILL_MAIL)} style={s.gd}>Copier E-mail</button>
-                  <button onClick={() => navigator.clipboard?.writeText(SKRILL_ID)} style={s.bSm}>Copier ID</button>
-                </div>
-              </div>
-            ) : (
-              <>
-                <small style={{ color: "#facc15", wordBreak: "break-all" }}>{addr}</small>
-                <button onClick={() => navigator.clipboard?.writeText(addr)} style={s.gd}>Copier Adresse</button>
-              </>
-            )}
-            <input value={tx} onChange={(e) => setTx(e.target.value)} placeholder={net === "Skrill" ? "ID Transaction Skrill ou votre e-mail..." : "TXID Crypto..."} style={s.inp} />
-            <button onClick={async () => { if (tx.length < 4) return; await api("crypto_payments", "POST", { user_pseudo: me.pseudo, plan_name: plan.name, amount: plan.price, network: net, tx_hash: tx }); alert("Paiement enregistré !"); setPlan(null); setTx(""); load(); }} style={s.bBtn}>Confirmer Paiement</button>
-          </div>
-        </div>
-      )}
-
-      <nav style={s.nav}><button onClick={() => setTab("live")} style={s.nBtn}>🔥 Live</button><button onClick={() => { setTab("chat"); setPeer(null); }} style={s.nBtn}>💬 Chat</button><button onClick={() => setTab("vip")} style={s.nBtn}>👑 VIP</button></nav>
-    </div>
-  );
-}
-
-const s = {
-  center: { position: "fixed", inset: 0, backgroundImage: "linear-gradient(rgba(9,13,22,0.5), rgba(9,13,22,0.85)), url('/bg.jpg')", backgroundSize: "cover", backgroundPosition: "center", color: "#fff", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", fontFamily: "sans-serif", gap: 14 },
-  circle: { width: "min(450px, 95vw)", height: "min(450px, 95vw)", borderRadius: "50%", background: "rgba(11,16,33,0.9)", border: "2px solid #38bdf8", boxShadow: "0 0 45px rgba(14,165,233,0.45)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: 26, boxSizing: "border-box", gap: 8 },
-  dlBar: { display: "flex", gap: 8, flexWrap: "wrap", justifyContent: "center" },
-  dlBtn: { background: "rgba(15,23,42,0.9)", color: "#38bdf8", border: "1px solid #38bdf8", padding: "7px 14px", borderRadius: 99, fontSize: 12, fontWeight: "bold", cursor: "pointer" },
-  sign18: { width: 68, height: 68, borderRadius: "50%", background: "#ef4444", border: "3px solid #fff", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 34, boxShadow: "0 0 20px rgba(239,68,68,0.7)" },
-  fBtn: { width: 32, height: 32, borderRadius: "50%", background: "#1e293b", border: "none", fontSize: 16, cursor: "pointer", padding: 0, display: "flex", alignItems: "center", justifyContent: "center" },
-  fAct: { width: 32, height: 32, borderRadius: "50%", background: "#0284c7", border: "2px solid #38bdf8", fontSize: 16, cursor: "pointer", padding: 0, display: "flex", alignItems: "center", justifyContent: "center" },
-  genBtn: { flex: 1, background: "rgba(30,41,59,0.8)", color: "#94a3b8", border: "1px solid #334155", padding: "7px 10px", borderRadius: 99, fontSize: 12, fontWeight: "bold", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 4 },
-  femAct: { flex: 1, background: "linear-gradient(135deg, #ec4899, #f43f5e)", color: "#fff", border: "1px solid #fbcfe8", boxShadow: "0 0 14px rgba(236,72,153,0.65)", padding: "7px 10px", borderRadius: 99, fontSize: 12, fontWeight: "bold", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 4 },
-  malAct: { flex: 1, background: "linear-gradient(135deg, #0284c7, #38bdf8)", color: "#fff", border: "1px solid #bae6fd", boxShadow: "0 0 14px rgba(56,189,248,0.65)", padding: "7px 10px", borderRadius: 99, fontSize: 12, fontWeight: "bold", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 4 },
-  agePill: { background: "#090d16", border: "1px solid #38bdf8", borderRadius: 99, padding: "4px 10px", display: "flex", alignItems: "center", gap: 4 },
-  ageInp: { width: 32, background: "transparent", border: "none", color: "#fff", fontSize: 13, fontWeight: "bold", textAlign: "center", outline: "none" },
-  inp: { width: "80%", background: "#090d16", border: "1px solid #38bdf8", color: "#fff", padding: "6px 12px", borderRadius: 99, fontSize: 12, textAlign: "center", outline: "none" },
-  bBtn: { width: "80%", background: "linear-gradient(90deg, #0284c7, #38bdf8)", color: "#fff", border: "none", padding: "8px 14px", borderRadius: 99, fontWeight: "bold", fontSize: 13, cursor: "pointer" },
-  bSm: { background: "#0284c7", color: "#fff", border: "none", padding: "6px 10px", borderRadius: 99, fontWeight: "bold", fontSize: 12, cursor: "pointer" },
-  privBtn: { background: "linear-gradient(90deg, #ec4899, #8b5cf6)", color: "#fff", border: "none", padding: "6px 10px", borderRadius: 99, fontWeight: "bold", fontSize: 12, cursor: "pointer" },
-  dk: { background: "#1e293b", color: "#fff", border: "none", padding: "6px 10px", borderRadius: 99, fontSize: 12, cursor: "pointer" },
-  arrowBtn: { background: "#1e293b", color: "#ffffff", border: "1.5px solid #38bdf8", padding: "5px 12px", borderRadius: 99, fontSize: 18, fontWeight: "900", cursor: "pointer", lineHeight: 1 },
-  rd: { background: "#ef4444", color: "#fff", border: "none", padding: "6px 12px", borderRadius: 99, fontWeight: "bold", fontSize: 12, cursor: "pointer" },
-  gd: { background: "#facc15", color: "#000", border: "none", padding: "6px 10px", borderRadius: 99, fontWeight: "bold", fontSize: 12, cursor: "pointer" },
-  app: { minHeight: "100vh", backgroundImage: "linear-gradient(rgba(9,13,22,0.85), rgba(9,13,22,0.95)), url('/bg.jpg')", backgroundSize: "cover", color: "#fff", fontFamily: "sans-serif", display: "flex", flexDirection: "column" },
-  head: { display: "flex", justifyContent: "space-between", alignItems: "center", padding: 14, background: "rgba(11,16,33,0.9)", borderBottom: "1px solid #1e293b" },
-  main: { flex: 1, padding: 16, maxWidth: 460, width: "100%", margin: "0 auto", boxSizing: "border-box" },
-  grid: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 },
-  card: { height: 215, borderRadius: 22, padding: 12, background: "rgba(15,23,42,0.75)", border: "1px solid #38bdf8", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "space-between" },
-  av: { width: 64, height: 64, borderRadius: "50%", background: "#0284c7", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: "bold", fontSize: 14, overflow: "hidden", border: "2px solid #38bdf8" },
-  col: { display: "flex", flexDirection: "column", gap: 12 },
-  box: { background: "rgba(15,23,42,0.9)", padding: 16, borderRadius: 20, border: "1px solid #38bdf8", display: "flex", flexDirection: "column", gap: 10, maxWidth: 380, width: "100%", boxSizing: "border-box" },
-  giftItem: { background: "#0f172a", border: "1px solid #38bdf8", borderRadius: 14, padding: 10, color: "#fff", display: "flex", flexDirection: "column", alignItems: "center", gap: 4, cursor: "pointer" },
-  flyBox: { position: "fixed", top: "38%", left: "50%", transform: "translate(-50%, -50%)", background: "rgba(11,16,33,0.92)", border: "2px solid #facc15", borderRadius: 24, padding: "18px 28px", textAlign: "center", zIndex: 120, boxShadow: "0 0 35px rgba(250,204,21,0.6)" },
-  row: { display: "flex", justifyContent: "space-between", alignItems: "center", gap: 8 },
-  m1: { alignSelf: "flex-end", background: "#0284c7", padding: "8px 12px", borderRadius: 14, fontSize: 13 },
-  m2: { alignSelf: "flex-start", background: "#1e293b", padding: "8px 12px", borderRadius: 14, fontSize: 13 },
-  modal: { position: "fixed", inset: 0, background: "rgba(0,0,0,0.8)", display: "flex", alignItems: "center", justifyContent: "center", padding: 16, zIndex: 110 },
-  nav: { display: "flex", justifyContent: "space-around", padding: 12, background: "rgba(11,16,33,0.9)", borderTop: "1px solid #1e293b" },
-  nBtn: { background: "none", border: "none", color: "#38bdf8", fontWeight: "bold", fontSize: 14, cursor: "pointer" },
-};
- 
+              <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
