@@ -421,6 +421,7 @@ export default function App() {
       )}
 
       <nav style={s.nav}>
+       
         <button onClick={() => setTab("live")} style={s.nBtn}>🔥 Live</button>
         <button onClick={() => { setTab("chat"); setPeer(null); }} style={s.nBtn}>💬 Chat</button>
         <button onClick={() => setTab("vip")} style={s.nBtn}>👑 VIP</button>
@@ -431,6 +432,7 @@ export default function App() {
 
 const s = {
   center: { position: "fixed", inset: 0, backgroundImage: "linear-gradient(rgba(9,13,22,0.5), rgba(9,13,22,0.85)), url('/bg.jpg')", backgroundSize: "cover", backgroundPosition: "center", color: "#fff", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", fontFamily: "sans-serif", gap: 14 },
+
   circle: { width: "min(440px, 94vw)", height: "min(440px, 94vw)", borderRadius: "50%", background: "rgba(11,16,33,0.88)", border: "2px solid #38bdf8", boxShadow: "0 0 45px rgba(14,165,233,0.45)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: 30, boxSizing: "border-box", gap: 10 },
   dlBar: { display: "flex", gap: 8, flexWrap: "wrap", justifyContent: "center" },
   dlBtn: { background: "rgba(15,23,42,0.9)", color: "#38bdf8", border: "1px solid #38bdf8", padding: "7px 14px", borderRadius: 99, fontSize: 12, fontWeight: "bold", cursor: "pointer" },
