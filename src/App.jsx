@@ -345,7 +345,7 @@ export default function App() {
                 {p.status === "valide" ? "✅ Validé" : <button onClick={async () => { await api(`crypto_payments?id=eq.${p.id}`, "PATCH", { status: "valide" }); load(); }} style={s.bBtn}>Valider VIP & Pièces</button>}
               </div>
             ))}
-                      </div>
+                     
           </div>
         )}
       </main>
