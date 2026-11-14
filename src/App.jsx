@@ -447,7 +447,7 @@ export default function App() {
 
 
 
-      <nav style={s.nav}>
+           <nav style={s.nav}>
         <button onClick={() => setTab("live")} style={s.nBtn}>🔥 Live</button>
         <button onClick={() => { setTab("chat"); setPeer(null); }} style={s.nBtn}>💬 Chat</button>
         <button onClick={() => setTab("vip")} style={s.nBtn}>👑 VIP</button>
@@ -455,6 +455,7 @@ export default function App() {
     </div>
   );
 }
+
 
 const s = {
   center: { position: "fixed", inset: 0, backgroundImage: "linear-gradient(rgba(9,13,22,0.5), rgba(9,13,22,0.85)), url('/bg.jpg')", backgroundSize: "cover", backgroundPosition: "center", color: "#fff", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", fontFamily: "sans-serif", gap: 14 },
