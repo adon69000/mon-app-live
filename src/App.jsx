@@ -447,7 +447,7 @@ export default function App() {
                 <strong>{p.user_pseudo} — {p.plan_name} ({p.amount})</strong>
                 <small style={{ color: "#facc15", wordBreak: "break-all" }}>{p.network}: {p.tx_hash}</small>
                 {p.status === "valide" ? "✅ Validé" : (
-                  <button onClick={async () => {)
+                  <button onClick={async () => {
                                        await api(`crypto_payments?id=eq.${p.id}`, "PATCH", { status: "valide" });
                     const targetU = users.find((x) => x.pseudo === p.user_pseudo);
                     const addCoins = p.plan_name.includes("1500") ? 1500 : p.plan_name.includes("500") ? 500 : 200;
