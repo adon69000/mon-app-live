@@ -190,3 +190,139 @@ export default function App() {
       <DlModal />
       <div style={s.circle}>
         <div style={s.sign18}>🔞</div>
+                <strong style={{ fontSize: 22 }}>KANQKA -18</strong>
+        <p style={{ fontSize: 13, color: "#cbd5e1", textAlign: "center", margin: 0 }}>{t.w}</p>
+        <button onClick={() => setIs18(true)} style={s.bBtn}>{t.ok18}</button>
+      </div>
+      <DlBar />
+    </div>
+  );
+
+  if (!me) return (
+    <div style={{ ...s.center, direction: lang === "he" ? "rtl" : "ltr" }}>
+      <DlModal />
+      <div style={s.circle}>
+        <div style={{ display: "flex", gap: 4, flexWrap: "wrap", justifyContent: "center", maxWidth: 280 }}>
+          {Object.keys(LANGS).map((k) => <button key={k} onClick={() => setLang(k)} style={lang === k ? s.fAct : s.fBtn}>{LANGS[k].f}</button>)}
+        </div>
+        <strong style={{ fontSize: 19 }}>🐾 KANQKA</strong>
+        {msg && <small style={{ color: "#38bdf8", fontSize: 11 }}>{msg}</small>}
+        {step === 0 ? (
+          <>
+            <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+              <label style={s.pick}>
+                {avatar ? <img src={avatar} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : "📷"}
+                <input type="file" accept="image/*" style={{ display: "none" }} onChange={(e) => { const f = e.target.files?.[0]; if (!f) return; const rd = new FileReader(); rd.onload = () => setAvatar(rd.result); rd.readAsDataURL(f); }} />
+              </label>
+              <button onClick={() => setGender("👩")} style={gender === "👩" ? s.bSm : s.dk}>👩</button>
+              <button onClick={() => setGender("👨")} style={gender === "👨" ? s.bSm : s.dk}>👨</button>
+              <input type="number" min="18" max="99" value={age} onChange={(e) => setAge(e.target.value)} style={{ ...s.inp, width: 54, padding: "6px" }} />
+            </div>
+            <input type="email" value={contact} onChange={(e) => setContact(e.target.value)} placeholder={t.c} style={s.inp} />
+            <input value={pseudo} onChange={(e) => setPseudo(e.target.value)} placeholder={t.ph} style={s.inp} />
+            <div style={{ display: "flex", gap: 8, width: "82%" }}>
+              <button onClick={() => setIs18(false)} style={s.arrowBtn}>←</button>
+              <button onClick={sendCode} style={{ ...s.bBtn, width: "100%" }}>{t.s}</button>
+            </div>
+          </>
+        ) : (
+          <>
+            <input value={otp} onChange={(e) => setOtp(e.target.value)} placeholder={t.code} style={{ ...s.inp, letterSpacing: 3 }} />
+            <div style={{ display: "flex", gap: 8, width: "82%" }}>
+              <button onClick={() => { setStep(0); setMsg(""); }} style={s.arrowBtn}>←</button>
+              <button onClick={checkCode} style={{ ...s.bBtn, width: "100%" }}>{t.go}</button>
+            </div>
+          </>
+        )}
+      </div>
+      <DlBar />
+    </div>
+  );
+
+  const addr = net === "USDT TRC20" ? TRC20 : EVM;
+  const thread = peer ? chats.filter((m) => (m.sender === me.pseudo && m.receiver === peer.pseudo) || (m.sender === peer.pseudo && m.receiver === me.pseudo)) : [];
+  const tabs = ["live", "chat", "vip"];
+  const goPrev = () => peer ? setPeer(null) : tab === "live" ? saveSession(null) : setTab(tabs[tabs.indexOf(tab) - 1]);
+  const goNext = () => setTab(tab === "vip" ? "live" : tabs[tabs.indexOf(tab) + 1]);
+
+  if (room) return (
+    <div style={{ position: "fixed", inset: 0, background: "#000", zIndex: 99 }}>
+      {flyGift && <div style={s.flyBox}><div style={{ fontSize: 54 }}>{flyGift.split(" ")[0]}</div><strong style={{ color: "#facc15" }}>{flyGift}</strong></div>}
+      <div style={s.head}><span>🔴 {room.title}</span><div style={{ display: "flex", gap: 8 }}><button onClick={() => setGiftTarget(room.title)} style={s.gd}>🎁</button><button onClick={() => setRoom(null)} style={s.rd}>✕</button></div></div>
+      <div ref={zegoRef} style={{ width: "100%", height: "calc(100vh - 54px)" }} />
+    </div>
+  );
+
+  return (
+    <div style={s.app}>
+      <DlModal />
+      {flyGift && <div style={s.flyBox}><div style={{ fontSize: 54 }}>{flyGift.split(" ")[0]}</div><strong style={{ color: "#facc15" }}>{flyGift}</strong></div>}
+      {giftTarget && (
+        <div style={s.modal} onClick={() => setGiftTarget(null)}>
+          <div style={s.box} onClick={(e) => e.stopPropagation()}>
+            <div style={s.row}><strong>🎁 Cadeau → {giftTarget}</strong><span style={{ color: "#facc15", fontSize: 12 }}>🪙 {me.coins || 0}</span></div>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8 }}>
+              {GIFTS.map((g) => <button key={g.id} onClick={() => sendGift(g, giftTarget)} style={s.giftItem}><span style={{ fontSize: 28 }}>{g.icon}</span><span style={{ fontSize: 11 }}>{g.name}</span><small style={{ color: "#facc15" }}>{g.cost} 🪙</small></button>)}
+            </div>
+          </div>
+        </div>
+      )}
+
+      <header style={s.head}>
+        <div style={{ display: "flex", gap: 8, alignItems: "center" }}><button onClick={goPrev} style={s.arrowBtn}>←</button><strong>🐾 KANQKA</strong><button onClick={goNext} style={s.arrowBtn}>→</button></div>
+        <div style={{ display: "flex", gap: 6 }}>
+          <button onClick={() => setRoom({ id: `live_${me.pseudo}`, title: me.pseudo, host: true })} style={s.rd}>🔴 Live</button>
+          <button onClick={() => setDlModal("apk")} style={s.dk}>📲</button>
+          <button onClick={() => prompt("PIN:") === "6900" && setTab("admin")} style={s.dk}>⚙️</button>
+          <button onClick={() => setTab("vip")} style={s.gd}>{me.is_vip ? "👑 VIP" : `🪙 ${me.coins || 0}`}</button>
+        </div>
+      </header>
+
+      <main style={s.main}>
+        {tab === "live" && (
+          <div style={s.grid}>
+            {users.map((u, i) => (
+              <div key={u.id || i} style={s.card}>
+                <div style={{ ...s.row, width: "100%" }}><span style={{ fontSize: 11, color: "#38bdf8", fontWeight: "bold" }}>{u.gender || "👩"} {u.age || 20}</span><div style={{ display: "flex", gap: 4 }}><button onClick={() => setGiftTarget(u.pseudo)} style={s.gd}>🎁</button><button onClick={() => { setPeer(u); setTab("chat"); }} style={s.dk}>💬</button></div></div>
+                <div style={s.av}>{u.avatar_url ? <img src={u.avatar_url} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : u.pseudo?.slice(0, 1)}</div>
+                <strong>{u.pseudo} {u.is_vip ? "👑" : ""}</strong>
+                <button onClick={() => setRoom({ id: `live_${u.pseudo}`, title: u.pseudo, host: false })} style={s.bBtn}>📹 Join</button>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {tab === "chat" && (
+          <div style={s.col}>
+            {peer ? (
+              <div style={s.box}>
+                <div style={s.row}><button onClick={() => setPeer(null)} style={s.arrowBtn}>←</button><strong>{peer.gender} {peer.pseudo} ({peer.age})</strong><div style={{ display: "flex", gap: 4 }}><button onClick={() => setGiftTarget(peer.pseudo)} style={s.gd}>🎁</button><button onClick={() => setRoom({ id: `live_${peer.pseudo}`, title: peer.pseudo, host: false })} style={s.bSm}>📹</button></div></div>
+                <div style={{ height: 220, overflowY: "auto", display: "flex", flexDirection: "column", gap: 6 }}>{thread.map((m, i) => <div key={i} style={m.sender === me.pseudo ? s.m1 : s.m2}>{m.audio_url ? <audio controls src={m.audio_url} style={{ height: 30, maxWidth: 190 }} /> : m.content}</div>)}</div>
+                <form onSubmit={async (e) => { e.preventDefault(); if (!txt.trim()) return; await api("messages", "POST", { sender: me.pseudo, receiver: peer.pseudo, content: txt }); setTxt(""); load(); }} style={s.row}>
+                  <button type="button" onClick={toggleVoice} style={rec ? s.rd : s.dk}>{rec ? "⏹️" : "🎤"}</button>
+                  <input value={txt} onChange={(e) => setTxt(e.target.value)} placeholder="Message..." style={s.inp} />
+                  <button type="submit" style={s.bSm}>➤</button>
+                </form>
+              </div>
+            ) : users.filter((u) => u.pseudo !== me.pseudo).map((u, i) => (
+              <div key={i} onClick={() => setPeer(u)} style={{ ...s.box, flexDirection: "row", alignItems: "center", cursor: "pointer" }}>
+                <div style={{ ...s.av, width: 42, height: 42 }}>{u.avatar_url ? <img src={u.avatar_url} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : u.pseudo?.slice(0, 1)}</div>
+                <div><strong>{u.pseudo}</strong><div style={{ fontSize: 12, color: "#38bdf8" }}>{u.gender || "👩"} {u.age || 20} ans</div></div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {tab === "vip" && (
+          <div style={s.col}>
+            <div style={s.box}><strong>{me.gender} {me.pseudo} ({me.age} ans) — 🪙 {me.coins || 0}</strong><small style={{ color: "#94a3b8" }}>{me.contact}</small></div>
+            <div style={s.box}><strong>📲 Installer KANQKA</strong><div style={{ display: "flex", gap: 6 }}><button onClick={() => triggerInstall("apk")} style={s.bSm}>🤖 Android</button><button onClick={() => triggerInstall("ios")} style={s.bSm}>🍎 iPhone</button><button onClick={() => triggerInstall("desktop")} style={s.bSm}>💻 Desktop</button></div></div>
+            <div style={s.box}><strong>🥈 VIP Silver + 300 🪙 — 9.99 $</strong><button onClick={() => setPlan({ name: "VIP Silver + 300 Coins", price: "9.99 $" })} style={s.bBtn}>Crypto</button></div>
+            <div style={s.box}><strong>👑 VIP Gold + 1000 🪙 — 24.99 $</strong><button onClick={() => setPlan({ name: "VIP Gold + 1000 Coins", price: "24.99 $" })} style={s.bBtn}>Crypto</button></div>
+          </div>
+        )}
+
+        {tab === "admin" && (
+          <div style={s.col}>
+            <h3>⚙️ Admin ({pays.length})</h3>
+
