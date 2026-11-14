@@ -50,7 +50,7 @@ export default function App() {
   const [pseudo, setPseudo] = useState("");
   const [bio, setBio] = useState("");
   const [age, setAge] = useState("22");
-  const [gender, setGender] = useState("👩");
+  const [gender, setGender] = useState("♀");
   const [avatar, setAvatar] = useState("");
   const [step, setStep] = useState(0);
   const [otp, setOtp] = useState("");
@@ -260,15 +260,19 @@ export default function App() {
         {msg && <small style={{ color: "#facc15", fontSize: 11 }}>{msg}</small>}
         {step === 0 ? (
           <>
-            <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
-              <label style={{ ...s.pick, borderColor: avatar ? "#22c55e" : "#facc15" }} title="Photo obligatoire">
-                {avatar ? <img src={avatar} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : "📷+"}
-                <input type="file" accept="image/*" style={{ display: "none" }} onChange={(e) => { const f = e.target.files?.at(0); if (!f) return; const rd = new FileReader(); rd.onload = () => setAvatar(rd.result); rd.readAsDataURL(f); }} />
-              </label>
-              <button onClick={() => setGender("👩")} style={gender === "👩" ? s.bSm : s.dk}>👩</button>
-              <button onClick={() => setGender("👨")} style={gender === "👨" ? s.bSm : s.dk}>👨</button>
-              <input type="number" min="18" max="99" value={age} onChange={(e) => setAge(e.target.value)} style={{ ...s.inp, width: 50, padding: "5px" }} />
+                        <div style={{ display: "flex", gap: 6, alignItems: "center", justifyContent: "center", width: "84%" }}>
+              <button type="button" onClick={() => setGender("♀")} style={gender === "♀" ? s.femAct : s.genBtn}>
+                <span style={{ fontSize: 15 }}>♀</span> Femme
+              </button>
+              <button type="button" onClick={() => setGender("♂")} style={gender === "♂" ? s.malAct : s.genBtn}>
+                <span style={{ fontSize: 15 }}>♂</span> Homme
+              </button>
+              <div style={s.agePill}>
+                <span style={{ fontSize: 10, color: "#38bdf8", fontWeight: "bold" }}>ÂGE</span>
+                <input type="number" min="18" max="99" value={age} onChange={(e) => setAge(e.target.value)} style={s.ageInp} />
+              </div>
             </div>
+
             <input type="email" value={contact} onChange={(e) => setContact(e.target.value)} placeholder={t.c} style={s.inp} />
             <input value={pseudo} onChange={(e) => setPseudo(e.target.value)} placeholder={t.ph} style={s.inp} />
             <input value={bio} onChange={(e) => setBio(e.target.value)} placeholder={t.bio} style={s.inp} />
@@ -446,6 +450,12 @@ const s = {
   bBtn: { width: "80%", background: "linear-gradient(90deg, #0284c7, #38bdf8)", color: "#fff", border: "none", padding: "8px 14px", borderRadius: 99, fontWeight: "bold", fontSize: 13, cursor: "pointer" },
   bSm: { background: "#0284c7", color: "#fff", border: "none", padding: "6px 10px", borderRadius: 99, fontWeight: "bold", fontSize: 12, cursor: "pointer" },
   dk: { background: "#1e293b", color: "#fff", border: "none", padding: "6px 10px", borderRadius: 99, fontSize: 12, cursor: "pointer" },
+    genBtn: { flex: 1, background: "rgba(30,41,59,0.8)", color: "#94a3b8", border: "1px solid #334155", padding: "7px 10px", borderRadius: 99, fontSize: 12, fontWeight: "bold", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 4 },
+  femAct: { flex: 1, background: "linear-gradient(135deg, #ec4899, #f43f5e)", color: "#fff", border: "1px solid #fbcfe8", boxShadow: "0 0 14px rgba(236,72,153,0.65)", padding: "7px 10px", borderRadius: 99, fontSize: 12, fontWeight: "bold", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 4 },
+  malAct: { flex: 1, background: "linear-gradient(135deg, #0284c7, #38bdf8)", color: "#fff", border: "1px solid #bae6fd", boxShadow: "0 0 14px rgba(56,189,248,0.65)", padding: "7px 10px", borderRadius: 99, fontSize: 12, fontWeight: "bold", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 4 },
+  agePill: { background: "#090d16", border: "1px solid #38bdf8", borderRadius: 99, padding: "4px 10px", display: "flex", alignItems: "center", gap: 4 },
+  ageInp: { width: 32, background: "transparent", border: "none", color: "#fff", fontSize: 13, fontWeight: "bold", textAlign: "center", outline: "none" },
+
   arrowBtn: { background: "#1e293b", color: "#ffffff", border: "1.5px solid #38bdf8", padding: "5px 12px", borderRadius: 99, fontSize: 18, fontWeight: "900", cursor: "pointer", lineHeight: 1 },
   rd: { background: "#ef4444", color: "#fff", border: "none", padding: "6px 12px", borderRadius: 99, fontWeight: "bold", fontSize: 12, cursor: "pointer" },
   gd: { background: "#facc15", color: "#000", border: "none", padding: "6px 10px", borderRadius: 99, fontWeight: "bold", fontSize: 12, cursor: "pointer" },
