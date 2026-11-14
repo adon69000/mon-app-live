@@ -18,15 +18,15 @@ const GIFTS = Array.of(
 );
 
 const LANGS = {
-  fr: { f: "🇫🇷", w: "Site réservé aux adultes (+18 ans)", ok18: "J'ai 18 ans ou plus ✓", ph: "Pseudo...", c: "Adresse E-mail...", s: "Continuer →", code: "Code 8 chiffres...", go: "Entrer 🚀" },
-  en: { f: "🇬🇧", w: "Adults only (+18 years)", ok18: "I am 18 or older ✓", ph: "Nickname...", c: "Email address...", s: "Continue →", code: "8-digit code...", go: "Enter 🚀" },
-  zh: { f: "🇨🇳", w: "仅限18岁以上成年人访问", ok18: "我已满18岁 ✓", ph: "昵称...", c: "电子邮箱...", s: "继续 →", code: "8位验证码...", go: "进入 🚀" },
-  es: { f: "🇪🇸", w: "Solo para mayores de 18 años", ok18: "Tengo 18 años o más ✓", ph: "Apodo...", c: "Correo electrónico...", s: "Continuar →", code: "Código 8 dígitos...", go: "Entrar 🚀" },
-  tr: { f: "🇹🇷", w: "Sadece 18 yaş ve üzeri yetişkinler", ok18: "18 yaşından büyüğüm ✓", ph: "Takma ad...", c: "E-posta adresi...", s: "Devam →", code: "8 haneli kod...", go: "Gir 🚀" },
-  pt: { f: "🇧🇷", w: "Apenas para maiores de 18 anos", ok18: "Tenho 18 anos ou mais ✓", ph: "Apelido...", c: "Endereço de E-mail...", s: "Continuar →", code: "Código 8 dígitos...", go: "Entrar 🚀" },
-  ru: { f: "🇷🇺", w: "Только для лиц старше 18 лет", ok18: "Мне есть 18 лет ✓", ph: "Никнейм...", c: "Электронная почта...", s: "Продолжить →", code: "Код из 8 цифр...", go: "Войти 🚀" },
-  he: { f: "🇮🇱", w: "הכניסה למבוגרים מעל גיל 18 בלבד", ok18: "אני מעל גיל 18 ✓", ph: "כינוי...", c: "כתובת אימייל...", s: "המשך →", code: "קוד 8 ספרות...", go: "כניסה 🚀" },
-  de: { f: "🇩🇪", w: "Nur für Erwachsene ab 18 Jahren", ok18: "Ich bin 18 oder älter ✓", ph: "Name...", c: "E-Mail-Adresse...", s: "Weiter →", code: "8-stelliger Code...", go: "Starten 🚀" },
+  fr: { f: "🇫🇷", w: "Site réservé aux adultes (+18 ans)", ok18: "J'ai 18 ans ou plus ✓", ph: "Pseudo...", bio: "Ville / Bio...", c: "Adresse E-mail...", s: "Continuer →", code: "Code 8 chiffres...", go: "Entrer 🚀" },
+  en: { f: "🇬🇧", w: "Adults only (+18 years)", ok18: "I am 18 or older ✓", ph: "Nickname...", bio: "City / Bio...", c: "Email address...", s: "Continue →", code: "8-digit code...", go: "Enter 🚀" },
+  zh: { f: "🇨🇳", w: "仅限18岁以上成年人访问", ok18: "我已满18岁 ✓", ph: "昵称...", bio: "城市 / 简介...", c: "电子邮箱...", s: "继续 →", code: "8位验证码...", go: "进入 🚀" },
+  es: { f: "🇪🇸", w: "Solo para mayores de 18 años", ok18: "Tengo 18 años o más ✓", ph: "Apodo...", bio: "Ciudad / Bio...", c: "Correo electrónico...", s: "Continuar →", code: "Código 8 dígitos...", go: "Entrar 🚀" },
+  tr: { f: "🇹🇷", w: "Sadece 18 yaş ve üzeri yetişkinler", ok18: "18 yaşından büyüğüm ✓", ph: "Takma ad...", bio: "Şehir / Bio...", c: "E-posta adresi...", s: "Devam →", code: "8 haneli kod...", go: "Gir 🚀" },
+  pt: { f: "🇧🇷", w: "Apenas para maiores de 18 anos", ok18: "Tenho 18 anos ou mais ✓", ph: "Apelido...", bio: "Cidade / Bio...", c: "Endereço de E-mail...", s: "Continuar →", code: "Código 8 dígitos...", go: "Entrar 🚀" },
+  ru: { f: "🇷🇺", w: "Только для лиц старше 18 лет", ok18: "Мне есть 18 лет ✓", ph: "Никнейм...", bio: "Город / О себе...", c: "Электронная почта...", s: "Продолжить →", code: "Код из 8 цифр...", go: "Войти 🚀" },
+  he: { f: "🇮🇱", w: "הכניסה למבוגרים מעל גיל 18 בלבד", ok18: "אני מעל גיל 18 ✓", ph: "כינוי...", bio: "עיר / פרופיל...", c: "כתובת אימייל...", s: "המשך →", code: "קוד 8 ספרות...", go: "כניסה 🚀" },
+  de: { f: "🇩🇪", w: "Nur für Erwachsene ab 18 Jahren", ok18: "Ich bin 18 oder älter ✓", ph: "Name...", bio: "Stadt / Bio...", c: "E-Mail-Adresse...", s: "Weiter →", code: "8-stelliger Code...", go: "Starten 🚀" },
 };
 
 const api = async (p, m = "GET", b = null) => {
@@ -48,6 +48,7 @@ export default function App() {
   const [me, setMe] = useState(getSaved);
   const [contact, setContact] = useState("");
   const [pseudo, setPseudo] = useState("");
+  const [bio, setBio] = useState("");
   const [age, setAge] = useState("22");
   const [gender, setGender] = useState("👩");
   const [avatar, setAvatar] = useState("");
@@ -55,7 +56,7 @@ export default function App() {
   const [otp, setOtp] = useState("");
   const [msg, setMsg] = useState("");
   const [tab, setTab] = useState("live");
-  const [users, setUsers] = useState(Array.of({ id: "s1", pseudo: "Sofia", age: 23, gender: "👩", is_vip: true, coins: 500 }));
+  const [users, setUsers] = useState(Array.of());
   const [pays, setPays] = useState(Array.of());
   const [chats, setChats] = useState(Array.of());
   const [peer, setPeer] = useState(null);
@@ -63,6 +64,7 @@ export default function App() {
   const [rec, setRec] = useState(false);
   const recRef = useRef(null);
   const [room, setRoom] = useState(null);
+  const [viewers, setViewers] = useState(Array.of());
   const [giftTarget, setGiftTarget] = useState(null);
   const [flyGift, setFlyGift] = useState(null);
   const [plan, setPlan] = useState(null);
@@ -80,36 +82,63 @@ export default function App() {
 
   const load = async () => {
     const u = await api("profiles?select=*&order=created_at.desc");
-    if (Array.isArray(u) && u.length) setUsers(u);
+    if (Array.isArray(u)) {
+      setUsers(u);
+      if (me) {
+        const fresh = u.find((x) => x.pseudo === me.pseudo);
+        if (fresh && fresh.coins !== me.coins) saveSession(fresh);
+      }
+      if (room && !room.host) {
+        const hostUser = u.find((x) => x.pseudo === room.title);
+        if (hostUser?.kicked_users?.split(",").includes(me?.pseudo)) {
+          setRoom(null);
+          alert("🚫 Vous avez été expulsé de ce live par l'hôte.");
+        }
+      }
+    }
     const p = await api("crypto_payments?select=*&order=created_at.desc");
     if (Array.isArray(p)) setPays(p);
     const c = await api("messages?select=*&order=created_at.asc");
     if (Array.isArray(c)) setChats(c);
   };
-
   useEffect(() => {
     document.body.style.margin = "0";
     document.body.style.background = "#090d16";
     const h = (e) => { e.preventDefault(); setInstallPrompt(e); };
     window.addEventListener("beforeinstallprompt", h);
     load();
-    const iv = setInterval(load, 5000);
+    const iv = setInterval(load, 4000);
     return () => { clearInterval(iv); window.removeEventListener("beforeinstallprompt", h); };
-  }, []);
+  }, [room, me?.pseudo]);
+
   useEffect(() => {
     if (!room || !zegoRef.current) return;
     const tk = ZegoUIKitPrebuilt.generateKitTokenForTest(ZEGO_ID, ZEGO_SEC, String(room.id), String(me.id || Date.now()), me.pseudo);
     const zp = ZegoUIKitPrebuilt.create(tk);
+    setViewers(Array.of());
     zp.joinRoom({
       container: zegoRef.current,
-      turnOnCameraWhenJoining: true,
-      turnOnMicrophoneWhenJoining: true,
+      turnOnCameraWhenJoining: room.host,
+      turnOnMicrophoneWhenJoining: room.host,
       showPreJoinView: false,
+      showUserList: true,
       scenario: { mode: ZegoUIKitPrebuilt.LiveStreaming, config: { role: room.host ? ZegoUIKitPrebuilt.Host : ZegoUIKitPrebuilt.Audience } },
-      onLeaveRoom: () => setRoom(null),
+      onUserJoin: (list) => setViewers((prev) => Array.from(new Map([...prev, ...list].map((v) => [v.userID, v])).values())),
+      onUserLeave: (list) => setViewers((prev) => prev.filter((v) => !list.some((l) => l.userID === v.userID))),
+      onLeaveRoom: () => { setRoom(null); setViewers(Array.of()); },
     });
     return () => zp.destroy();
   }, [room]);
+
+  const kickViewer = async (viewerName) => {
+    const current = users.find((x) => x.pseudo === me.pseudo);
+    const list = (current?.kicked_users || "").split(",").filter(Boolean);
+    if (!list.includes(viewerName)) list.push(viewerName);
+    await api(`profiles?pseudo=eq.${encodeURIComponent(me.pseudo)}`, "PATCH", { kicked_users: list.join(",") });
+    setViewers((prev) => prev.filter((v) => v.userName !== viewerName));
+    alert(`🚫 ${viewerName} a été expulsé de votre live !`);
+    load();
+  };
 
   const triggerInstall = (p) => {
     if (installPrompt && p !== "ios") { installPrompt.prompt(); setInstallPrompt(null); }
@@ -128,8 +157,10 @@ export default function App() {
       setMsg("");
       return;
     }
+    if (!avatar) return setMsg("📷 Ajoutez une photo de profil !");
     setMsg("Envoi du code unique...");
-    await fetch(`${URL}/auth/v1/otp`, { method: "POST", headers: { apikey: KEY, "Content-Type": "application/json" }, body: JSON.stringify({ email: mail }) }).catch(() => {});
+    const r = await fetch(`${URL}/auth/v1/otp`, { method: "POST", headers: { apikey: KEY, "Content-Type": "application/json" }, body: JSON.stringify({ email: mail }) });
+    if (!r.ok) return setMsg("Erreur d'envoi e-mail");
     setMsg("Code envoyé par e-mail !");
     setStep(1);
   };
@@ -139,18 +170,22 @@ export default function App() {
     const mail = contact.trim().toLowerCase();
     const r = await fetch(`${URL}/auth/v1/verify`, { method: "POST", headers: { apikey: KEY, "Content-Type": "application/json" }, body: JSON.stringify({ email: mail, token: otp.trim(), type: "email" }) });
     if (!r.ok) return setMsg("Code incorrect");
-    const data = { pseudo: pseudo.trim(), contact: mail, age: Number(age) || 18, gender, avatar_url: avatar || null, coins: 100 };
+    const data = { pseudo: pseudo.trim(), contact: mail, age: Number(age) || 18, gender, avatar_url: avatar, coins: 0, kicked_users: "" };
     const res = await api("profiles", "POST", data);
     saveSession((Array.isArray(res) && res.at(0)) || { id: Date.now(), ...data });
     load();
   };
 
   const sendGift = async (g, toName) => {
-    if (!me.is_vip && (me.coins || 0) < g.cost) { setGiftTarget(null); setTab("vip"); return alert("👑 Devenez VIP ou rechargez vos pièces !"); }
-    const newCoins = Math.max(0, (me.coins || 0) - g.cost);
+    if ((me.coins || 0) < g.cost) {
+      setGiftTarget(null);
+      setTab("vip");
+      return alert(`🪙 Solde insuffisant (${me.coins || 0} 🪙). Rechargez vos pièces payantes pour envoyer ${g.icon} ${g.name} (${g.cost} 🪙) !`);
+    }
+    const newCoins = (me.coins || 0) - g.cost;
     saveSession({ ...me, coins: newCoins });
-    if (typeof me.id === "string") await api(`profiles?id=eq.${me.id}`, "PATCH", { coins: newCoins });
-    await api("messages", "POST", { sender: me.pseudo, receiver: toName, content: `${g.icon} Cadeau VIP : ${g.name} (${g.cost} 🪙)` });
+    await api(`profiles?pseudo=eq.${encodeURIComponent(me.pseudo)}`, "PATCH", { coins: newCoins });
+    await api("messages", "POST", { sender: me.pseudo, receiver: toName, content: `${g.icon} Cadeau Payant : ${g.name} (${g.cost} 🪙)` });
     setGiftTarget(null);
     setFlyGift(`${g.icon} ${g.name} → ${toName}`);
     setTimeout(() => setFlyGift(null), 3200);
@@ -175,7 +210,6 @@ export default function App() {
       setRec(true);
     } catch { alert("Micro bloqué"); }
   };
-
   const DlBar = () => (
     <div style={s.dlBar}>
       <button onClick={() => triggerInstall("apk")} style={s.dlBtn}>🤖 Android APK</button>
@@ -194,6 +228,7 @@ export default function App() {
       </div>
     </div>
   ) : null;
+
   if (!is18) return (
     <div style={s.center}>
       <DlModal />
@@ -216,26 +251,27 @@ export default function App() {
         <div style={{ display: "flex", gap: 4, flexWrap: "wrap", justifyContent: "center", maxWidth: 280 }}>
           {Object.keys(LANGS).map((k) => <button key={k} onClick={() => setLang(k)} style={lang === k ? s.fAct : s.fBtn}>{LANGS[k].f}</button>)}
         </div>
-        <strong style={{ fontSize: 19 }}>🐾 KANQKA</strong>
+        <strong style={{ fontSize: 18 }}>🐾 KANQKA</strong>
         {remembered && (
-          <button onClick={() => setMe(remembered)} style={{ ...s.gd, width: "82%", padding: "8px 12px" }}>
+          <button onClick={() => setMe(remembered)} style={{ ...s.gd, width: "82%", padding: "7px 12px" }}>
             ⚡ Entrer : {remembered.pseudo} 🚀
           </button>
         )}
-        {msg && <small style={{ color: "#38bdf8", fontSize: 11 }}>{msg}</small>}
+        {msg && <small style={{ color: "#facc15", fontSize: 11 }}>{msg}</small>}
         {step === 0 ? (
           <>
-            <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
-              <label style={s.pick}>
-                {avatar ? <img src={avatar} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : "📷"}
+            <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
+              <label style={{ ...s.pick, borderColor: avatar ? "#22c55e" : "#facc15" }} title="Photo obligatoire">
+                {avatar ? <img src={avatar} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : "📷+"}
                 <input type="file" accept="image/*" style={{ display: "none" }} onChange={(e) => { const f = e.target.files?.at(0); if (!f) return; const rd = new FileReader(); rd.onload = () => setAvatar(rd.result); rd.readAsDataURL(f); }} />
               </label>
               <button onClick={() => setGender("👩")} style={gender === "👩" ? s.bSm : s.dk}>👩</button>
               <button onClick={() => setGender("👨")} style={gender === "👨" ? s.bSm : s.dk}>👨</button>
-              <input type="number" min="18" max="99" value={age} onChange={(e) => setAge(e.target.value)} style={{ ...s.inp, width: 54, padding: "6px" }} />
+              <input type="number" min="18" max="99" value={age} onChange={(e) => setAge(e.target.value)} style={{ ...s.inp, width: 50, padding: "5px" }} />
             </div>
             <input type="email" value={contact} onChange={(e) => setContact(e.target.value)} placeholder={t.c} style={s.inp} />
             <input value={pseudo} onChange={(e) => setPseudo(e.target.value)} placeholder={t.ph} style={s.inp} />
+            <input value={bio} onChange={(e) => setBio(e.target.value)} placeholder={t.bio} style={s.inp} />
             <div style={{ display: "flex", gap: 8, width: "82%" }}>
               <button onClick={() => setIs18(false)} style={s.arrowBtn}>←</button>
               <button onClick={sendCode} style={{ ...s.bBtn, width: "100%" }}>{t.s}</button>
@@ -264,8 +300,24 @@ export default function App() {
   if (room) return (
     <div style={{ position: "fixed", inset: 0, background: "#000", zIndex: 99 }}>
       {flyGift && <div style={s.flyBox}><div style={{ fontSize: 54 }}>{flyGift.split(" ").at(0)}</div><strong style={{ color: "#facc15" }}>{flyGift}</strong></div>}
-      <div style={s.head}><span>🔴 {room.title}</span><div style={{ display: "flex", gap: 8 }}><button onClick={() => setGiftTarget(room.title)} style={s.gd}>🎁</button><button onClick={() => setRoom(null)} style={s.rd}>✕</button></div></div>
-      <div ref={zegoRef} style={{ width: "100%", height: "calc(100vh - 54px)" }} />
+      <div style={s.head}>
+        <span>🔴 {room.title} {room.host ? `(👁️ ${viewers.length})` : ""}</span>
+        <div style={{ display: "flex", gap: 8 }}>
+          {!room.host && <button onClick={() => setGiftTarget(room.title)} style={s.gd}>🎁 Cadeau 🪙</button>}
+          <button onClick={() => setRoom(null)} style={s.rd}>✕ Quitter</button>
+        </div>
+      </div>
+      {room.host && viewers.length > 0 && (
+        <div style={{ display: "flex", gap: 6, padding: "8px 12px", background: "#0f172a", overflowX: "auto", borderBottom: "1px solid #1e293b" }}>
+          {viewers.filter((v) => v.userName !== me.pseudo).map((v) => (
+            <div key={v.userID} style={{ display: "flex", alignItems: "center", gap: 6, background: "#1e293b", padding: "4px 10px", borderRadius: 99, fontSize: 12 }}>
+              <span>👤 {v.userName}</span>
+              <button onClick={() => kickViewer(v.userName)} style={{ ...s.rd, padding: "2px 8px", fontSize: 11 }}>🚫 Virer</button>
+            </div>
+          ))}
+        </div>
+      )}
+      <div ref={zegoRef} style={{ width: "100%", height: room.host && viewers.length > 0 ? "calc(100vh - 96px)" : "calc(100vh - 54px)" }} />
     </div>
   );
   return (
@@ -275,10 +327,11 @@ export default function App() {
       {giftTarget && (
         <div style={s.modal} onClick={() => setGiftTarget(null)}>
           <div style={s.box} onClick={(e) => e.stopPropagation()}>
-            <div style={s.row}><strong>🎁 Cadeau → {giftTarget}</strong><span style={{ color: "#facc15", fontSize: 12 }}>🪙 {me.coins || 0}</span></div>
+            <div style={s.row}><strong>🎁 Cadeau Payant → {giftTarget}</strong><span style={{ color: "#facc15", fontSize: 12 }}>Solde : 🪙 {me.coins || 0}</span></div>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8 }}>
               {GIFTS.map((g) => <button key={g.id} onClick={() => sendGift(g, giftTarget)} style={s.giftItem}><span style={{ fontSize: 28 }}>{g.icon}</span><span style={{ fontSize: 11 }}>{g.name}</span><small style={{ color: "#facc15" }}>{g.cost} 🪙</small></button>)}
             </div>
+            <button onClick={() => { setGiftTarget(null); setTab("vip"); }} style={s.bBtn}>➕ Recharger mes pièces 🪙</button>
           </div>
         </div>
       )}
@@ -301,7 +354,10 @@ export default function App() {
                 <div style={{ ...s.row, width: "100%" }}><span style={{ fontSize: 11, color: "#38bdf8", fontWeight: "bold" }}>{u.gender || "👩"} {u.age || 20}</span><div style={{ display: "flex", gap: 4 }}><button onClick={() => setGiftTarget(u.pseudo)} style={s.gd}>🎁</button><button onClick={() => { setPeer(u); setTab("chat"); }} style={s.dk}>💬</button></div></div>
                 <div style={s.av}>{u.avatar_url ? <img src={u.avatar_url} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : u.pseudo?.slice(0, 1)}</div>
                 <strong>{u.pseudo} {u.is_vip ? "👑" : ""}</strong>
-                <button onClick={() => setRoom({ id: `live_${u.pseudo}`, title: u.pseudo, host: false })} style={s.bBtn}>📹 Join</button>
+                <button onClick={() => {
+                  if (u.kicked_users?.split(",").includes(me.pseudo)) return alert("🚫 L'hôte vous a banni de ce salon live.");
+                  setRoom({ id: `live_${u.pseudo}`, title: u.pseudo, host: false });
+                }} style={s.bBtn}>📹 Join</button>
               </div>
             ))}
           </div>
@@ -330,17 +386,31 @@ export default function App() {
 
         {tab === "vip" && (
           <div style={s.col}>
-            <div style={s.box}><strong>{me.gender} {me.pseudo} ({me.age} ans) — 🪙 {me.coins || 0}</strong><small style={{ color: "#94a3b8" }}>{me.contact}</small></div>
-            <div style={s.box}><strong>📲 Installer KANQKA</strong><div style={{ display: "flex", gap: 6 }}><button onClick={() => triggerInstall("apk")} style={s.bSm}>🤖 Android</button><button onClick={() => triggerInstall("ios")} style={s.bSm}>🍎 iPhone</button><button onClick={() => triggerInstall("desktop")} style={s.bSm}>💻 Desktop</button></div></div>
-            <div style={s.box}><strong>🥈 VIP Silver + 300 🪙 — 9.99 $</strong><button onClick={() => setPlan({ name: "VIP Silver + 300 Coins", price: "9.99 $" })} style={s.bBtn}>Crypto</button></div>
-            <div style={s.box}><strong>👑 VIP Gold + 1000 🪙 — 24.99 $</strong><button onClick={() => setPlan({ name: "VIP Gold + 1000 Coins", price: "24.99 $" })} style={s.bBtn}>Crypto</button></div>
+            <div style={s.box}><strong>{me.gender} {me.pseudo} ({me.age} ans) — Solde : 🪙 {me.coins || 0}</strong><small style={{ color: "#94a3b8" }}>{me.contact}</small></div>
+            <div style={s.box}><strong>🪙 Pack 200 Pièces Cadeaux — 5.99 $</strong><button onClick={() => setPlan({ name: "Pack 200 Coins", price: "5.99 $", coins: 200 })} style={s.bBtn}>Acheter en Crypto</button></div>
+            <div style={s.box}><strong>🥈 VIP Silver + 500 🪙 — 14.99 $</strong><button onClick={() => setPlan({ name: "VIP Silver + 500 Coins", price: "14.99 $", coins: 500 })} style={s.bBtn}>Acheter en Crypto</button></div>
+            <div style={s.box}><strong>👑 VIP Gold + 1500 🪙 — 29.99 $</strong><button onClick={() => setPlan({ name: "VIP Gold + 1500 Coins", price: "29.99 $", coins: 1500 })} style={s.bBtn}>Acheter en Crypto</button></div>
           </div>
         )}
 
         {tab === "admin" && (
           <div style={s.col}>
             <h3>⚙️ Admin ({pays.length})</h3>
-            {pays.map((p) => <div key={p.id} style={s.box}><strong>{p.user_pseudo} — {p.plan_name} ({p.amount})</strong><small style={{ color: "#facc15", wordBreak: "break-all" }}>{p.network}: {p.tx_hash}</small>{p.status === "valide" ? "✅" : <button onClick={async () => { await api(`crypto_payments?id=eq.${p.id}`, "PATCH", { status: "valide" }); load(); }} style={s.bBtn}>Valider</button>}</div>)}
+            {pays.map((p) => (
+              <div key={p.id} style={s.box}>
+                <strong>{p.user_pseudo} — {p.plan_name} ({p.amount})</strong>
+                <small style={{ color: "#facc15", wordBreak: "break-all" }}>{p.network}: {p.tx_hash}</small>
+                {p.status === "valide" ? "✅ Validé" : (
+                  <button onClick={async () => {
+                    await api(`crypto_payments?id=eq.${p.id}`, "PATCH", { status: "valide" });
+                    const targetU = users.find((x) => x.pseudo === p.user_pseudo);
+                    const addCoins = p.plan_name.includes("1500") ? 1500 : p.plan_name.includes("500") ? 500 : 200;
+                    await api(`profiles?pseudo=eq.${encodeURIComponent(p.user_pseudo)}`, "PATCH", { coins: (targetU?.coins || 0) + addCoins, is_vip: p.plan_name.includes("VIP") });
+                    load();
+                  }} style={s.bBtn}>Valider & Créditer Pièces</button>
+                )}
+              </div>
+            ))}
           </div>
         )}
       </main>
@@ -353,7 +423,7 @@ export default function App() {
             <small style={{ color: "#facc15", wordBreak: "break-all" }}>{addr}</small>
             <button onClick={() => navigator.clipboard?.writeText(addr)} style={s.gd}>Copier</button>
             <input value={tx} onChange={(e) => setTx(e.target.value)} placeholder="TXID..." style={s.inp} />
-            <button onClick={async () => { if (tx.length < 5) return; await api("crypto_payments", "POST", { user_pseudo: me.pseudo, plan_name: plan.name, amount: plan.price, network: net, tx_hash: tx }); alert("OK!"); setPlan(null); setTx(""); load(); }} style={s.bBtn}>Confirmer</button>
+            <button onClick={async () => { if (tx.length < 5) return; await api("crypto_payments", "POST", { user_pseudo: me.pseudo, plan_name: plan.name, amount: plan.price, network: net, tx_hash: tx }); alert("Demande envoyée !"); setPlan(null); setTx(""); load(); }} style={s.bBtn}>Confirmer</button>
           </div>
         </div>
       )}
@@ -365,34 +435,8 @@ export default function App() {
 
 const s = {
   center: { position: "fixed", inset: 0, backgroundImage: "linear-gradient(rgba(9,13,22,0.5), rgba(9,13,22,0.85)), url('/bg.jpg')", backgroundSize: "cover", backgroundPosition: "center", color: "#fff", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", fontFamily: "sans-serif", gap: 14 },
-  circle: { width: "min(440px, 94vw)", height: "min(440px, 94vw)", borderRadius: "50%", background: "rgba(11,16,33,0.88)", border: "2px solid #38bdf8", boxShadow: "0 0 45px rgba(14,165,233,0.45)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: 30, boxSizing: "border-box", gap: 10 },
+  circle: { width: "min(450px, 95vw)", height: "min(450px, 95vw)", borderRadius: "50%", background: "rgba(11,16,33,0.9)", border: "2px solid #38bdf8", boxShadow: "0 0 45px rgba(14,165,233,0.45)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: 28, boxSizing: "border-box", gap: 8 },
   dlBar: { display: "flex", gap: 8, flexWrap: "wrap", justifyContent: "center" },
   dlBtn: { background: "rgba(15,23,42,0.9)", color: "#38bdf8", border: "1px solid #38bdf8", padding: "7px 14px", borderRadius: 99, fontSize: 12, fontWeight: "bold", cursor: "pointer" },
   sign18: { width: 68, height: 68, borderRadius: "50%", background: "#ef4444", border: "3px solid #fff", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 34, boxShadow: "0 0 20px rgba(239,68,68,0.7)" },
-  pick: { width: 38, height: 38, borderRadius: "50%", border: "2px dashed #38bdf8", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", overflow: "hidden" },
-  fBtn: { width: 25, height: 25, borderRadius: "50%", background: "#1e293b", border: "none", fontSize: 11, cursor: "pointer", padding: 0 },
-  fAct: { width: 25, height: 25, borderRadius: "50%", background: "#0284c7", border: "2px solid #38bdf8", fontSize: 11, cursor: "pointer", padding: 0 },
-  inp: { width: "82%", background: "#090d16", border: "1px solid #38bdf8", color: "#fff", padding: "7px 12px", borderRadius: 99, fontSize: 12, textAlign: "center", outline: "none" },
-  bBtn: { width: "82%", background: "linear-gradient(90deg, #0284c7, #38bdf8)", color: "#fff", border: "none", padding: "8px 14px", borderRadius: 99, fontWeight: "bold", fontSize: 13, cursor: "pointer" },
-  bSm: { background: "#0284c7", color: "#fff", border: "none", padding: "6px 10px", borderRadius: 99, fontWeight: "bold", fontSize: 12, cursor: "pointer" },
-  dk: { background: "#1e293b", color: "#fff", border: "none", padding: "6px 10px", borderRadius: 99, fontSize: 12, cursor: "pointer" },
-  arrowBtn: { background: "#1e293b", color: "#ffffff", border: "1.5px solid #38bdf8", padding: "5px 12px", borderRadius: 99, fontSize: 18, fontWeight: "900", cursor: "pointer", lineHeight: 1 },
-  rd: { background: "#ef4444", color: "#fff", border: "none", padding: "6px 12px", borderRadius: 99, fontWeight: "bold", fontSize: 12, cursor: "pointer" },
-  gd: { background: "#facc15", color: "#000", border: "none", padding: "6px 10px", borderRadius: 99, fontWeight: "bold", fontSize: 12, cursor: "pointer" },
-  app: { minHeight: "100vh", backgroundImage: "linear-gradient(rgba(9,13,22,0.85), rgba(9,13,22,0.95)), url('/bg.jpg')", backgroundSize: "cover", color: "#fff", fontFamily: "sans-serif", display: "flex", flexDirection: "column" },
-  head: { display: "flex", justifyContent: "space-between", alignItems: "center", padding: 14, background: "rgba(11,16,33,0.9)", borderBottom: "1px solid #1e293b" },
-  main: { flex: 1, padding: 16, maxWidth: 460, width: "100%", margin: "0 auto", boxSizing: "border-box" },
-  grid: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 },
-  card: { height: 205, borderRadius: 22, padding: 12, background: "rgba(15,23,42,0.75)", border: "1px solid #38bdf8", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "space-between" },
-  av: { width: 56, height: 56, borderRadius: "50%", background: "#0284c7", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: "bold", fontSize: 22, overflow: "hidden" },
-  col: { display: "flex", flexDirection: "column", gap: 12 },
-  box: { background: "rgba(15,23,42,0.9)", padding: 16, borderRadius: 20, border: "1px solid #38bdf8", display: "flex", flexDirection: "column", gap: 10, maxWidth: 380, width: "100%", boxSizing: "border-box" },
-  giftItem: { background: "#0f172a", border: "1px solid #38bdf8", borderRadius: 14, padding: 10, color: "#fff", display: "flex", flexDirection: "column", alignItems: "center", gap: 4, cursor: "pointer" },
-  flyBox: { position: "fixed", top: "38%", left: "50%", transform: "translate(-50%, -50%)", background: "rgba(11,16,33,0.92)", border: "2px solid #facc15", borderRadius: 24, padding: "18px 28px", textAlign: "center", zIndex: 120, boxShadow: "0 0 35px rgba(250,204,21,0.6)" },
-  row: { display: "flex", justifyContent: "space-between", alignItems: "center", gap: 8 },
-  m1: { alignSelf: "flex-end", background: "#0284c7", padding: "8px 12px", borderRadius: 14, fontSize: 13 },
-  m2: { alignSelf: "flex-start", background: "#1e293b", padding: "8px 12px", borderRadius: 14, fontSize: 13 },
-  modal: { position: "fixed", inset: 0, background: "rgba(0,0,0,0.8)", display: "flex", alignItems: "center", justifyContent: "center", padding: 16, zIndex: 110 },
-  nav: { display: "flex", justifyContent: "space-around", padding: 12, background: "rgba(11,16,33,0.9)", borderTop: "1px solid #1e293b" },
-  nBtn: { background: "none", border: "none", color: "#38bdf8", fontWeight: "bold", fontSize: 14, cursor: "pointer" },
-};
+  pick: { width: 42, height: 42, borderRadius: "50%", border: "2px dashed #facc15", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", overflow: "hidden", fontWeight: "bold", fontSize: 14 },
