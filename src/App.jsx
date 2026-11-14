@@ -546,3 +546,137 @@ export default function App() {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
+                <select value={payMethod} onChange={(e) => setPayMethod(e.target.value)} style={{ ...s.inp, width: "42%" }}>
+                  <option value="Skrill">Skrill</option>
+                  <option value="USDT TRC20">USDT TRC20</option>
+                  <option value="BTC BEP20">BTC BEP20</option>
+                  <option value="ETH ERC20">ETH ERC20</option>
+                </select>
+                <input value={payInfo} onChange={(e) => setPayInfo(e.target.value)} placeholder="Mon E-mail Skrill ou Wallet..." style={{ ...s.inp, width: "58%" }} />
+              </div>
+              <button onClick={async () => {
+                await api(`profiles?pseudo=eq.${encodeURIComponent(me.pseudo)}`, "PATCH", { payout_method: payMethod, payout_info: payInfo });
+                alert("✅ Mode de réception des gains enregistré !");
+                load();
+              }} style={s.dk}>💾 Enregistrer mon mode de paiement</button>
+            </div>
+            <div style={s.box}><strong>🪙 Pack 200 Pièces (Crédit Instantané) — 5.99 $</strong><button onClick={() => setPlan({ name: "Pack 200 Coins", price: "5.99 $", coins: 200 })} style={s.bBtn}>⚡ Payer & Créditer Auto</button></div>
+            <div style={s.box}><strong>🥈 VIP Silver + 500 🪙 (Instantané) — 14.99 $</strong><button onClick={() => setPlan({ name: "VIP Silver + 500 Coins", price: "14.99 $", coins: 500 })} style={s.bBtn}>⚡ Payer & Créditer Auto</button></div>
+            <div style={s.box}><strong>👑 VIP Gold + 1500 🪙 (Instantané) — 29.99 $</strong><button onClick={() => setPlan({ name: "VIP Gold + 1500 Coins", price: "29.99 $", coins: 1500 })} style={s.bBtn}>⚡ Payer & Créditer Auto</button></div>
+          </div>
+        )}
+
+        {tab === "admin" && (
+          <div style={s.col}>
+            <div style={s.box}>
+              <strong>➕ Ajouter un Streameur / Utilisateur</strong>
+              <input value={admPseudo} onChange={(e) => setAdmPseudo(e.target.value)} placeholder="Pseudo..." style={s.inp} />
+              <input value={admMail} onChange={(e) => setAdmMail(e.target.value)} placeholder="E-mail connexion..." style={s.inp} />
+              <div style={{ display: "flex", gap: 6 }}>
+                <select value={admMethod} onChange={(e) => setAdmMethod(e.target.value)} style={{ ...s.inp, width: "45%" }}>
+                  <option value="Skrill">Skrill</option>
+                  <option value="USDT TRC20">USDT TRC20</option>
+                  <option value="BTC BEP20">BTC BEP20</option>
+                </select>
+                <input value={admInfo} onChange={(e) => setAdmInfo(e.target.value)} placeholder="Compte Skrill/Crypto..." style={{ ...s.inp, width: "55%" }} />
+              </div>
+              <input type="number" value={admCoins} onChange={(e) => setAdmCoins(e.target.value)} placeholder="Pièces initiales..." style={s.inp} />
+              <button onClick={async () => {
+                if (!admPseudo.trim()) return;
+                await api("profiles", "POST", { pseudo: admPseudo.trim(), contact: admMail.trim().toLowerCase(), age: 22, gender: "♀", coins: Number(admCoins) || 0, payout_method: admMethod, payout_info: admInfo.trim() });
+                setAdmPseudo(""); setAdmMail(""); setAdmInfo("");
+                load();
+              }} style={s.bBtn}>Créer Profil</button>
+            </div>
+
+            <h3>💸 Payer les Streameurs ({users.length})</h3>
+            {users.map((u) => (
+              <div key={u.id || u.pseudo} style={s.box}>
+                <div style={s.row}><strong>{u.pseudo} — 🪙 {u.coins || 0}</strong><span style={{ color: "#38bdf8", fontSize: 12 }}>{u.payout_method || "Skrill"}</span></div>
+                <small style={{ color: "#facc15", wordBreak: "break-all" }}>{u.payout_info || u.contact || "Non renseigné"}</small>
+                <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+                  {(u.payout_method || "Skrill") === "Skrill" ? (
+                    <a href={`https://skrill.com{encodeURIComponent(u.payout_info || u.contact || "")}`} target="_blank" rel="noreferrer" style={{ ...s.privBtn, textDecoration: "none" }}>💸 Payer Skrill</a>
+                  ) : (
+                    <button onClick={() => navigator.clipboard?.writeText(u.payout_info || "")} style={s.gd}>📋 Copier Crypto</button>
+                  )}
+                  <button onClick={async () => {
+                    const add = Number(prompt(`Ajouter ou retirer des pièces pour ${u.pseudo} (ex: 100 ou -100) :`, "100"));
+                    if (!add) return;
+                    await api(`profiles?pseudo=eq.${encodeURIComponent(u.pseudo)}`, "PATCH", { coins: Math.max(0, (u.coins || 0) + add) });
+                    load();
+                  }} style={s.bSm}>± Pièces</button>
+                  <button onClick={async () => {
+                    if (!window.confirm(`Remettre les pièces de ${u.pseudo} à 0 après paiement ?`)) return;
+                    await api(`profiles?pseudo=eq.${encodeURIComponent(u.pseudo)}`, "PATCH", { coins: 0 });
+                    load();
+                  }} style={s.dk}>✅ Soldé (0 🪙)</button>
+                </div>
+              </div>
+            ))}
+
+            <h3>⚡ Journal Auto-Paiements & Secours ({pays.length})</h3>
+            {pays.map((p) => (
+              <div key={p.id} style={s.box}>
+                <div style={s.row}><strong>{p.user_pseudo} — {p.plan_name}</strong><span style={{ color: p.status === "valide" ? "#22c55e" : "#ef4444", fontSize: 11 }}>{p.status === "valide" ? "⚡ Auto-Validé" : "❌ Annulé"}</span></div>
+                <small style={{ color: "#facc15", wordBreak: "break-all" }}>{p.network}: {p.tx_hash}</small>
+                {p.status === "valide" ? (
+                  <button onClick={async () => {
+                    if (!window.confirm("Annuler ce paiement et retirer les pièces en cas de litige ?")) return;
+                    await api(`crypto_payments?id=eq.${p.id}`, "PATCH", { status: "annule" });
+                    const targetU = users.find((x) => x.pseudo === p.user_pseudo);
+                    const subCoins = p.plan_name.includes("1500") ? 1500 : p.plan_name.includes("500") ? 500 : 200;
+                    await api(`profiles?pseudo=eq.${encodeURIComponent(p.user_pseudo)}`, "PATCH", { coins: Math.max(0, (targetU?.coins || 0) - subCoins) });
+                    load();
+                  }} style={s.rd}>↩️ Secours : Annuler & Retirer Pièces</button>
+                ) : (
+                  <button onClick={async () => {
+                    await api(`crypto_payments?id=eq.${p.id}`, "PATCH", { status: "valide" });
+                    const targetU = users.find((x) => x.pseudo === p.user_pseudo);
+                    const addCoins = p.plan_name.includes("1500") ? 1500 : p.plan_name.includes("500") ? 500 : 200;
+                    await api(`profiles?pseudo=eq.${encodeURIComponent(p.user_pseudo)}`, "PATCH", { coins: (targetU?.coins || 0) + addCoins, is_vip: p.plan_name.includes("VIP") });
+                    load();
+                  }} style={s.bBtn}>✅ Forcer Validation Manuelle</button>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+      </main>
+
+      {plan && (
+        <div style={s.modal} onClick={() => setPlan(null)}>
+          <div style={s.box} onClick={(e) => e.stopPropagation()}>
+            <strong>⚡ {plan.name} ({plan.price})</strong>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 4 }}>
+              {Array.of("Skrill", "USDT TRC20", "BTC BEP20", "ETH ERC20", "USDT Arbitrum").map((k) => <button key={k} onClick={() => setNet(k)} style={net === k ? s.bSm : s.dk}>{k}</button>)}
+            </div>
+            {net === "Skrill" ? (
+              <div style={{ background: "#090d16", padding: 10, borderRadius: 12, border: "1px solid #ec4899", display: "flex", flexDirection: "column", gap: 6 }}>
+                <small style={{ color: "#facc15" }}>💳 E-mail Skrill : <b>{SKRILL_MAIL}</b></small>
+                <small style={{ color: "#38bdf8" }}>🆔 ID Client Skrill : <b>{SKRILL_ID}</b></small>
+                <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+                  <a href={skrillLink} target="_blank" rel="noreferrer" style={{ ...s.privBtn, textDecoration: "none" }}>🔗 Payer sur Skrill</a>
+                  <button onClick={() => navigator.clipboard?.writeText(SKRILL_MAIL)} style={s.gd}>Copier E-mail</button>
+                  <button onClick={() => navigator.clipboard?.writeText(SKRILL_ID)} style={s.bSm}>Copier ID</button>
+                </div>
+              </div>
+            ) : (
+              <>
+                <small style={{ color: "#facc15", wordBreak: "break-all" }}>{addr}</small>
+                <button onClick={() => navigator.clipboard?.writeText(addr)} style={s.gd}>Copier Adresse</button>
+              </>
+            )}
+            <input value={tx} onChange={(e) => setTx(e.target.value)} placeholder={net === "Skrill" ? "Numéro ID Transaction Skrill..." : "TXID Blockchain..."} style={s.inp} />
+            <button disabled={payBusy} onClick={processAutoPayment} style={s.bBtn}>{payBusy ? "Vérification..." : "⚡ Vérifier & Créditer Automatiquement"}</button>
+          </div>
+        </div>
+      )}
+
+      <nav style={s.nav}><button onClick={() => setTab("live")} style={s.nBtn}>🔥 Live</button><button onClick={() => { setTab("chat"); setPeer(null); }} style={s.nBtn}>💬 Chat</button><button onClick={() => setTab("vip")} style={s.nBtn}>👑 VIP</button></nav>
+    </div>
+  );
+}
+
+const s = {
+  center: { position: "fixed", inset: 0, backgroundImage: "linear-gradient(rgba(9,13,22,0.5), rgba(9,13,22,0.85)), url('/bg.jpg')", backgroundSize: "cover", backgroundPosition: "center", color: "#fff", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", fontFamily: "sans-serif", gap: 14 },
