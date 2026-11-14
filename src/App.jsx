@@ -531,13 +531,13 @@ export default function App() {
                   <strong>{me.gender} {me.pseudo} ({me.age} ans)</strong>
                   <div style={{ fontSize: 12, color: "#facc15" }}>Solde : 🪙 {me.coins || 0}</div>
                   <label style={{ ...s.bSm, textAlign: "center", cursor: "pointer" }}>
-                    📷 Importer une photo
+                  📷 Photo
                     <input
                       type="file"
                       accept="image/*"
                       style={{ display: "none" }}
                       onChange={(e) => {
-                        const f = e.target.files?.at(0);
+                        const f = e.target.files?.item(0);
                         e.target.value = "";
                         if (!f) return;
                         resizeImg(f, async (img) => {
@@ -552,6 +552,7 @@ export default function App() {
                           alert("✅ Photo de profil enregistrée !");
                           load();
                         });
+                        e.target.value = "";
                       }}
                     />
                   </label>
