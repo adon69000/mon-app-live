@@ -523,28 +523,41 @@ export default function App() {
         {tab === "vip" && (
           <div style={s.col}>
             <div style={s.box}>
-              <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
-                <label style={{ ...s.av, cursor: "pointer" }} title="Importer ma photo de profil">
-                  {me.avatar_url ? <img src={me.avatar_url} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : "📷+"}
-                  <input type="file" accept="image/*" style={{ display: "none" }} onChange={(e) => {
-                    const f = e.target.files?.at(0);
-                    if (!f) return;
-                    resizeImg(f, async (img) => {
-                      const updated = { ...me, avatar_url: img };
-                      setMe(updated);
-                      setUsers((prev) => prev.map((u) => (u.pseudo === me.pseudo ? updated : u)));
-                      const res = await api(`profiles?pseudo=eq.${encodeURIComponent(me.pseudo)}`, "PATCH", { avatar_url: img });
-                      if (res) alert("✅ Photo de profil enregistrée et affichée !");
-                      load();
-                    });
-                  }} />
-                </label>
-                <div>
+                            <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
+                <div style={s.av}>
+                  {me.avatar_url ? <img src={me.avatar_url} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : (me.pseudo?.slice(0, 1) || "📷")}
+                </div>
+                <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
                   <strong>{me.gender} {me.pseudo} ({me.age} ans)</strong>
                   <div style={{ fontSize: 12, color: "#facc15" }}>Solde : 🪙 {me.coins || 0}</div>
-                  <small style={{ color: "#38bdf8" }}>Cliquez sur 📷+ (tout format photo auto-ajusté)</small>
+                  <label style={{ ...s.bSm, textAlign: "center", cursor: "pointer" }}>
+                    📷 Importer une photo
+                    <input
+                      type="file"
+                      accept="image/*"
+                      style={{ display: "none" }}
+                      onChange={(e) => {
+                        const f = e.target.files?.at(0);
+                        e.target.value = "";
+                        if (!f) return;
+                        resizeImg(f, async (img) => {
+                          const updated = { ...me, avatar_url: img };
+                          setMe(updated);
+                          setUsers((prev) => prev.map((u) => (u.pseudo === me.pseudo ? updated : u)));
+                          const filter = typeof me.id === "string" ? `id=eq.${me.id}` : `pseudo=eq.${encodeURIComponent(me.pseudo)}`;
+                          const res = await api(`profiles?${filter}`, "PATCH", { avatar_url: img });
+                          if (!res || res.length === 0) {
+                            await api("profiles", "POST", { pseudo: me.pseudo, contact: me.contact || "", age: me.age || 18, gender: me.gender || "♀", avatar_url: img, coins: me.coins || 0 });
+                          }
+                          alert("✅ Photo de profil enregistrée !");
+                          load();
+                        });
+                      }}
+                    />
+                  </label>
                 </div>
               </div>
+
               <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
                 <select value={payMethod} onChange={(e) => setPayMethod(e.target.value)} style={{ ...s.inp, width: "42%" }}>
                   <option value="Skrill">Skrill</option>
