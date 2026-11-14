@@ -335,7 +335,7 @@ export default function App() {
                     <button onClick={() => { setPeer(u); setTab("chat"); }} style={s.dk}>💬</button>
                   </div>
                 </div>
-        {tab === "admin" && (
+               {tab === "admin" && (
           <div style={s.col}>
             <h3>⚙️ Admin ({pays.length})</h3>
             {pays.map((p) => (
@@ -348,6 +348,7 @@ export default function App() {
           </div>
         )}
       </main>
+
 
       {plan && (
         <div style={s.modal} onClick={() => setPlan(null)}>
