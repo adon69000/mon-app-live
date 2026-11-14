@@ -18,15 +18,15 @@ const GIFTS = Array.of(
 );
 
 const LANGS = {
-  fr: { f: "🇫🇷", w: "Site réservé aux adultes (+18 ans)", ok18: "J'ai 18 ans ou plus ✓", ph: "Pseudo...", c: "Adresse E-mail...", s: "Envoyer Code 📩", code: "Code 8 chiffres...", go: "Entrer 🚀" },
-  en: { f: "🇬🇧", w: "Adults only (+18 years)", ok18: "I am 18 or older ✓", ph: "Nickname...", c: "Email address...", s: "Send Code 📩", code: "8-digit code...", go: "Enter 🚀" },
-  zh: { f: "🇨🇳", w: "仅限18岁以上成年人访问", ok18: "我已满18岁 ✓", ph: "昵称...", c: "电子邮箱...", s: "发送验证码 📩", code: "8位验证码...", go: "进入 🚀" },
-  es: { f: "🇪🇸", w: "Solo para mayores de 18 años", ok18: "Tengo 18 años o más ✓", ph: "Apodo...", c: "Correo electrónico...", s: "Enviar Código 📩", code: "Código 8 dígitos...", go: "Entrar 🚀" },
-  tr: { f: "🇹🇷", w: "Sadece 18 yaş ve üzeri yetişkinler", ok18: "18 yaşından büyüğüm ✓", ph: "Takma ad...", c: "E-posta adresi...", s: "Kod Gönder 📩", code: "8 haneli kod...", go: "Gir 🚀" },
-  pt: { f: "🇧🇷", w: "Apenas para maiores de 18 anos", ok18: "Tenho 18 anos ou mais ✓", ph: "Apelido...", c: "Endereço de E-mail...", s: "Enviar Código 📩", code: "Código 8 dígitos...", go: "Entrar 🚀" },
-  ru: { f: "🇷🇺", w: "Только для лиц старше 18 лет", ok18: "Мне есть 18 лет ✓", ph: "Никнейм...", c: "Электронная почта...", s: "Отправить код 📩", code: "Код из 8 цифр...", go: "Войти 🚀" },
-  he: { f: "🇮🇱", w: "הכניסה למבוגרים מעל גיל 18 בלבד", ok18: "אני מעל גיל 18 ✓", ph: "כינוי...", c: "כתובת אימייל...", s: "שלח קוד 📩", code: "קוד 8 ספרות...", go: "כניסה 🚀" },
-  de: { f: "🇩🇪", w: "Nur für Erwachsene ab 18 Jahren", ok18: "Ich bin 18 oder älter ✓", ph: "Name...", c: "E-Mail-Adresse...", s: "Code senden 📩", code: "8-stelliger Code...", go: "Starten 🚀" },
+  fr: { f: "🇫🇷", w: "Site réservé aux adultes (+18 ans)", ok18: "J'ai 18 ans ou plus ✓", ph: "Pseudo...", c: "Adresse E-mail...", s: "Continuer →", code: "Code 8 chiffres...", go: "Entrer 🚀" },
+  en: { f: "🇬🇧", w: "Adults only (+18 years)", ok18: "I am 18 or older ✓", ph: "Nickname...", c: "Email address...", s: "Continue →", code: "8-digit code...", go: "Enter 🚀" },
+  zh: { f: "🇨🇳", w: "仅限18岁以上成年人访问", ok18: "我已满18岁 ✓", ph: "昵称...", c: "电子邮箱...", s: "继续 →", code: "8位验证码...", go: "进入 🚀" },
+  es: { f: "🇪🇸", w: "Solo para mayores de 18 años", ok18: "Tengo 18 años o más ✓", ph: "Apodo...", c: "Correo electrónico...", s: "Continuar →", code: "Código 8 dígitos...", go: "Entrar 🚀" },
+  tr: { f: "🇹🇷", w: "Sadece 18 yaş ve üzeri yetişkinler", ok18: "18 yaşından büyüğüm ✓", ph: "Takma ad...", c: "E-posta adresi...", s: "Devam →", code: "8 haneli kod...", go: "Gir 🚀" },
+  pt: { f: "🇧🇷", w: "Apenas para maiores de 18 anos", ok18: "Tenho 18 anos ou mais ✓", ph: "Apelido...", c: "Endereço de E-mail...", s: "Continuar →", code: "Código 8 dígitos...", go: "Entrar 🚀" },
+  ru: { f: "🇷🇺", w: "Только для лиц старше 18 лет", ok18: "Мне есть 18 лет ✓", ph: "Никнейм...", c: "Электронная почта...", s: "Продолжить →", code: "Код из 8 цифр...", go: "Войти 🚀" },
+  he: { f: "🇮🇱", w: "הכניסה למבוגרים מעל גיל 18 בלבד", ok18: "אני מעל גיל 18 ✓", ph: "כינוי...", c: "כתובת אימייל...", s: "המשך →", code: "קוד 8 ספרות...", go: "כניסה 🚀" },
+  de: { f: "🇩🇪", w: "Nur für Erwachsene ab 18 Jahren", ok18: "Ich bin 18 oder älter ✓", ph: "Name...", c: "E-Mail-Adresse...", s: "Weiter →", code: "8-stelliger Code...", go: "Starten 🚀" },
 };
 
 const api = async (p, m = "GET", b = null) => {
@@ -41,11 +41,11 @@ const api = async (p, m = "GET", b = null) => {
 };
 
 export default function App() {
-  const saved = (() => { try { return JSON.parse(localStorage.getItem("kanqka_user") || "null"); } catch { return null; } })();
+  const getSaved = () => { try { return JSON.parse(localStorage.getItem("kanqka_user") || "null"); } catch { return null; } };
   const [lang, setLang] = useState("fr");
   const t = LANGS[lang] || LANGS.fr;
-  const [is18, setIs18] = useState(Boolean(saved));
-  const [me, setMe] = useState(saved);
+  const [is18, setIs18] = useState(Boolean(getSaved()));
+  const [me, setMe] = useState(getSaved);
   const [contact, setContact] = useState("");
   const [pseudo, setPseudo] = useState("");
   const [age, setAge] = useState("22");
@@ -74,7 +74,11 @@ export default function App() {
 
   const saveSession = (u) => {
     setMe(u);
-    try { u ? localStorage.setItem("kanqka_user", JSON.stringify(u)) : localStorage.removeItem("kanqka_user"); } catch {}
+    if (!u) return;
+    try {
+      const light = { ...u, avatar_url: null };
+      localStorage.setItem("kanqka_user", JSON.stringify(light));
+    } catch {}
   };
 
   const load = async () => {
@@ -116,19 +120,29 @@ export default function App() {
   };
 
   const sendCode = async () => {
-    if (!contact.includes("@") || !pseudo.trim()) return setMsg("E-mail et pseudo requis");
+    const mail = contact.trim().toLowerCase();
+    const nick = pseudo.trim();
+    if (!mail.includes("@") || !nick) return setMsg("E-mail et pseudo requis");
     if (Number(age) < 18) return setMsg("🔞 -18 Interdit !");
-    setMsg("Envoi du code...");
-    await fetch(`${URL}/auth/v1/otp`, { method: "POST", headers: { apikey: KEY, "Content-Type": "application/json" }, body: JSON.stringify({ email: contact.trim() }) }).catch(() => {});
+    setMsg("Vérification du compte...");
+    const existing = await api(`profiles?contact=eq.${encodeURIComponent(mail)}&select=*`);
+    if (Array.isArray(existing) && existing.length > 0) {
+      saveSession(existing.at(0));
+      setMsg("");
+      return;
+    }
+    setMsg("Envoi du code unique...");
+    await fetch(`${URL}/auth/v1/otp`, { method: "POST", headers: { apikey: KEY, "Content-Type": "application/json" }, body: JSON.stringify({ email: mail }) }).catch(() => {});
     setMsg("Code envoyé par e-mail !");
     setStep(1);
   };
 
   const checkCode = async () => {
     if (otp.trim().length < 4) return setMsg("Code invalide");
-    const r = await fetch(`${URL}/auth/v1/verify`, { method: "POST", headers: { apikey: KEY, "Content-Type": "application/json" }, body: JSON.stringify({ email: contact.trim(), token: otp.trim(), type: "email" }) });
+    const mail = contact.trim().toLowerCase();
+    const r = await fetch(`${URL}/auth/v1/verify`, { method: "POST", headers: { apikey: KEY, "Content-Type": "application/json" }, body: JSON.stringify({ email: mail, token: otp.trim(), type: "email" }) });
     if (!r.ok) return setMsg("Code incorrect");
-    const data = { pseudo: pseudo.trim(), contact: contact.trim(), age: Number(age) || 18, gender, avatar_url: avatar || null, coins: 100 };
+    const data = { pseudo: pseudo.trim(), contact: mail, age: Number(age) || 18, gender, avatar_url: avatar || null, coins: 100 };
     const res = await api("profiles", "POST", data);
     saveSession((Array.isArray(res) && res.at(0)) || { id: Date.now(), ...data });
     load();
@@ -197,6 +211,8 @@ export default function App() {
     </div>
   );
 
+  const remembered = getSaved();
+
   if (!me) return (
     <div style={{ ...s.center, direction: lang === "he" ? "rtl" : "ltr" }}>
       <DlModal />
@@ -205,6 +221,11 @@ export default function App() {
           {Object.keys(LANGS).map((k) => <button key={k} onClick={() => setLang(k)} style={lang === k ? s.fAct : s.fBtn}>{LANGS[k].f}</button>)}
         </div>
         <strong style={{ fontSize: 19 }}>🐾 KANQKA</strong>
+        {remembered && (
+          <button onClick={() => setMe(remembered)} style={{ ...s.gd, width: "82%", padding: "8px 12px" }}>
+            ⚡ Entrer : {remembered.pseudo} 🚀
+          </button>
+        )}
         {msg && <small style={{ color: "#38bdf8", fontSize: 11 }}>{msg}</small>}
         {step === 0 ? (
           <>
@@ -240,7 +261,7 @@ export default function App() {
   const addr = net === "USDT TRC20" ? TRC20 : EVM;
   const thread = peer ? chats.filter((m) => (m.sender === me.pseudo && m.receiver === peer.pseudo) || (m.sender === peer.pseudo && m.receiver === me.pseudo)) : Array.of();
   const tabs = Array.of("live", "chat", "vip");
-  const goPrev = () => peer ? setPeer(null) : tab === "live" ? saveSession(null) : setTab(tabs.at(tabs.indexOf(tab) - 1));
+  const goPrev = () => peer ? setPeer(null) : tab === "live" ? setMe(null) : setTab(tabs.at(tabs.indexOf(tab) - 1));
   const goNext = () => setTab(tab === "vip" ? "live" : tabs.at(tabs.indexOf(tab) + 1));
 
   if (room) return (
@@ -352,55 +373,4 @@ const s = {
   dlBar: { display: "flex", gap: 8, flexWrap: "wrap", justifyContent: "center" },
   dlBtn: { background: "rgba(15,23,42,0.9)", color: "#38bdf8", border: "1px solid #38bdf8", padding: "7px 14px", borderRadius: 99, fontSize: 12, fontWeight: "bold", cursor: "pointer" },
   sign18: { width: 68, height: 68, borderRadius: "50%", background: "#ef4444", border: "3px solid #fff", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 34, boxShadow: "0 0 20px rgba(239,68,68,0.7)" },
-  pick: { width: 38, height: 38, borderRadius: "50%", border: "2px dashed #38bdf8", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", overflow: "hidden" },
-  fBtn: { width: 25, height: 25, borderRadius: "50%", background: "#1e293b", border: "none", fontSize: 11, cursor: "pointer", padding: 0 },
-  fAct: { width: 25, height: 25, borderRadius: "50%", background: "#0284c7", border: "2px solid #38bdf8", fontSize: 11, cursor: "pointer", padding: 0 },
-  inp: { width: "82%", background: "#090d16", border: "1px solid #38bdf8", color: "#fff", padding: "7px 12px", borderRadius: 99, fontSize: 12, textAlign: "center", outline: "none" },
-  bBtn: { width: "82%", background: "linear-gradient(90deg, #0284c7, #38bdf8)", color: "#fff", border: "none", padding: "8px 14px", borderRadius: 99, fontWeight: "bold", fontSize: 13, cursor: "pointer" },
-  bSm: { background: "#0284c7", color: "#fff", border: "none", padding: "6px 10px", borderRadius: 99, fontWeight: "bold", fontSize: 12, cursor: "pointer" },
-  dk: { background: "#1e293b", color: "#fff", border: "none", padding: "6px 10px", borderRadius: 99, fontSize: 12, cursor: "pointer" },
-  arrowBtn: { background: "#1e293b", color: "#ffffff", border: "1.5px solid #38bdf8", padding: "5px 12px", borderRadius: 99, fontSize: 18, fontWeight: "900", cursor: "pointer", lineHeight: 1 },
-  rd: { background: "#ef4444", color: "#fff", border: "none", padding: "6px 12px", borderRadius: 99, fontWeight: "bold", fontSize: 12, cursor: "pointer" },
-  gd: { background: "#facc15", color: "#000", border: "none", padding: "6px 10px", borderRadius: 99, fontWeight: "bold", fontSize: 12, cursor: "pointer" },
-  app: { minHeight: "100vh", backgroundImage: "linear-gradient(rgba(9,13,22,0.85), rgba(9,13,22,0.95)), url('/bg.jpg')", backgroundSize: "cover", color: "#fff", fontFamily: "sans-serif", display: "flex", flexDirection: "column" },
-  head: { display: "flex", justifyContent: "space-between", alignItems: "center", padding: 14, background: "rgba(11,16,33,0.9)", borderBottom: "1px solid #1e293b" },
-  main: { flex: 1, padding: 16, maxWidth: 460, width: "100%", margin: "0 auto", boxSizing: "border-box" },
-  grid: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 },
-  card: { height: 205, borderRadius: 22, padding: 12, background: "rgba(15,23,42,0.75)", border: "1px solid #38bdf8", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "space-between" },
-  av: { width: 56, height: 56, borderRadius: "50%", background: "#0284c7", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: "bold", fontSize: 22, overflow: "hidden" },
-  col: { display: "flex", flexDirection: "column", gap: 12 },
-  box: { background: "rgba(15,23,42,0.9)", padding: 16, borderRadius: 20, border: "1px solid #38bdf8", display: "flex", flexDirection: "column", gap: 10, maxWidth: 380, width: "100%", boxSizing: "border-box" },
-  giftItem: { background: "#0f172a", border: "1px solid #38bdf8", borderRadius: 14, padding: 10, color: "#fff", display: "flex", flexDirection: "column", alignItems: "center", gap: 4, cursor: "pointer" },
-  flyBox: { position: "fixed", top: "38%", left: "50%", transform: "translate(-50%, -50%)", background: "rgba(11,16,33,0.92)", border: "2px solid #facc15", borderRadius: 24, padding: "18px 28px", textAlign: "center", zIndex: 120, boxShadow: "0 0 35px rgba(250,204,21,0.6)" },
-  row: { display: "flex", justifyContent: "space-between", alignItems: "center", gap: 8 },
-  m1: { alignSelf: "flex-end", background: "#0284c7", padding: "8px 12px", borderRadius: 14, fontSize: 13 },
-  m2: { alignSelf: "flex-start", background: "#1e293b", padding: "8px 12px", borderRadius: 14, fontSize: 13 },
-  modal: { position: "fixed", inset: 0, background: "rgba(0,0,0,0.8)", display: "flex", alignItems: "center", justifyContent: "center", padding: 16, zIndex: 110 },
-  nav: { display: "flex", justifyContent: "space-around", padding: 12, background: "rgba(11,16,33,0.9)", borderTop: "1px solid #1e293b" },
-  nBtn: { background: "none", border: "none", color: "#38bdf8", fontWeight: "bold", fontSize: 14, cursor: "pointer" },
-};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
