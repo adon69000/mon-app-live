@@ -210,7 +210,122 @@ export default function App() {
       <DlBar />
     </div>
   );
-  pick: { width: 38, height: 38, borderRadius: "50%", border: "2px dashed #38bdf8", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", overflow: "hidden" },
+    const addr = net === "USDT TRC20" ? TRC20 : EVM;
+  const thread = peer ? chats.filter((m) => (m.sender === me.pseudo && m.receiver === peer.pseudo) || (m.sender === peer.pseudo && m.receiver === me.pseudo)) : Array.of();
+  const tabs = Array.of("live", "chat", "vip");
+  const goPrev = () => peer ? setPeer(null) : tab === "live" ? setMe(null) : setTab(tabs.at(tabs.indexOf(tab) - 1));
+  const goNext = () => setTab(tab === "vip" ? "live" : tabs.at(tabs.indexOf(tab) + 1));
+
+  if (room) return (
+    <div style={{ position: "fixed", inset: 0, background: "#000", zIndex: 99 }}>
+      {flyGift && <div style={s.flyBox}><div style={{ fontSize: 54 }}>{flyGift.split(" ").at(0)}</div><strong style={{ color: "#facc15" }}>{flyGift}</strong></div>}
+      <div style={s.head}><span>🔴 {room.title}</span><div style={{ display: "flex", gap: 8 }}><button onClick={() => setGiftTarget(room.title)} style={s.gd}>🎁</button><button onClick={() => setRoom(null)} style={s.rd}>✕</button></div></div>
+      <div ref={zegoRef} style={{ width: "100%", height: "calc(100vh - 54px)" }} />
+    </div>
+  );
+
+  return (
+    <div style={s.app}>
+      <DlModal />
+      {flyGift && <div style={s.flyBox}><div style={{ fontSize: 54 }}>{flyGift.split(" ").at(0)}</div><strong style={{ color: "#facc15" }}>{flyGift}</strong></div>}
+      {giftTarget && (
+        <div style={s.modal} onClick={() => setGiftTarget(null)}>
+          <div style={s.box} onClick={(e) => e.stopPropagation()}>
+            <div style={s.row}><strong>🎁 Cadeau → {giftTarget}</strong><span style={{ color: "#facc15", fontSize: 12 }}>🪙 {me.coins || 0}</span></div>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8 }}>
+              {GIFTS.map((g) => <button key={g.id} onClick={() => sendGift(g, giftTarget)} style={s.giftItem}><span style={{ fontSize: 28 }}>{g.icon}</span><span style={{ fontSize: 11 }}>{g.name}</span><small style={{ color: "#facc15" }}>{g.cost} 🪙</small></button>)}
+            </div>
+          </div>
+        </div>
+      )}
+
+      <header style={s.head}>
+        <div style={{ display: "flex", gap: 8, alignItems: "center" }}><button onClick={goPrev} style={s.arrowBtn}>←</button><strong>🐾 KANQKA</strong><button onClick={goNext} style={s.arrowBtn}>→</button></div>
+        <div style={{ display: "flex", gap: 6 }}>
+          <button onClick={() => setRoom({ id: `live_${me.pseudo}`, title: me.pseudo, host: true })} style={s.rd}>🔴 Live</button>
+          <button onClick={() => setDlModal("apk")} style={s.dk}>📲</button>
+          <button onClick={() => prompt("PIN:") === "6900" && setTab("admin")} style={s.dk}>⚙️</button>
+          <button onClick={() => setTab("vip")} style={s.gd}>{me.is_vip ? "👑 VIP" : `🪙 ${me.coins || 0}`}</button>
+        </div>
+      </header>
+
+      <main style={s.main}>
+        {tab === "live" && (
+          <div style={s.grid}>
+            {users.map((u, i) => (
+              <div key={u.id || i} style={s.card}>
+                <div style={{ ...s.row, width: "100%" }}><span style={{ fontSize: 11, color: "#38bdf8", fontWeight: "bold" }}>{u.gender || "👩"} {u.age || 20}</span><div style={{ display: "flex", gap: 4 }}><button onClick={() => setGiftTarget(u.pseudo)} style={s.gd}>🎁</button><button onClick={() => { setPeer(u); setTab("chat"); }} style={s.dk}>💬</button></div></div>
+                <div style={s.av}>{u.avatar_url ? <img src={u.avatar_url} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : u.pseudo?.slice(0, 1)}</div>
+                <strong>{u.pseudo} {u.is_vip ? "👑" : ""}</strong>
+                <button onClick={() => setRoom({ id: `live_${u.pseudo}`, title: u.pseudo, host: false })} style={s.bBtn}>📹 Join</button>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {tab === "chat" && (
+          <div style={s.col}>
+            {peer ? (
+              <div style={s.box}>
+                <div style={s.row}><button onClick={() => setPeer(null)} style={s.arrowBtn}>←</button><strong>{peer.gender} {peer.pseudo} ({peer.age})</strong><div style={{ display: "flex", gap: 4 }}><button onClick={() => setGiftTarget(peer.pseudo)} style={s.gd}>🎁</button><button onClick={() => setRoom({ id: `live_${peer.pseudo}`, title: peer.pseudo, host: false })} style={s.bSm}>📹</button></div></div>
+                <div style={{ height: 220, overflowY: "auto", display: "flex", flexDirection: "column", gap: 6 }}>{thread.map((m, i) => <div key={i} style={m.sender === me.pseudo ? s.m1 : s.m2}>{m.audio_url ? <audio controls src={m.audio_url} style={{ height: 30, maxWidth: 190 }} /> : m.content}</div>)}</div>
+                <form onSubmit={async (e) => { e.preventDefault(); if (!txt.trim()) return; await api("messages", "POST", { sender: me.pseudo, receiver: peer.pseudo, content: txt }); setTxt(""); load(); }} style={s.row}>
+                  <button type="button" onClick={toggleVoice} style={rec ? s.rd : s.dk}>{rec ? "⏹️" : "🎤"}</button>
+                  <input value={txt} onChange={(e) => setTxt(e.target.value)} placeholder="Message..." style={s.inp} />
+                  <button type="submit" style={s.bSm}>➤</button>
+                </form>
+              </div>
+            ) : users.filter((u) => u.pseudo !== me.pseudo).map((u, i) => (
+              <div key={i} onClick={() => setPeer(u)} style={{ ...s.box, flexDirection: "row", alignItems: "center", cursor: "pointer" }}>
+                <div style={{ ...s.av, width: 42, height: 42 }}>{u.avatar_url ? <img src={u.avatar_url} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : u.pseudo?.slice(0, 1)}</div>
+                <div><strong>{u.pseudo}</strong><div style={{ fontSize: 12, color: "#38bdf8" }}>{u.gender || "👩"} {u.age || 20} ans</div></div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {tab === "vip" && (
+          <div style={s.col}>
+            <div style={s.box}><strong>{me.gender} {me.pseudo} ({me.age} ans) — 🪙 {me.coins || 0}</strong><small style={{ color: "#94a3b8" }}>{me.contact}</small></div>
+            <div style={s.box}><strong>📲 Installer KANQKA</strong><div style={{ display: "flex", gap: 6 }}><button onClick={() => triggerInstall("apk")} style={s.bSm}>🤖 Android</button><button onClick={() => triggerInstall("ios")} style={s.bSm}>🍎 iPhone</button><button onClick={() => triggerInstall("desktop")} style={s.bSm}>💻 Desktop</button></div></div>
+            <div style={s.box}><strong>🥈 VIP Silver + 300 🪙 — 9.99 $</strong><button onClick={() => setPlan({ name: "VIP Silver + 300 Coins", price: "9.99 $" })} style={s.bBtn}>Crypto</button></div>
+            <div style={s.box}><strong>👑 VIP Gold + 1000 🪙 — 24.99 $</strong><button onClick={() => setPlan({ name: "VIP Gold + 1000 Coins", price: "24.99 $" })} style={s.bBtn}>Crypto</button></div>
+          </div>
+        )}
+
+        {tab === "admin" && (
+          <div style={s.col}>
+            <h3>⚙️ Admin ({pays.length})</h3>
+            {pays.map((p) => <div key={p.id} style={s.box}><strong>{p.user_pseudo} — {p.plan_name} ({p.amount})</strong><small style={{ color: "#facc15", wordBreak: "break-all" }}>{p.network}: {p.tx_hash}</small>{p.status === "valide" ? "✅" : <button onClick={async () => { await api(`crypto_payments?id=eq.${p.id}`, "PATCH", { status: "valide" }); load(); }} style={s.bBtn}>Valider</button>}</div>)}
+          </div>
+        )}
+      </main>
+
+      {plan && (
+        <div style={s.modal} onClick={() => setPlan(null)}>
+          <div style={s.box} onClick={(e) => e.stopPropagation()}>
+            <strong>{plan.name} ({plan.price})</strong>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 4 }}>{Array.of("USDT TRC20", "BTC BEP20", "ETH ERC20", "USDT Arbitrum").map((k) => <button key={k} onClick={() => setNet(k)} style={net === k ? s.bSm : s.dk}>{k}</button>)}</div>
+            <small style={{ color: "#facc15", wordBreak: "break-all" }}>{addr}</small>
+            <button onClick={() => navigator.clipboard?.writeText(addr)} style={s.gd}>Copier</button>
+            <input value={tx} onChange={(e) => setTx(e.target.value)} placeholder="TXID..." style={s.inp} />
+            <button onClick={async () => { if (tx.length < 5) return; await api("crypto_payments", "POST", { user_pseudo: me.pseudo, plan_name: plan.name, amount: plan.price, network: net, tx_hash: tx }); alert("OK!"); setPlan(null); setTx(""); load(); }} style={s.bBtn}>Confirmer</button>
+          </div>
+        </div>
+      )}
+
+      <nav style={s.nav}><button onClick={() => setTab("live")} style={s.nBtn}>🔥 Live</button><button onClick={() => { setTab("chat"); setPeer(null); }} style={s.nBtn}>💬 Chat</button><button onClick={() => setTab("vip")} style={s.nBtn}>👑 VIP</button></nav>
+    </div>
+  );
+}
+
+const s = {
+  center: { position: "fixed", inset: 0, backgroundImage: "linear-gradient(rgba(9,13,22,0.5), rgba(9,13,22,0.85)), url('/bg.jpg')", backgroundSize: "cover", backgroundPosition: "center", color: "#fff", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", fontFamily: "sans-serif", gap: 14 },
+  circle: { width: "min(440px, 94vw)", height: "min(440px, 94vw)", borderRadius: "50%", background: "rgba(11,16,33,0.88)", border: "2px solid #38bdf8", boxShadow: "0 0 45px rgba(14,165,233,0.45)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: 30, boxSizing: "border-box", gap: 10 },
+  dlBar: { display: "flex", gap: 8, flexWrap: "wrap", justifyContent: "center" },
+  dlBtn: { background: "rgba(15,23,42,0.9)", color: "#38bdf8", border: "1px solid #38bdf8", padding: "7px 14px", borderRadius: 99, fontSize: 12, fontWeight: "bold", cursor: "pointer" },
+  sign18: { width: 68, height: 68, borderRadius: "50%", background: "#ef4444", border: "3px solid #fff", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 34, boxShadow: "0 0 20px rgba(239,68,68,0.7)" },
+
   fBtn: { width: 25, height: 25, borderRadius: "50%", background: "#1e293b", border: "none", fontSize: 11, cursor: "pointer", padding: 0 },
   fAct: { width: 25, height: 25, borderRadius: "50%", background: "#0284c7", border: "2px solid #38bdf8", fontSize: 11, cursor: "pointer", padding: 0 },
   inp: { width: "82%", background: "#090d16", border: "1px solid #38bdf8", color: "#fff", padding: "7px 12px", borderRadius: 99, fontSize: 12, textAlign: "center", outline: "none" },
