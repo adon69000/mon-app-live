@@ -340,16 +340,31 @@ export default function App() {
     </div>
   );
 
-  const DlModal = () => dlModal ? (
+    const DlModal = () => dlModal ? (
     <div style={s.modal} onClick={() => setDlModal(null)}>
       <div style={s.box} onClick={(e) => e.stopPropagation()}>
         <div style={s.row}><strong>📲 Installer KANQKA ({dlModal.toUpperCase()})</strong><button onClick={() => setDlModal(null)} style={s.dk}>✕</button></div>
+        {dlModal === "apk" && (
+          <a href="/kanqka.apk" download="KANQKA.apk" style={{ ...s.bBtn, textDecoration: "none", textAlign: "center", display: "block" }}>
+            ⬇️ Télécharger KANQKA.apk (Android)
+          </a>
+        )}
+        {dlModal === "desktop" && installPrompt && (
+          <button onClick={() => { installPrompt.prompt(); setInstallPrompt(null); setDlModal(null); }} style={s.bBtn}>
+            ⬇️ Installer sur mon Ordinateur
+          </button>
+        )}
         <p style={{ fontSize: 12, color: "#cbd5e1", margin: 0 }}>
-          {dlModal === "ios" ? "Dans Safari : appuyez sur Partager (⬆️) puis « Sur l'écran d'accueil ➕ »." : "Dans Chrome/Edge : ouvrez le menu (⋮) puis cliquez sur « Installer l'application »."}
+          {dlModal === "apk"
+            ? "Sur Android : cliquez sur le bouton bleu ci-dessus pour télécharger et installer l'application KANQKA."
+            : dlModal === "ios"
+            ? "Sur iPhone (Safari) : appuyez sur Partager (⬆️) tout en bas puis « Sur l'écran d'accueil ➕ »."
+            : "Sur PC / Mac (Chrome ou Edge) : cliquez sur l'icône d'installation (📥) tout à droite de la barre d'adresse ou sur Menu (⋮) > « Installer KANQKA »."}
         </p>
       </div>
     </div>
   ) : null;
+
 
   if (!is18) return (
     <div style={s.center}>
